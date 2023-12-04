@@ -19,7 +19,6 @@ language = None
 
 # The Text object
 text = None
-
 scenarios("rendering.feature")
 
 

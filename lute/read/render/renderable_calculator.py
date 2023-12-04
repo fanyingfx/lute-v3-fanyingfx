@@ -435,9 +435,10 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
                 return False
             no_extra = all(
                 [
-                    cterm.translation is None or cterm.strip() == "",
-                    cterm.romanization is None or cterm.strip() == "",
-                    cterm.get_current_image() is None or cterm.strip() == "",
+                    cterm.translation is None or cterm.translation.strip() == "",
+                    cterm.romanization is None or cterm.romanization.strip() == "",
+                    cterm.get_current_image() is None
+                    or cterm.get_current_image().strip() == "",
                 ]
             )
             return not no_extra

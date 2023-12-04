@@ -9,6 +9,7 @@ from nltk.stem import WordNetLemmatizer
 # nltk.download()
 WNL = WordNetLemmatizer()
 
+
 def _get_wordnet_pos(tag):
     if tag.startswith("J"):
         return wordnet.ADJ

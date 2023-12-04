@@ -74,7 +74,7 @@ class JapaneseParser(AbstractParser):
         "Parse the string using MeCab."
         text = re.sub(r"[ \t]+", " ", text).strip()
 
-        lines = []
+        rlines = []
 
         # If the string contains a "\n", MeCab appears to silently
         # remove it.  Splitting it works (ref test_JapaneseParser).
@@ -83,15 +83,21 @@ class JapaneseParser(AbstractParser):
         #    -U = unknown format
         #    -E = EOP format
         with MeCab(
-            r"-F %m\t%t\t%h\t%f[6]x\n -U %m\t%t\t%h\t%f[6]x\n -E EOP\t3\t7\tx\n"
+            r"-F %m\t%t\t%h\t%f[6]\n -U %m\t%t\t%h\t%f[6]\n -E EOP\t3\t7\t8\n"
         ) as nm:
             for para in text.split("\n"):
                 for n in nm.parse(para, as_nodes=True):
-                    lines.append(n.feature)
+                    rlines.append(n.feature)
 
         lines = [
-            n.strip().split("\t") for n in lines if n is not None and n.strip() != ""
+            [y.strip() for y in x.split("\t")]
+            for x in rlines
+            if x is not None and x.strip() != ""
         ]
+        lines = []
+        for line in rlines:
+            if line is not None and line.strip() != "":
+                lines.append([tok.strip() for tok in line.split("\t")])
 
         # Production bug: JP parsing with MeCab would sometimes return a line
         # "0\t4" before an end-of-paragraph "EOP\t3\t7", reasons unknown.  These

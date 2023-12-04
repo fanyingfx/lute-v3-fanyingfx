@@ -29,7 +29,7 @@ def given_demo_data(app_context):
 
 @given(parsers.parse("language {langname}"))
 def given_lang(langname):
-    global language  # pylint: disable=global-statement
+    global language  # pylint: disable=global-sstatement
     lang = db.session.query(Language).filter(Language.name == langname).first()
     assert lang.name == langname, "sanity check"
     language = lang

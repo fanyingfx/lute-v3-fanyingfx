@@ -4,7 +4,7 @@
 
 from datetime import datetime
 
-from flask import Blueprint, flash, render_template, redirect
+from flask import Blueprint, flash, render_template, redirect, request
 from lute.read.service import get_paragraphs, set_unknowns_to_known
 from lute.read.forms import TextForm
 from lute.term.model import Repository
@@ -122,8 +122,11 @@ def term_form(langid, text):
     """
     Create or edit a term.
     """
+    lemma = ""
+    lemma = request.args.get("lemma", default=None, type=str)
+    # if
     repo = Repository(db)
-    term = repo.find_or_new(langid, text)
+    term = repo.find_or_new(langid, text, lemma)
 
     return handle_term_form(
         term,

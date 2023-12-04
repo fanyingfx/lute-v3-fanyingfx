@@ -1,0 +1,1 @@
+alter table words add "WoLemma" VARCHAR(100) NULL;

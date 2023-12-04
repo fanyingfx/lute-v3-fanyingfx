@@ -82,3 +82,5 @@ wrapt==1.15.0
 wsproto==1.2.0
 WTForms==3.0.1
 zipp==3.17.0
+
+nltk~=3.8.1

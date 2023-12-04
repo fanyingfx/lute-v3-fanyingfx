@@ -373,6 +373,12 @@
 
     const termdicts = LANGUAGES[langid].term;
     const usedict = termdicts[termdictindex];
+    if ($('#lemma').val()){
+        text=$('#lemma').val()
+    }else{
+        text= $('#text').val()
+
+    }
     show_lookup_page(usedict, $('#text').val(), langid, allow_open_new_web_page);
 
     termdictindex++;

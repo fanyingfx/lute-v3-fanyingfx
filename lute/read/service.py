@@ -14,7 +14,7 @@ from lute.term.model import Repository
 from lute.db import db
 
 
-def find_all_Terms_in_string(s, language):
+def find_all_Terms_in_string(s, language, tokens=None):
     """
     Find all terms contained in the string s.
 
@@ -31,8 +31,9 @@ def find_all_Terms_in_string(s, language):
     """
 
     # Extract word tokens from the input string
-    cleaned = re.sub(r"\s+", " ", s)
-    tokens = language.get_parsed_tokens(cleaned)
+    if tokens is None:
+        cleaned = re.sub(r"\s+", " ", s)
+        tokens = language.get_parsed_tokens(cleaned)
 
     parser = language.parser
 
@@ -94,7 +95,7 @@ def get_paragraphs(text):
     tokens = language.get_parsed_tokens(text.text)
     tokens = [t for t in tokens if t.token != "¶"]
 
-    terms = find_all_Terms_in_string(text.text, language)
+    terms = find_all_Terms_in_string(text.text, language, tokens)
 
     def make_RenderableSentence(pnum, sentence_num, tokens, terms):
         """

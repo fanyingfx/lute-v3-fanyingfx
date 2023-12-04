@@ -123,6 +123,7 @@ class Term(
     translation = db.Column("WoTranslation", db.String(500))
     romanization = db.Column("WoRomanization", db.String(100))
     token_count = db.Column("WoTokenCount", db.Integer)
+    lemma = db.Column("WoLemma", db.String(100))
 
     language = db.relationship("Language")
     term_tags = db.relationship("TermTag", secondary="wordtags")
@@ -153,7 +154,7 @@ class Term(
         cascade="all, delete-orphan",
     )
 
-    def __init__(self, language=None, text=None):
+    def __init__(self, language=None, text=None, lemma=None):
         self.status = 1
         self.translation = None
         self.romanization = None
@@ -165,6 +166,8 @@ class Term(
             self.language = language
         if text is not None:
             self.text = text
+        if lemma is not None:
+            self.lemma = lemma
 
     def __repr__(self):
         return f"<Term {self.id} '{self.text}'>"

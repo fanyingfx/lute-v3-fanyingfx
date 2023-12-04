@@ -29,7 +29,9 @@ class ParsedToken:
         ParsedToken.cls_paragraph_number = 0
         ParsedToken.cls_order = 0
 
-    def __init__(self, token: str, is_word: bool, is_end_of_sentence: bool = False):
+    def __init__(
+        self, token: str, is_word: bool, is_end_of_sentence: bool = False, lemma=None
+    ):
         self.token = token
         self.is_word = is_word
         self.is_end_of_sentence = is_end_of_sentence
@@ -47,11 +49,10 @@ class ParsedToken:
             ParsedToken.cls_sentence_number += 1
         if self.token == "¶":
             ParsedToken.cls_paragraph_number += 1
+        self.lemma = lemma
 
     def __repr__(self):
-        return (
-            f'<"{self.token}" (word: {self.is_word}, eos: {self.is_end_of_sentence})>'
-        )
+        return f'<"{self.token}" (word: {self.is_word}, eos: {self.is_end_of_sentence}, lemma: {self.lemma})>'
 
 
 class SentenceGroupIterator:

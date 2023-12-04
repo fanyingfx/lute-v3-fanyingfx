@@ -13,6 +13,7 @@ Includes classes:
 import re
 from typing import List
 from lute.parse.base import ParsedToken, AbstractParser
+from lute.utils.english_lemma import lemmatize_tokens
 
 
 class SpaceDelimitedParser(AbstractParser):
@@ -86,6 +87,7 @@ class SpaceDelimitedParser(AbstractParser):
 
         m = self.preg_match_capture(pattern, text)
         wordtoks = list(filter(lambda t: t[0] != "", m))
+        wordtoks_lemma = lemmatize_tokens([wt[0] for wt in wordtoks])
 
         def add_non_words(s):
             """
@@ -105,12 +107,12 @@ class SpaceDelimitedParser(AbstractParser):
         # For each wordtok, add all non-words before the wordtok, and
         # then add the wordtok.
         pos = 0
-        for wt in wordtoks:
+        for wt, wt_lemma in zip(wordtoks, wordtoks_lemma):
             w = wt[0]
             wp = wt[1]
             s = text[pos:wp]
             add_non_words(s)
-            tokens.append(ParsedToken(w, True, False))
+            tokens.append(ParsedToken(w, True, False, wt_lemma))
             pos = wp + len(w)
 
         # Add anything left over.

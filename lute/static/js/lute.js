@@ -109,6 +109,18 @@ function showEditFrame(el, extra_args = {}) {
   const lid = parseInt(el.attr('lid'));
 
   let text = extra_args.textparts ?? [ el.attr('data_text') ];
+  let is_multipleterm = extra_args.is_multipleterm
+
+  ext_lemma = extra_args.lemma
+  extra_args.lemma = ext_lemma ?? [el.attr('data_lemma')]
+  if (is_multipleterm){
+    extra_args.lemma=null
+  }
+
+
+
+
+  // let multititerm
   const sendtext = text.join('');
 
   let extras = Object.entries(extra_args).
@@ -266,7 +278,7 @@ function select_ended(e) {
     return;
   }
 
-  showEditFrame(selection_start_el, { textparts: textparts });
+  showEditFrame(selection_start_el, { textparts: textparts, is_multipleterm:true});
   selection_start_el = null;
 }
 

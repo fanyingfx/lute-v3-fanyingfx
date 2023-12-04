@@ -120,6 +120,7 @@ class RenderableCalculator:
         # Step 1.  Map of the token position to the id of the
         # candidate that should be rendered there.
         rendered = {}
+        text_lemma = {}
 
         # Step 2 - fill with the original texttokens.
         for tok in texttokens:
@@ -128,8 +129,10 @@ class RenderableCalculator:
             rc.text = tok.token
             rc.pos = tok.order
             rc.is_word = tok.is_word
+            rc.lemma = tok.lemma
             candidates[rc.id] = rc
             rendered[rc.pos] = rc.id
+            text_lemma[tok.token] = tok.lemma
 
         # 3.  Create candidates for all the terms.
         termcandidates = []
@@ -143,6 +146,7 @@ class RenderableCalculator:
                 rc.pos = texttokens[0].order + loc["index"]
                 rc.length = term.token_count
                 rc.is_word = 1
+                rc.lemma = text_lemma.get(loc["text"])
 
                 termcandidates.append(rc)
                 candidates[rc.id] = rc
@@ -242,6 +246,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         self.length: int = 1
         self.is_word: int
         self.render: bool = True
+        self.lemma = None
 
     def __repr__(self):
         parts = [f"pos {self.pos}", f"render {self.render}" f"(id {self.id})"]
@@ -272,6 +277,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.se_id = se_id
         t.is_word = self.is_word
         t.text_length = len(self.text)
+        t.lemma = self.lemma
 
         t.load_term_data(self.term)
 
@@ -411,6 +417,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.wo_id: int = None
         self.wo_status: int = None
         self.flash_message: str = None
+        self.lemma: str = None
 
     def load_term_data(self, term):
         """

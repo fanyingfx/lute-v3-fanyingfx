@@ -109,15 +109,8 @@ function showEditFrame(el, extra_args = {}) {
   const lid = parseInt(el.attr('lid'));
 
   let text = extra_args.textparts ?? [ el.attr('data_text') ];
-  let is_multipleterm = extra_args.is_multipleterm
-
-  ext_lemma = extra_args.lemma
-  extra_args.lemma = ext_lemma ?? [el.attr('data_lemma')]
-  if (is_multipleterm){
-    extra_args.lemma=null
-  }
-
-
+  let lemma = extra_args.lemma ?? [el.attr('data_lemma')];
+  extra_args.lemma = lemma;
 
 
   // let multititerm
@@ -272,13 +265,20 @@ function select_ended(e) {
 
   const textparts = selected.toArray().map((el) => $(el).text());
   const text = textparts.join('').trim();
+  const lemmaparts= selected.toArray().map((el)=>{
+    let lemma= $(el).attr('data_lemma')
+    lemma= lemma==='None'? $(el).attr('data_text'): lemma
+    return lemma
+    
+  })
+  const lemma = lemmaparts.join('').trim();
   if (text.length > 250) {
     alert(`Selections can be max length 250 chars ("${text}" is ${text.length} chars)`);
     start_hover_mode();
     return;
   }
 
-  showEditFrame(selection_start_el, { textparts: textparts, is_multipleterm:true});
+  showEditFrame(selection_start_el, { textparts: textparts, lemma: lemma});
   selection_start_el = null;
 }
 
@@ -297,7 +297,7 @@ let word_clicked = function(el, e) {
   else {
     if (! e.shiftKey) {
       $('span.kwordmarked').removeClass('kwordmarked');
-      showEditFrame(el);
+      showEditFrame(el,);
     }
     el.addClass('kwordmarked');
     el.removeClass('hasflash');

@@ -143,3 +143,4 @@ cython_debug/
 
 .DS_Store
 .idea/
+/lute/mdx_server/

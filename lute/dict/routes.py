@@ -19,7 +19,7 @@ from lute.mdx_server.mdx_server import (
 
 bp = Blueprint("dict", __name__, url_prefix="/dict")
 filedir = "/home/fan/dicts/Eng/olad10"
-filename = "Oxford Advanced Learner's Dictionary 10th.mdx"
+en_filename = "Oxford Advanced Learner's Dictionary 10th.mdx"
 jp_filedir = "/home/fan/dicts/ja/Shogakukanjcv3"
 jp_filename = "Shogakukanjcv3.mdx"
 resource_path = Path(filedir)
@@ -28,7 +28,7 @@ jp_resource_path = Path(jp_filedir)
 en_local = get_local_resource([resource_path, jp_resource_path])
 jp_local = get_local_resource([jp_resource_path])
 
-builder = IndexBuilder(f"{filedir}/{filename}")
+builder = IndexBuilder(f"{filedir}/{en_filename}")
 jp_builder = IndexBuilder(f"{jp_filedir}/{jp_filename}")
 
 bd = MDXDict(builder, en_local)
@@ -41,16 +41,20 @@ def handle_req(filename, loc):
     if filename in loc:
         content = loc[filename]
     else:
-        content = bd.lookup(f"/{filename}")
+        for abd in [bd, jp_bd]:
+            content = abd.lookup(f"/{filename}")
+            if content != b"":
+                break
     response = make_response(content)
     response.headers["Content-Type"] = content_type
     return response
 
 
-@bp.route("/<filename>")
-def index(filename):
-    print("hell0")
-    return handle_req(filename, en_local)
+@bp.route("/", defaults={"path": ""})
+@bp.route("/<path:path>")
+def index(path):
+    print("path", path)
+    return handle_req(path, en_local)
 
 
 @bp.route("/en/<word>")

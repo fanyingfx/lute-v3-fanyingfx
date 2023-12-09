@@ -37,14 +37,14 @@ class SudachiParser(AbstractParser):
         # sudachi has three dicts, core, small, full ,need to be installed by pip
         tokenizer_obj = dictionary.Dictionary(dict="full").create()
         # Split unit: "A" (short), "B" (middle), or "C" (Named Entity) [default: C]
-        mode = sudachipy.Tokenizer.SplitMode.C
+        mode = sudachipy.Tokenizer.SplitMode.B
         for para in text.split("\n"):
             for tok in tokenizer_obj.tokenize(para, mode):
                 lines.append(
                     [
                         tok.surface(),
                         tok.part_of_speech()[0],
-                        tok.dictionary_id(),
+                        str(tok.dictionary_id()),
                     ]
                 )
             # add the EOP manually
@@ -70,7 +70,9 @@ class SudachiParser(AbstractParser):
                 "接尾辞",
                 "助動詞",
             ]
-            is_word = node_type in word_types  # or node_type in "2678"
+            is_word = (
+                node_type not in ["補助記号", "記号"] and third != "-1"
+            )  # or node_type in "2678"
             return ParsedToken(term, is_word, is_eos)
 
         tokens = [line_to_token(lin) for lin in lines]

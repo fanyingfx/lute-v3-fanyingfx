@@ -58,19 +58,7 @@ class SudachiParser(AbstractParser):
             if term == "EOP" and third == "7":
                 term = "¶"
             # all_word_types=['名詞', '記号', '感動詞', '副詞', '形状詞', '補助記号', '接尾辞', '形容詞', '助詞', '連体詞',
-            #        '接続詞', '接頭辞', '代名詞', '動詞']
-            word_types = [
-                "名詞",
-                "形状詞",
-                "形容詞",
-                "動詞",
-                "代名詞",
-                "副詞",
-                "連体詞",
-                "接頭辞",
-                "接尾辞",
-                "助動詞",
-            ]
+            #        '接続詞', '接頭辞', '代名詞', '動詞'
             is_word = (
                 node_type not in ["補助記号", "記号"] and third != "-1"
             )  # or node_type in "2678"

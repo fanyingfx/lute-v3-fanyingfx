@@ -46,12 +46,16 @@ def handle_req(filename, loc):
     if filename in loc:
         content = loc[filename]
     else:
-        for abd in [bd, jp_bd]:
+        for abd in [bd, jp_bd, jp_bd2]:
             content = abd.lookup(f"/{filename}")
             if content != b"":
                 break
+        if ext in content_type_map:
+            loc[filename] = content
     response = make_response(content)
     response.headers["Content-Type"] = content_type
+    response.headers["Cache-Control"] = "max-age=604800, must-revalidate"
+
     return response
 
 
@@ -62,15 +66,20 @@ def index(path):
     return handle_req(path, dict_local)
 
 
-@bp.route("/en/<word>")
-def query_en(word):
+@bp.route("/en")
+def query_en():
+    word = request.args.get("word", "")
     ext = word.split(".")[-1]
     if ext in content_type_map:
         return handle_req(word, dict_local)
-    res = bd.lookup(word)
+    for ebd in [bd]:
+        res = ebd.lookup(word)
+        if res != b"":
+            break
     response = make_response(res)
     content_type = content_type_map["html"]
     response.headers["Content-type"] = content_type
+    response.headers["Cache-Control"] = "max-age=604800, must-revalidate"
     return response
 
 
@@ -87,4 +96,6 @@ def query_jp():
     response = make_response(res)
     content_type = content_type_map["html"]
     response.headers["Content-type"] = content_type
+    response.headers["Cache-Control"] = "max-age=604800, must-revalidate"
+
     return response

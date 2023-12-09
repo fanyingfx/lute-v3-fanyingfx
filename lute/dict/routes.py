@@ -81,7 +81,7 @@ def query_jp():
     if ext in content_type_map:
         return handle_req(word, dict_local)
     for jbd in [jp_bd, jp_bd2]:
-        res = jp_bd.lookup(word)
+        res = jbd.lookup(word)
         if res != b"":
             break
     response = make_response(res)

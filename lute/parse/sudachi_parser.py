@@ -45,14 +45,15 @@ class SudachiParser(AbstractParser):
                         tok.surface(),
                         tok.part_of_speech()[0],
                         str(tok.dictionary_id()),
+                        str(tok.dictionary_form()),
                     ]
                 )
             # add the EOP manually
-            lines.append(["EOP", "3", "7"])
+            lines.append(["EOP", "3", "7", "8"])
 
         def line_to_token(lin):
             "Convert parsed line to a ParsedToken."
-            term, node_type, third = lin
+            term, node_type, third, lemma = lin
             is_eos = term in language.regexp_split_sentences
             if term == "EOP" and third == "7":
                 term = "¶"
@@ -73,7 +74,7 @@ class SudachiParser(AbstractParser):
             is_word = (
                 node_type not in ["補助記号", "記号"] and third != "-1"
             )  # or node_type in "2678"
-            return ParsedToken(term, is_word, is_eos)
+            return ParsedToken(term, is_word, is_eos, lemma)
 
         tokens = [line_to_token(lin) for lin in lines]
         return tokens

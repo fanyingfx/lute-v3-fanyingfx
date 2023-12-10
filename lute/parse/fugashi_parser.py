@@ -6,10 +6,10 @@ from typing import List
 import jaconv
 from lute.parse.base import ParsedToken, AbstractParser
 from lute.models.setting import UserSetting
-from sudachipy import dictionary
-import sudachipy
+from fugashi import Tagger
 
-class SudachiParser(AbstractParser):
+
+class FugashiParser(AbstractParser):
     """
     Another Japanese Parser, using Sudachi do not need to install MeCab
     https://github.com/WorksApplications/sudachi.rs
@@ -17,8 +17,8 @@ class SudachiParser(AbstractParser):
     """
 
     _is_supported = True
-    _tokenizer_obj = dictionary.Dictionary(dict="core").create()
-    _split_mode = sudachipy.Tokenizer.SplitMode.B
+    _dict_path = ""
+    _tagger = Tagger("-d /home/fan/.unidics/unidic-csj-202302")
 
     @classmethod
     def is_supported(cls):
@@ -39,15 +39,13 @@ class SudachiParser(AbstractParser):
         # sudachi has three dicts, core, small, full ,need to be installed by pip
         # Split unit: "A" (short), "B" (middle), or "C" (Named Entity) [default: C]
         for para in text.split("\n"):
-            for tok in SudachiParser._tokenizer_obj.tokenize(
-                para, SudachiParser._split_mode, out=sm
-            ):
+            for tok in FugashiParser._tagger(para):
                 lines.append(
                     [
-                        tok.surface(),
-                        tok.part_of_speech()[0],
-                        str(tok.dictionary_id()),
-                        str(tok.normalized_form()),
+                        tok.surface,
+                        str(tok.char_type),
+                        tok.feature.lemma_id,
+                        tok.feature.lemma,
                     ]
                 )
             # add the EOP manually
@@ -62,7 +60,7 @@ class SudachiParser(AbstractParser):
             # all_word_types=['名詞', '記号', '感動詞', '副詞', '形状詞', '補助記号', '接尾辞', '形容詞', '助詞', '連体詞',
             #        '接続詞', '接頭辞', '代名詞', '動詞'
             is_word = (
-                node_type not in ["補助記号", "記号"] and third != "-1"
+                node_type in "2678" and third is not None
             )  # or node_type in "2678"
             return ParsedToken(term, is_word, is_eos, lemma)
 
@@ -91,10 +89,8 @@ class SudachiParser(AbstractParser):
 
         readings = []
         # with MeCab(flags) as nm:
-        for tok in SudachiParser._tokenizer_obj.tokenize(
-            text, SudachiParser._split_mode
-        ):
-            readings.append(tok.reading_form())
+        for tok in FugashiParser._tagger(text):
+            readings.append(tok.feature.kana)
 
         # for n in (text, as_nodes=True):
         #     readings.append(n.feature)

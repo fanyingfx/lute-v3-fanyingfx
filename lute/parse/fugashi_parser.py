@@ -43,9 +43,9 @@ class FugashiParser(AbstractParser):
         if FugashiParser._get_cache(text):
             return FugashiParser._get_cache(text)
         for tok in FugashiParser._tagger(text.strip()):
-            reading_is_kana = cls._string_is_hiragana(tok.feature.kana)
+            reading_is_kana = tok.feature.kana
             reading = tok.feature.kana
-            if reading_is_kana:
+            if reading_is_kana or not reading:
                 reading = ""
             else:
                 reading = jaconv.kata2hira(reading)

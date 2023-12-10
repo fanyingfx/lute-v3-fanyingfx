@@ -110,7 +110,9 @@ function showEditFrame(el, extra_args = {}) {
 
   let text = extra_args.textparts ?? [ el.attr('data_text') ];
   let lemma = extra_args.lemma ?? [el.attr('data_lemma')];
+  let reading = extra_args.reading ?? [el.attr('data_reading')]
   extra_args.lemma = lemma;
+  extra_args.reading = reading
 
 
   // let multititerm

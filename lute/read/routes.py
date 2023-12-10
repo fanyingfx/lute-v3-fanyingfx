@@ -122,11 +122,11 @@ def term_form(langid, text):
     """
     Create or edit a term.
     """
-    lemma = ""
     lemma = request.args.get("lemma", default=None, type=str)
+    reading = request.args.get("reading", default=None, type=str)
     # if
     repo = Repository(db)
-    term = repo.find_or_new(langid, text, lemma)
+    term = repo.find_or_new(langid, text, lemma, reading)
 
     return handle_term_form(
         term,

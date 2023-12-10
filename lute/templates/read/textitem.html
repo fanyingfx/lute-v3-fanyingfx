@@ -9,6 +9,7 @@
       data_status_class="{{ item.status_class }}"
       data_order="{{ item.order }}"
       data_lemma="{{ item.lemma }}"
+      data_reading="{{ item.reading }}"
 {% if item.wo_id is not none %}
       data_wid="{{ item.wo_id }}"
 {% endif %}>{{ item.html_display_text | safe }}</span>

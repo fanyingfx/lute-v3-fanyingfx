@@ -30,7 +30,12 @@ class ParsedToken:
         ParsedToken.cls_order = 0
 
     def __init__(
-        self, token: str, is_word: bool, is_end_of_sentence: bool = False, lemma=None
+        self,
+        token: str,
+        is_word: bool,
+        is_end_of_sentence: bool = False,
+        lemma=None,
+        reading="",
     ):
         self.token = token
         self.is_word = is_word
@@ -50,6 +55,7 @@ class ParsedToken:
         if self.token == "¶":
             ParsedToken.cls_paragraph_number += 1
         self.lemma = lemma
+        self.reading = reading
 
     def __repr__(self):
         return f'<"{self.token}" (word: {self.is_word}, eos: {self.is_end_of_sentence}, lemma: {self.lemma})>'

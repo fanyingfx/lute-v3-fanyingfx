@@ -121,6 +121,7 @@ class RenderableCalculator:
         # candidate that should be rendered there.
         rendered = {}
         text_lemma = {}
+        text_reading = {}
 
         # Step 2 - fill with the original texttokens.
         for tok in texttokens:
@@ -130,9 +131,11 @@ class RenderableCalculator:
             rc.pos = tok.order
             rc.is_word = tok.is_word
             rc.lemma = tok.lemma
+            rc.reading = tok.reading
             candidates[rc.id] = rc
             rendered[rc.pos] = rc.id
             text_lemma[tok.token] = tok.lemma
+            text_reading[tok.token] = tok.reading
 
         # 3.  Create candidates for all the terms.
         termcandidates = []
@@ -147,6 +150,7 @@ class RenderableCalculator:
                 rc.length = term.token_count
                 rc.is_word = 1
                 rc.lemma = text_lemma.get(loc["text"])
+                rc.reading = text_reading.get(loc["text"], "")
 
                 termcandidates.append(rc)
                 candidates[rc.id] = rc
@@ -201,7 +205,9 @@ class RenderableCalculator:
         Given a language and some terms and texttokens,
         return the RenderableCandidates to be rendered.
         """
-        texttokens.sort(key=lambda x: x.order)
+        texttokens.sort(
+            key=lambda x: x.order,
+        )
         self._assert_texttokens_are_contiguous(texttokens)
 
         subject = TokenLocator.make_string([t.token for t in texttokens])
@@ -247,6 +253,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         self.is_word: int
         self.render: bool = True
         self.lemma = None
+        self.reading = None
 
     def __repr__(self):
         parts = [f"pos {self.pos}", f"render {self.render}" f"(id {self.id})"]
@@ -278,6 +285,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.is_word = self.is_word
         t.text_length = len(self.text)
         t.lemma = self.lemma
+        t.reading = self.reading
 
         t.load_term_data(self.term)
 
@@ -418,6 +426,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.wo_status: int = None
         self.flash_message: str = None
         self.lemma: str = None
+        self.reading: str = None
 
     def load_term_data(self, term):
         """

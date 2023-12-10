@@ -41,6 +41,7 @@ class Term:  # pylint: disable=too-many-instance-attributes
         self.parents = []
         self.current_image = None
         self.lemma = None
+        self.reading = None
 
     def __repr__(self):
         return (
@@ -141,7 +142,7 @@ class Repository:
         self._add_to_identity_map(term)
         return term
 
-    def find_or_new(self, langid, text, lemma=None):
+    def find_or_new(self, langid, text, lemma=None, reading=None):
         """
         Return a Term business object for the DBTerm with the langid and text.
         If no match, return a new term with the text and language.
@@ -161,7 +162,10 @@ class Repository:
         t.language_id = langid
         t.text = text
         t.text_lc = spec.text_lc
-        t.romanization = spec.language.parser.get_reading(text)
+        if reading:
+            t.romanization = reading
+        else:
+            t.romanization = spec.language.parser.get_reading(text)
         t.original_text = text
         t.lemma = lemma
 

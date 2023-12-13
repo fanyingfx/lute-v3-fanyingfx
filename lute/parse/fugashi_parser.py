@@ -29,7 +29,6 @@ class FugashiParser(AbstractParser):
 
     @classmethod
     def _get_cache(cls, key):
-        print("hit cache")
         return FugashiParser._cache.get(key)
 
     @classmethod

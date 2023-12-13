@@ -1,6 +1,3 @@
-from io import StringIO
-import sys
-import os
 import re
 from typing import List
 import jaconv
@@ -8,6 +5,7 @@ from lute.parse.base import ParsedToken, AbstractParser
 from lute.models.setting import UserSetting
 from sudachipy import dictionary
 import sudachipy
+
 
 class SudachiParser(AbstractParser):
     """
@@ -24,6 +22,11 @@ class SudachiParser(AbstractParser):
     def is_supported(cls):
         return True
 
+    def __init__(self):
+        self.tokenizer_obj = dictionary.Dictionary(dict="full").create()
+        self.split_mode = sudachipy.SplitMode.B
+        super().__init__()
+
     @classmethod
     def name(cls):
         return "Japanese"
@@ -38,10 +41,17 @@ class SudachiParser(AbstractParser):
         # ref: https://tdual.hatenablog.com/entry/2020/07/13/162151
         # sudachi has three dicts, core, small, full ,need to be installed by pip
         # Split unit: "A" (short), "B" (middle), or "C" (Named Entity) [default: C]
+        # Sudachi has three dicts, core, small and full ,need to be installed by pip
+
+        # Split unit: "A" (short), "B" (middle), or "C" (Named Entity) [default: C]
+
         for para in text.split("\n"):
-            for tok in SudachiParser._tokenizer_obj.tokenize(
-                para, SudachiParser._split_mode, out=sm
-            ):
+            for tok in self.tokenizer_obj.tokenize(para, self.split_mode):
+                #  https://github.com/WorksApplications/SudachiPy
+                # Dictionary ID
+                # 0 for the system dictionary
+                # 1 and above for the user dictionaries
+                # -1\t(OOV) if a word is Out-of-Vocabulary (not in the dictionary)
                 lines.append(
                     [
                         tok.surface(),
@@ -65,6 +75,7 @@ class SudachiParser(AbstractParser):
                 node_type not in ["補助記号", "記号"] and third != "-1"
             )  # or node_type in "2678"
             return ParsedToken(term, is_word, is_eos, lemma)
+            #        '接続詞', '接頭辞', '代名詞', '動詞']
 
         tokens = [line_to_token(lin) for lin in lines]
         return tokens
@@ -85,15 +96,12 @@ class SudachiParser(AbstractParser):
         Returns None if the text is all hiragana, or the pronunciation
         doesn't add value (same as text).
         """
-
         if self._string_is_hiragana(text):
             return None
 
         readings = []
         # with MeCab(flags) as nm:
-        for tok in SudachiParser._tokenizer_obj.tokenize(
-            text, SudachiParser._split_mode
-        ):
+        for tok in self.tokenizer_obj.tokenize(text, self.split_mode):
             readings.append(tok.reading_form())
 
         # for n in (text, as_nodes=True):

@@ -1,5 +1,6 @@
 import re
 from typing import List, Any
+from typing import List
 import jaconv
 from lute.parse.base import ParsedToken, AbstractParser
 from lute.models.setting import UserSetting
@@ -9,13 +10,17 @@ from fugashi import Tagger
 class FugashiParser(AbstractParser):
     """
     Another Japanese Parser, Fugashi which provide wheels for
-    Linux, OSX and Win64, not suitable for Win32, can easy using UniDic
+    Linux, OSX and Win64, not suitable for Win32, can easy using the UniDic
     https://github.com/polm/fugashi
     https://clrd.ninjal.ac.jp/unidic/
     """
 
     _is_supported = True
     _dict_path = ""
+    # Can using -d <dict_path> to using the local unidic,
+    # For example
+    # _tagger = Tagger("-d /home/fy/.unidics/unidic-csj-202302")
+    # unidic can download from  https://clrd.ninjal.ac.jp/unidic/
     _tagger = Tagger("-d /home/fan/.unidics/unidic-csj-202302")
     _cache = {}
 
@@ -48,16 +53,8 @@ class FugashiParser(AbstractParser):
                 reading = ""
             else:
                 reading = jaconv.kata2hira(reading)
-            lines.append(
-                [
-                    tok.surface,
-                    str(tok.char_type),
-                    "-1" if tok.is_unk else "0",
-                    tok.feature.orthBase,
-                    reading,
-                ]
-            )
         lines.append(["EOP", "3", "7", "8", ""])
+        # res = [line_to_token(lin) for lin in lines]
 
         FugashiParser._set_cache(text, lines)
         return lines
@@ -68,21 +65,22 @@ class FugashiParser(AbstractParser):
         """
         text = re.sub(r"[ \t]+", " ", text).strip()
         lines = []
+        tokens = []
+        lines = []
+
+        def line_to_token(lin):
+            "Convert parsed line to a ParsedToken."
+            term, node_type, third = lin
+            is_eos = term in language.regexp_split_sentences
+            if term == "EOP" and third == "7":
+                term = "¶"
+            is_word = node_type in "2678" and third != "-1"  # or node_type in "2678"
+            return ParsedToken(term, is_word, is_eos)
 
         # ref: https://tdual.hatenablog.com/entry/2020/07/13/162151
         # sudachi has three dicts, core, small, full ,need to be installed by pip
         # Split unit: "A" (short), "B" (middle), or "C" (Named Entity) [default: C]
         for para in text.split("\n"):
-            # for tok in FugashiParser._tagger(para):
-            #     lines.append(
-            #         [
-            #             tok.surface,
-            #             str(tok.char_type),
-            #             tok.feature.lemma_id,
-            #             tok.feature.lemma,
-            #         ]
-            #     )
-            # add the EOP manually
             lines.extend(FugashiParser.parse_para(para.rstrip(), language))
 
         def line_to_token(lin):
@@ -103,6 +101,8 @@ class FugashiParser(AbstractParser):
         tokens = [line_to_token(lin) for lin in lines]
 
         # tokens = [line_to_token(lin) for lin in lines]
+
+        tokens = [line_to_token(lin) for lin in lines]
         return tokens
 
     # Hiragana is Unicode code block U+3040 - U+309F
@@ -115,6 +115,9 @@ class FugashiParser(AbstractParser):
     @staticmethod
     def _string_is_hiragana(s: str) -> bool:
         return all(FugashiParser._char_is_hiragana(c) for c in s)
+
+    def _char_is_hiragana(self, c) -> bool:
+        return "\u3040" <= c <= "\u309F"
 
     def get_reading(self, text: str):
         """

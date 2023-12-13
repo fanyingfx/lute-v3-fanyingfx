@@ -76,9 +76,6 @@ class FugashiParser(AbstractParser):
         text = re.sub(r"[ \t]+", " ", text).strip()
         lines = []
 
-        # ref: https://tdual.hatenablog.com/entry/2020/07/13/162151
-        # sudachi has three dicts, core, small, full ,need to be installed by pip
-        # Split unit: "A" (short), "B" (middle), or "C" (Named Entity) [default: C]
         for para in text.split("\n"):
             lines.extend(FugashiParser.parse_para(para.rstrip(), language))
 

@@ -124,6 +124,10 @@ def render_page(bookid, pagenum):
         return redirect("/", 302)
 
     pagenum = _page_in_range(book, pagenum)
+    # for cache
+    # page_num_next = _page_in_range(book, pagenum + 1)
+    # get_paragraphs(book.texts[page_num_next])
+
     text = book.texts[pagenum - 1]
 
     mark_stale(book)

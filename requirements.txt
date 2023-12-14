@@ -89,3 +89,4 @@ SudachiPy==0.6.7
 mdict-query @ git+https://github.com/fanyingfx/mdict-query.git@3ffdb433a116fed8c9d3e7e315abf5ad01532f22
 fugashi==1.3.0
 unidic-lite==1.0.8
+unidic2ud==3.0.2

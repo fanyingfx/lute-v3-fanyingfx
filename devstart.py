@@ -32,7 +32,7 @@ def start(port):
     """
     Start the dev server with reloads on port.
     """
-    config_file = AppConfig.default_config_filename()
+    config_file = AppConfig.default_config_filename(dev=True)
     ac = AppConfig(config_file)
 
     # https://stackoverflow.com/questions/25504149/

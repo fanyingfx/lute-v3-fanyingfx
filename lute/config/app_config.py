@@ -81,7 +81,9 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         return os.path.dirname(os.path.realpath(__file__))
 
     @staticmethod
-    def default_config_filename():
+    def default_config_filename(dev=False):
         "Return the path to the default configuration file."
         thisdir = AppConfig.configdir()
+        if dev:
+            return os.path.join(thisdir, "config.dev.yml")
         return os.path.join(thisdir, "config.yml")

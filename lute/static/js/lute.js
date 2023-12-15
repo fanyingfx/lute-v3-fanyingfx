@@ -247,6 +247,7 @@ function select_over(e) {
   selected.addClass('newmultiterm');
 }
 
+
 function select_ended(e) {
   // Handle single word click.
   if (selection_start_el.attr('id') == $(this).attr('id')) {
@@ -273,6 +274,12 @@ function select_ended(e) {
     
   })
   const lemma = lemmaparts.join('').trim();
+  const readingparts= selected.toArray().map((el)=>{
+    let reading= $(el).attr('data_reading')
+    return reading
+
+  })
+  const reading= readingparts.join('').trim();
   if (text.length > 250) {
     alert(`Selections can be max length 250 chars ("${text}" is ${text.length} chars)`);
     start_hover_mode();

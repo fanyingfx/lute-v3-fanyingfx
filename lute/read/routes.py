@@ -115,6 +115,23 @@ def save_player_data():
     return jsonify("ok")
 
 
+@bp.route("/preloadpage/<int:bookid>/<int:pagenum>", methods=["GET"])
+def preload_page(bookid, pagenum):
+    "Method called by ajax, just for cache"
+    book = Book.find(bookid)
+    if book is None:
+        flash(f"No book matching id {bookid}")
+        return ""
+
+    pagenum = _page_in_range(book, pagenum)
+    # for cache
+    # page_num_next = _page_in_range(book, pagenum + 1)
+    # get_paragraphs(book.texts[page_num_next])
+    text = book.texts[pagenum - 1]
+    paragraphs = get_paragraphs(text)
+    return ""
+
+
 @bp.route("/renderpage/<int:bookid>/<int:pagenum>", methods=["GET"])
 def render_page(bookid, pagenum):
     "Method called by ajax, render the given page."
@@ -124,10 +141,6 @@ def render_page(bookid, pagenum):
         return redirect("/", 302)
 
     pagenum = _page_in_range(book, pagenum)
-    # for cache
-    # page_num_next = _page_in_range(book, pagenum + 1)
-    # get_paragraphs(book.texts[page_num_next])
-
     text = book.texts[pagenum - 1]
 
     mark_stale(book)

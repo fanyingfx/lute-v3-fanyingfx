@@ -328,6 +328,8 @@
         relpage = maxpage;
     }
     let next_page = relpage+1;
+    const cache_url= `/read/preloadpage/${bookid}/${next_page}`;
+    $.get(cache_url)
 
     const url = `/read/renderpage/${bookid}/${relpage}`;
     $.get(
@@ -344,10 +346,6 @@
         show_hide_title(relpage);
       }
     );
-    if (next_page <=maxpage){
-        const next_url = `/read/renderpage/${bookid}/${next_page}`;
-        $.get(next_url)
-    }
   }
 
   let tooltip_help_hover_content = function (setContent) {

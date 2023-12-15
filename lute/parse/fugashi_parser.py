@@ -21,7 +21,8 @@ class FugashiParser(AbstractParser):
     # For example
     # _tagger = Tagger("-d /home/fy/.unidics/unidic-csj-202302")
     # unidic can download from  https://clrd.ninjal.ac.jp/unidic/
-    _tagger = Tagger("-d /home/fan/.unidics/unidic-csj-202302")
+    # _tagger = Tagger("-d /home/fan/.unidics/unidic-csj-202302")
+    _tagger = Tagger()
     _cache = {}
 
     @classmethod

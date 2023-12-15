@@ -28,6 +28,6 @@ def lemmatize_tokens(tokens):
     res = []
     for word, pos in nltk.pos_tag(tokens):
         word_pos = _get_wordnet_pos(pos) or wordnet.NOUN
-        lemma = WNL.lemmatize(word, word_pos)
-        res.append(lemma.lower())
+        lemma = WNL.lemmatize(word.lower(), word_pos)
+        res.append(lemma)
     return res

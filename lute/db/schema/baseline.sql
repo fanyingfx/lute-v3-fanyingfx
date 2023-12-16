@@ -66,6 +66,7 @@ INSERT INTO languages VALUES(8,'Japanese','https://jisho.org/search/###','https:
 INSERT INTO languages VALUES(9,'Russian','https://www.dict.com/Russian-English/###','https://en.openrussian.org/?search=###','*https://www.deepl.com/translator#ru/en/###','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','А-Яа-яЁё',0,0,0,0,'spacedel');
 INSERT INTO languages VALUES(10,'Spanish','https://es.thefreedictionary.com/###','https://www.wordreference.com/es/en/translation.asp?spen=###','*https://www.deepl.com/translator#es/en/###','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,0,0,'spacedel');
 INSERT INTO languages VALUES(11,'Turkish','https://www.wordreference.com/tren/###','https://tr.wiktionary.org/###','*https://www.deepl.com/translator#tr/en/###','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑğĞıİöÖüÜşŞçÇ',0,0,0,1,'turkish');
+INSERT INTO languages VALUES(12,'Modern Chinese','https://ctext.org/dictionary.pl?if=en&char=###','https://www.bing.com/images/search?q=###&form=HDRSC2&first=1&tsc=ImageHoverTitle','*https://www.deepl.com/translator#ch/en/###','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?。！？','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','一-龥',0,0,0,1,'classicalchinese');
 CREATE TABLE IF NOT EXISTS "statuses" (
 	"StID" INTEGER NOT NULL  ,
 	"StText" VARCHAR(20) NOT NULL  ,

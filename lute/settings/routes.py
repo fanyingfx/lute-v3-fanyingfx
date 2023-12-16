@@ -21,6 +21,8 @@ from lute.models.setting import UserSetting
 from lute.themes.service import list_themes
 from lute.db import db
 from lute.parse.mecab_parser import JapaneseParser
+from lute.parse.fugashi_parser import FugashiParser
+from lute.parse.registry import parser_instances, get_parser
 
 
 class UserSettingsForm(FlaskForm):
@@ -53,6 +55,8 @@ class UserSettingsForm(FlaskForm):
         ("alphabet", "Romaji"),
     ]
     japanese_reading = SelectField("Pronunciation characters", choices=reading_choices)
+    unidic_choices = [("novel", "novel"), ("normal", "normal")]
+    unidic_types = SelectField("Unidic", choices=unidic_choices)
 
     def validate_backup_dir(self, field):
         "Field must be set if enabled."
@@ -138,3 +142,13 @@ def test_parse():
         UserSetting.set_value("mecab_path", old_setting)
 
     return jsonify(result)
+
+
+@bp.route("/set_japanese_parser/<unidic_type>")
+def set_parser(unidic_type):
+    if unidic_type == UserSetting.get_value("unidic_types"):
+        return unidic_type
+    if not parser_instances["japanese"]:
+        get_parser("japanese")
+    parser_instances["japanese"].switch_tagger(unidic_type)
+    return unidic_type

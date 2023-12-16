@@ -154,6 +154,7 @@ class UserSetting(SettingBase):
             "current_theme": "-",
             "custom_styles": "/* Custom css to modify Lute's appearance. */",
             "show_highlights": True,
+            "unidic_types": "normal",
         }
         for k, v in keys_and_defaults.items():
             if not UserSetting.key_exists(k):

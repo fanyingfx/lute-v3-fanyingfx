@@ -5,6 +5,7 @@ import jaconv
 from lute.parse.base import ParsedToken, AbstractParser
 from lute.models.setting import UserSetting
 from fugashi import Tagger
+from flask import current_app
 
 
 class FugashiParser(AbstractParser):
@@ -21,8 +22,9 @@ class FugashiParser(AbstractParser):
     # For example
     # _tagger = Tagger("-d /home/fy/.unidics/unidic-csj-202302")
     # unidic can download from  https://clrd.ninjal.ac.jp/unidic/
-    # _tagger = Tagger("-d /home/fan/.unidics/unidic-csj-202302")
+    # _tagger = Tagger("-d .unidics/unidic-csj-202302")
     _tagger = Tagger()
+    _tagger_type = "normal"
     _cache = {}
 
     @classmethod
@@ -109,8 +111,20 @@ class FugashiParser(AbstractParser):
     def _string_is_hiragana(s: str) -> bool:
         return all(FugashiParser._char_is_hiragana(c) for c in s)
 
-    def _char_is_hiragana(self, c) -> bool:
+    @classmethod
+    def _char_is_hiragana(cls, c) -> bool:
         return "\u3040" <= c <= "\u309F"
+
+    @classmethod
+    def switch_tagger(cls, type="novel"):
+        if type == "normal":
+            cls._tagger = Tagger()
+            cls._tagger_type = "normal"
+        else:
+            dict_config = current_app.env_config
+            cls._tagger = Tagger(f"-d {dict_config.userunidic}")
+            cls._tagger_type = "novel"
+        cls._cache = {}
 
     def get_reading(self, text: str):
         """

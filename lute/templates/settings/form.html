@@ -131,6 +131,13 @@
       <td>{{ form.japanese_reading.label }}</td>
       <td>{{ form.japanese_reading }}</td>
     </tr>
+  <tr>
+      <td>{{ form.unidic_types.label }}</td>
+      <td>{{ form.unidic_types }}</td>
+  </tr>
+  <tr>
+      <td><button onclick="switch_unidic();return false;"> Switch unidic</button></td>
+  </tr>
 
   </table>
 
@@ -170,6 +177,11 @@
       }
     });
   }
+  function switch_unidic(){
+      let unidic_type=document.getElementById('unidic_types').value
+    $.get(`/settings/set_japanese_parser/${unidic_type}`)
+  }
+
 
 </script>
 

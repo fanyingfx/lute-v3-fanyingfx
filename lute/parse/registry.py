@@ -3,7 +3,8 @@ Parser registry.
 
 List of available parsers.
 """
-from functools import lru_cache
+
+from lute.models.setting import UserSetting
 
 from lute.parse.base import AbstractParser
 from lute.parse.fugashi_parser import FugashiParser
@@ -12,16 +13,23 @@ from lute.parse.mecab_parser import JapaneseParser
 from lute.parse.sudachi_parser import SudachiParser
 from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.character_parser import ClassicalChineseParser
-from lute.parse.unidic2ud_parser_temp import Unidic2udParser
+from lute.parse.unidic2ud_parser import Unidic2udParser
 
 # List of ALL parsers available, not necessarily all supported.
 # This design feels fishy, but it suffices for now.
 parsers = {
     "spacedel": SpaceDelimitedParser,
     "turkish": TurkishParser,
-    "japanese": Unidic2udParser,
+    "japanese": FugashiParser,
     "classicalchinese": ClassicalChineseParser,
 }
+parser_instances = {}
+
+
+def _init_jp_parser():
+    unidic_type = UserSetting.get_value("unidic_types")
+    parser_instances["japanese"] = parsers["japanese"]()
+    parser_instances["japanese"].switch_tagger(unidic_type)
 
 
 def _supported_parsers():
@@ -33,12 +41,18 @@ def _supported_parsers():
     return ret
 
 
-@lru_cache(maxsize=None)
 def get_parser(parser_name) -> AbstractParser:
     "Return the supported parser with the given name."
     if parser_name in _supported_parsers():
-        pclass = parsers[parser_name]
-        return pclass()
+        if parser_name in parser_instances:
+            return parser_instances[parser_name]
+        if parser_name == "japanese":
+            _init_jp_parser()
+        else:
+            pclass = parsers[parser_name]
+            parser_instances[parser_name] = pclass()
+        return parser_instances[parser_name]
+
     raise ValueError(f"Unknown parser type '{parser_name}'")
 
 

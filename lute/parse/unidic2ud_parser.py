@@ -17,7 +17,8 @@ class Unidic2udParser(AbstractParser):
     """
 
     _is_supported = True
-    _nlp = unidic2ud.spacy.load("novel")
+    # _nlp = unidic2ud.spacy.load("novel")
+    _nlp = unidic2ud.spacy.load("spoken")
     _cache = {}
     _reg = re.compile("Translit=(.*)")
 

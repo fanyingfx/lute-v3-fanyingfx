@@ -352,11 +352,16 @@ let get_textitems_spans = function(e) {
 
   let attr_name = 'seid';
   let attr_value = w.attr('seid');
+  if (!e.shiftKey){
+    // send the sentence, word's parent is textsentence
+    pa= w.parent()
+    return pa.children().toArray()
+  }
 
-  if (e.shiftKey) {
+  // if (e.shiftKey) {
     attr_name = 'paraid';
     attr_value = w.attr('paraid');
-  }
+  // }
 
   return $('span.textitem').toArray().filter(x => x.getAttribute(attr_name) === attr_value);
 };

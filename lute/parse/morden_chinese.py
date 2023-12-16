@@ -1,10 +1,11 @@
 from typing import List
-
+import logging
 from lute.parse.base import AbstractParser
 from lute.parse.base import ParsedToken
 import jieba
 
-jieba.enable_paddle()
+jieba.setLogLevel(logging.INFO)
+
 # Chinese_
 CHINESE_PUNCTS = (
     r"！？｡＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏.\n"

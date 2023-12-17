@@ -43,38 +43,12 @@ content_type_map = {
     "woff2": "application/font-woff2",
 }
 
-
-# def get_url_map():
-#     result = {}
-#     files = []
-
-#     # resource_path = '/mdx'
-#     file_util_get_files(resource_path, files)
-#     for p in files:
-#         if file_util_get_ext(p) in content_type_map:
-#             p = p.replace('\\', '/')
-#             result[re.match('.*?/mdx(/.*)', p).groups()[0]] = p
-#     return result
-# # 可以重写使用python的http server即可
-# URL_MAP=get_url_map()
-# print('urlmap',URL_MAP)
-
-# try:
-#     # PyInstaller creates a temp folder and stores path in _MEIPASS
-#     #base_path = sys._MEIPASS
-#     base_path = os.path.dirname(sys.executable)
-# except Exception:
-#     base_path = os.path.abspath(".")
-import pathlib
 from pathlib import Path
 
-resource_path = Path("D:/dicts/Eng/olad10/")
-# resource_path = os.path.join(base_path, 'mdx')
-# local_map={}
-import pathlib
-from pathlib import Path
-
-resource_path = Path("D:/dicts/ja/Shogakukanjcv3")
+# resource_path = Path("D:/dicts/Eng/olad10/")
+# from pathlib import Path
+#
+# resource_path = Path("D:/dicts/ja/Shogakukanjcv3")
 # resource_path = os.path.join(base_path, 'mdx')
 from typing import List
 
@@ -156,7 +130,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         parsed_url = unquote(parsed_url.geturl())
 
         # print(parsed_url)
-        file_extension = file_util_get_ext(parsed_url)
+        file_extension = parsed_url.split(".")[-1]
         # print('url',parsed_url,parsed_url[1:],parsed_url[1:] in local_map)
         # content_type =
         content_type = content_type_map.get(file_extension, "text/html; charset=utf-8")
@@ -169,55 +143,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.send_header("Content-type", content_type)
         self.end_headers()
         self.wfile.write(res)
-
-        # if parsed_url[1:] in self.local_map:
-        #     print(1)
-        #     content_type = content_type_map.get(file_extension, 'text/html; charset=utf-8')
-        #     self.send_response(200)
-        #     self.send_header('Content-type', content_type)
-        #     self.end_headers()
-        #     response=self.local_map.get(parsed_url[1:])
-
-        #     self.wfile.write(response)
-
-        # elif file_extension in content_type_map:
-        #     print(2)
-        #     content_type = content_type_map.get(file_extension, 'text/html; charset=utf-8')
-        #     self.send_response(200)
-        #     print('mdd',file_extension,parsed_url)
-        #     # content_type='Content-Type', 'text/html; charset=utf-8'
-        #     self.send_header('Content-type', content_type)
-        #     self.end_headers()
-        #     response=get_definition_mdd(parsed_url,self.mdx_dict)
-        #     # print(response)
-        #     if not response:
-        #         response=''.encode('utf-8')
-
-        #     self.wfile.write(response)
-
-        # else:
-        #     print(3)
-        #     self.send_response(200)
-        #     content_type='text/html; charset=utf-8'
-        #     self.send_header('Content-type', content_type)
-        #     self.end_headers()
-        #     print('mdx_word',parsed_url[1:])
-        #     response= get_definition_mdx(parsed_url[1:],self.mdx_dict)
-        #     if response.strip()==b'' and self.mdx_dict2 is not None:
-        #         response = get_definition_mdx(parsed_url)
-        #     # print('mdx_res',response)
-        #     # print(response)
-        #     if not response:
-        #         response=''.encode('utf-8')
-        #     self.wfile.write(response)
-
-        # Send response headers
-        # self.send_response(200)
-        # self.send_header('Content-type', 'text/html')
-        # self.end_headers()
-        # # Handle GET requests
-        # response = f"Hello! You requested {parsed_url.path} with parameters: {params}"
-        # self.wfile.write(response.encode('utf-8'))
 
 
 def run_server(builder: IndexBuilder, local_map={}, port=8000, builder2=None):

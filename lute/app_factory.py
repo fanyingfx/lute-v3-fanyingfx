@@ -18,6 +18,7 @@ from flask import (
     send_from_directory,
     jsonify,
 )
+
 from lute.config.app_config import AppConfig
 from lute.db import db
 from lute.db.setup.main import setup_db

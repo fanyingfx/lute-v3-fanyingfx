@@ -19,20 +19,24 @@ jp_filedir = "/home/fan/dicts/ja/Shogakukanjcv3"
 jp_filename = "Shogakukanjcv3.mdx"
 jp_filename2 = "xsjrihanshuangjie.mdx"
 jp_dir2 = "/home/fan/dicts/ja/xsjrihanshuangjie"
+jp_filename3 = "NHK日本語発音アクセント辞書.mdx"
+jp_dir3 = "/home/fan/dicts/ja/nhk"
 resource_path = Path(filedir)
 jp_resource_path = Path(jp_filedir)
 jp_res2 = Path(jp_dir2)
+jp_res3 = Path(jp_dir3)
 
-dict_local = get_local_resource([resource_path, jp_resource_path, jp_res2])
-# jp_local = get_local_resource([jp_resource_path])
+dict_local = get_local_resource([resource_path, jp_resource_path, jp_res2, jp_res3])
 
 builder = IndexBuilder(f"{filedir}/{en_filename}")
 jp_builder = IndexBuilder(f"{jp_filedir}/{jp_filename}")
 jp_builder2 = IndexBuilder(f"{jp_dir2}/{jp_filename2}")
+jp_builder3 = IndexBuilder(f"{jp_dir3}/{jp_filename3}")
 
 bd = MDXDict(builder, dict_local)
 jp_bd = MDXDict(jp_builder, dict_local)
 jp_bd2 = MDXDict(jp_builder2, dict_local)
+jp_bd3 = MDXDict(jp_builder3, dict_local, "jp3")
 
 
 def handle_req(filename, loc):
@@ -41,7 +45,7 @@ def handle_req(filename, loc):
     if filename in loc:
         content = loc[filename]
     else:
-        for abd in [bd, jp_bd, jp_bd2]:
+        for abd in [bd, jp_bd, jp_bd2, jp_bd3]:
             content = abd.lookup(f"/{filename}")
             if content != b"":
                 break
@@ -50,6 +54,7 @@ def handle_req(filename, loc):
     response = make_response(content)
     response.headers["Content-Type"] = content_type
     response.headers["Cache-Control"] = "max-age=604800, must-revalidate"
+    response.headers.add("Access-Control-Allow-Origin", "*")
 
     return response
 
@@ -84,10 +89,13 @@ def query_jp():
     ext = word.split(".")[-1]
     if ext in content_type_map:
         return handle_req(word, dict_local)
+    pronunciation = jp_bd3.lookup(word)
+
     for jbd in [jp_bd, jp_bd2]:
         res = jbd.lookup(word)
         if res != b"":
             break
+    res = pronunciation + b"<br/>" + res
     response = make_response(res)
     content_type = content_type_map["html"]
     response.headers["Content-type"] = content_type

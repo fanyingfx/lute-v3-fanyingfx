@@ -34,7 +34,6 @@ content_type_map = {
     "mp3": "audio/mpeg",
     "mp4": "audio/mp4",
     "wav": "audio/wav",
-    "spx": "audio/ogg",
     "ogg": "audio/ogg",
     "eot": "font/opentype",
     "svg": "text/xml",
@@ -74,9 +73,13 @@ builder = None
 
 
 class MDXDict:
-    def __init__(self, builder: IndexBuilder, local_map=dict()) -> None:
+    def __init__(self, builder: IndexBuilder, local_map=None, name=None) -> None:
         self.builder = builder
-        self.local_map = local_map
+        if local_map is None:
+            self.local_map = {}
+        else:
+            self.local_map = local_map
+        self.name = name
 
     def lookup(self, resource_path):
         file_extension = resource_path.split(".")[-1]

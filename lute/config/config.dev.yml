@@ -1,11 +1,11 @@
 # Generic production config.
 # Copied to config.yml if needed by lute.main
 
-#ENV: prod
-#DBNAME: lute.db
-ENV: dev
-DBNAME: test_lute.db
-DATAPATH: /home/fan/.local/share/test_lute
+ENV: prod
+DBNAME: lute.db
+#ENV: dev
+#DBNAME: test_lute.db
+#DATAPATH: /home/fan/.local/share/test_lute
 # DATAPATH is not set: user data should be
 # stored in PlatformDirs.user_data_dir
 # (ref https://pypi.org/project/platformdirs/).

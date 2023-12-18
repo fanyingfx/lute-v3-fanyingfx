@@ -10,17 +10,18 @@ from bs4 import BeautifulSoup
 
 
 def process_audio(soup: BeautifulSoup):
-    l = soup.find_all("a", {"class": "sound"})
+    l = soup.find_all("a", {"class": ["sound", "aud-btn"]})
     for a in l:
-        a.name = "div"
+        a.name = "span"
         a.attrs[
             "onclick"
-        ] = "function playAudio(e){e.children[0].play()};playAudio(this)"
+        ] = "function pl(el){if (el.nodeName=='AUDIO') el.play(); console.log(el)};function playAudio(e){e.childNodes.forEach(pl)};playAudio(this)"
         href = a.get("href")
         sound_file = href.split("//")[-1]
         sound_type = sound_file.split(".")[-1]
+        sound_type = f"audio/{sound_type}"
         audio = soup.new_tag("audio")
-        audio.append(soup.new_tag("source", src=sound_file, type=f"audio/{sound_type}"))
+        audio.append(soup.new_tag("source", src=sound_file, type=f"{sound_type}"))
         a.append(audio)
         a.attrs.pop("href", None)
     return str(soup)
@@ -56,11 +57,8 @@ def get_definition_mdx(word, builder):
 
 def get_definition_mdd(word, builder: IndexBuilder):
     """根据关键字得到MDX词典的媒体"""
-    print(f"word: {word}")
     word = word.replace("/", "\\")
-    print("word_replace", word)
     content = builder.mdd_lookup(word)
-    builder.get_mdd_keys()
     if len(content) > 0:
         return content[0]
     return b""

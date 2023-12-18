@@ -4,8 +4,26 @@
 import sys
 import re
 from mdict_query.mdict_query import IndexBuilder
+from bs4 import BeautifulSoup
 
 # from file_util import *
+
+
+def process_audio(soup: BeautifulSoup):
+    l = soup.find_all("a", {"class": "sound"})
+    for a in l:
+        a.name = "div"
+        a.attrs[
+            "onclick"
+        ] = "function playAudio(e){e.children[0].play()};playAudio(this)"
+        href = a.get("href")
+        sound_file = href.split("//")[-1]
+        sound_type = sound_file.split(".")[-1]
+        audio = soup.new_tag("audio")
+        audio.append(soup.new_tag("source", src=sound_file, type=f"audio/{sound_type}"))
+        a.append(audio)
+        a.attrs.pop("href", None)
+    return str(soup)
 
 
 def get_definition_mdx(word, builder):
@@ -16,20 +34,10 @@ def get_definition_mdx(word, builder):
     if not content:
         content = "".encode("utf-8")
         return content
-    # print(word,content)
-    # if len(content) < 1:
-    # fp = os.popen('python lemma.py ' + word)
-    # word = fp.read().strip()
-    # fp.close()
-    # print("lemma: " + word)
-    # content = builder.mdx_lookup(word)
-    # pattern = re.compile(r"@@@LINK=([\w\s]*)")
     pattern = re.compile(r"@@@LINK=(.*)")
     res = []
     for cnt in content:
         rst = pattern.match(cnt)
-        # import ipdb
-        # ipdb.set_trace()
         if rst is not None:
             link = rst.group(1).strip()
             content = builder.mdx_lookup(link)
@@ -37,6 +45,9 @@ def get_definition_mdx(word, builder):
         if len(content) > 0:
             for c in content:
                 str_content += c.replace("\r\n", "").replace("entry:/", "")
+        s_html = BeautifulSoup(str_content, "html.parser")
+        str_content = process_audio(s_html)
+
         res.append(str_content)
 
     output_html = "<br/>".join(res)

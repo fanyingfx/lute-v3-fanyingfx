@@ -16,6 +16,9 @@ from typing import List
 from lute.parse.base import ParsedToken, AbstractParser
 from lute.utils.english_lemma import lemmatize_tokens
 import spacy
+from collections import namedtuple
+
+RawToken = namedtuple("RawToken", ["token", "is_word", "is_end_of_sent", "lemma"])
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -32,6 +35,7 @@ class SpaceDelimitedParser(AbstractParser):
 
     def __init__(self):
         self.cache = {}
+        self.nlp_cache = {}
 
     def _set_cache(self, k, v):
         self.cache[k] = v
@@ -61,6 +65,9 @@ class SpaceDelimitedParser(AbstractParser):
         """
         Returns ParsedToken array for given language.
         """
+        key = hash(text)
+        if key in self.cache:
+            return self._get_from_cache(key)
         replacements = lang.character_substitutions.split("|")
         for replacement in replacements:
             fromto = replacement.strip().split("=")
@@ -76,52 +83,38 @@ class SpaceDelimitedParser(AbstractParser):
         tokens = []
         paras = text.split("\n")
         pcount = len(paras)
+
         for i, para in enumerate(paras):
-            # self.parse_para(para, lang, tokens)
-            tokens.extend(self.parse_para(para, lang, i))
+            tokens.extend(self.parse_para(para, lang))
             if i != (pcount - 1):
-                tokens.append(ParsedToken("¶", False, True))
+                tokens.append(RawToken("¶", False, True, ""))
 
-        return tokens
+        res = [
+            ParsedToken(tok.token, tok.is_word, tok.is_end_of_sent, tok.lemma)
+            for tok in tokens
+        ]
+        self._set_cache(key, res)
+        return res
 
-    def parse_para(self, text: str, lang, i):
+    def parse_para(self, text: str, lang):
         """
         Parse a string, appending the tokens to the list of tokens.
         """
-        #
-        # termchar = lang.word_characters
-        # if termchar.strip() == "":
-        #     raise RuntimeError(
-        #         f"Language {lang.name} has invalid Word Characters specification."
-        #     )
-        #
-        # splitex = lang.exceptions_split_sentences.replace(".", "\\.")
-        # pattern = rf"({splitex}|[{termchar}]*)"
-        # if splitex.strip() == "":
-        #     pattern = rf"([{termchar}]*)"
 
-        # m = self.preg_match_capture(pattern, text)
-        # doc = nlp(text)
-        # wordtoks = list(filter(lambda t: t[0] != "", m))
-        # wordtoks_lemma = lemmatize_tokens([wt[0] for wt in wordtoks])
-
-        #
-
-        # For each wordtok, add all non-words before the wordtok, and
-        # then add the wordtok.
         toks = []
-        if text in self.cache:
-            doc = self._get_from_cache(text)
-        else:
-            doc = nlp(text)
-            self._set_cache(text, doc)
+        key = hash(text)
+        if key in self.cache:
+            return self._get_from_cache(key)
+        doc = nlp(text)
 
         for tok in doc:
             toks.append(
-                ParsedToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
+                # ParsedToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
+                RawToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
             )
             if tok.whitespace_ != "":
-                toks.append(ParsedToken(tok.whitespace_, False))
+                toks.append(RawToken(tok.whitespace_, False, False, ""))
+        self._set_cache(key, toks)
         return toks
 
 

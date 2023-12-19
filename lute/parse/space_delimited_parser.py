@@ -11,9 +11,13 @@ Includes classes:
 """
 
 import re
+from functools import lru_cache
 from typing import List
 from lute.parse.base import ParsedToken, AbstractParser
 from lute.utils.english_lemma import lemmatize_tokens
+import spacy
+
+nlp = spacy.load("en_core_web_sm")
 
 
 class SpaceDelimitedParser(AbstractParser):
@@ -25,6 +29,15 @@ class SpaceDelimitedParser(AbstractParser):
     @classmethod
     def name(cls):
         return "Space Delimited"
+
+    def __init__(self):
+        self.cache = {}
+
+    def _set_cache(self, k, v):
+        self.cache[k] = v
+
+    def _get_from_cache(self, k):
+        return self.cache[k]
 
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         "Return parsed tokens."
@@ -64,60 +77,52 @@ class SpaceDelimitedParser(AbstractParser):
         paras = text.split("\n")
         pcount = len(paras)
         for i, para in enumerate(paras):
-            self.parse_para(para, lang, tokens)
+            # self.parse_para(para, lang, tokens)
+            tokens.extend(self.parse_para(para, lang, i))
             if i != (pcount - 1):
                 tokens.append(ParsedToken("¶", False, True))
 
         return tokens
 
-    def parse_para(self, text: str, lang, tokens: List[ParsedToken]):
+    def parse_para(self, text: str, lang, i):
         """
         Parse a string, appending the tokens to the list of tokens.
         """
-        termchar = lang.word_characters
-        if termchar.strip() == "":
-            raise RuntimeError(
-                f"Language {lang.name} has invalid Word Characters specification."
-            )
+        #
+        # termchar = lang.word_characters
+        # if termchar.strip() == "":
+        #     raise RuntimeError(
+        #         f"Language {lang.name} has invalid Word Characters specification."
+        #     )
+        #
+        # splitex = lang.exceptions_split_sentences.replace(".", "\\.")
+        # pattern = rf"({splitex}|[{termchar}]*)"
+        # if splitex.strip() == "":
+        #     pattern = rf"([{termchar}]*)"
 
-        splitex = lang.exceptions_split_sentences.replace(".", "\\.")
-        pattern = rf"({splitex}|[{termchar}]*)"
-        if splitex.strip() == "":
-            pattern = rf"([{termchar}]*)"
+        # m = self.preg_match_capture(pattern, text)
+        # doc = nlp(text)
+        # wordtoks = list(filter(lambda t: t[0] != "", m))
+        # wordtoks_lemma = lemmatize_tokens([wt[0] for wt in wordtoks])
 
-        m = self.preg_match_capture(pattern, text)
-        wordtoks = list(filter(lambda t: t[0] != "", m))
-        wordtoks_lemma = lemmatize_tokens([wt[0] for wt in wordtoks])
-
-        def add_non_words(s):
-            """
-            Add non-word token s to the list of tokens.  If s
-            matches any of the split_sentence values, mark it as an
-            end-of-sentence.
-            """
-            if not s:
-                return
-            pattern = f"[{re.escape(lang.regexp_split_sentences)}]"
-            has_eos = False
-            if pattern != "[]":  # Should never happen, but ...
-                allmatches = self.preg_match_capture(pattern, s)
-                has_eos = len(allmatches) > 0
-            tokens.append(ParsedToken(s, False, has_eos))
+        #
 
         # For each wordtok, add all non-words before the wordtok, and
         # then add the wordtok.
-        pos = 0
-        for wt, wt_lemma in zip(wordtoks, wordtoks_lemma):
-            w = wt[0]
-            wp = wt[1]
-            s = text[pos:wp]
-            add_non_words(s)
-            tokens.append(ParsedToken(w, True, False, wt_lemma))
-            pos = wp + len(w)
+        toks = []
+        if text in self.cache:
+            doc = self._get_from_cache(text)
+        else:
+            doc = nlp(text)
+            self._set_cache(text, doc)
 
-        # Add anything left over.
-        s = text[pos:]
-        add_non_words(s)
+        for tok in doc:
+            toks.append(
+                ParsedToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
+            )
+            if tok.whitespace_ != "":
+                toks.append(ParsedToken(tok.whitespace_, False))
+        return toks
 
 
 class TurkishParser(SpaceDelimitedParser):

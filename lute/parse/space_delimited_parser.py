@@ -32,6 +32,7 @@ class SpaceDelimitedParser(AbstractParser):
 
     def __init__(self):
         self.cache = {}
+        self.nlp_cache = {}
 
     def _set_cache(self, k, v):
         self.cache[k] = v
@@ -88,33 +89,16 @@ class SpaceDelimitedParser(AbstractParser):
         """
         Parse a string, appending the tokens to the list of tokens.
         """
-        #
-        # termchar = lang.word_characters
-        # if termchar.strip() == "":
-        #     raise RuntimeError(
-        #         f"Language {lang.name} has invalid Word Characters specification."
-        #     )
-        #
-        # splitex = lang.exceptions_split_sentences.replace(".", "\\.")
-        # pattern = rf"({splitex}|[{termchar}]*)"
-        # if splitex.strip() == "":
-        #     pattern = rf"([{termchar}]*)"
 
-        # m = self.preg_match_capture(pattern, text)
-        # doc = nlp(text)
-        # wordtoks = list(filter(lambda t: t[0] != "", m))
-        # wordtoks_lemma = lemmatize_tokens([wt[0] for wt in wordtoks])
-
-        #
-
-        # For each wordtok, add all non-words before the wordtok, and
-        # then add the wordtok.
         toks = []
-        if text in self.cache:
-            doc = self._get_from_cache(text)
+        key = f"{i}-{text}"
+        if key in self.cache:
+            return self._get_from_cache(key)
+        if text in self.nlp_cache:
+            doc = self.nlp_cache.get(text)
         else:
             doc = nlp(text)
-            self._set_cache(text, doc)
+            self.nlp_cache[text] = doc
 
         for tok in doc:
             toks.append(
@@ -122,6 +106,8 @@ class SpaceDelimitedParser(AbstractParser):
             )
             if tok.whitespace_ != "":
                 toks.append(ParsedToken(tok.whitespace_, False))
+        if len(text) > 3:
+            self._set_cache(f"{i}-{text}", toks)
         return toks
 
 

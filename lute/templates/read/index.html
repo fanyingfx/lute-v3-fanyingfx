@@ -5,6 +5,7 @@
 {% block body %}
 
 <script type="text/javascript" src="{{ url_for('static', filename='js/player.js') }}" charset="utf-8" defer></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/text-options.js') }}" charset="utf-8" defer></script>
 
 <div id="rendering_controls" style="display: none">
   <pre>
@@ -19,71 +20,79 @@
   </pre>
 </div>
 
+<div id="read_pane_container">
+
 <div id="read_pane_left">
+
   <div id="reading-header">
-    <!-- Lacking css skills, so table layout to the rescue. -->
-    <table style="width: 100%">
-      <tr>
-        <td width="2px">
-          <img
-            src="{{ url_for('static', filename='img/lute.png') }}"
-            class="lutelogo_small"
-            style="cursor: pointer"
-            onclick="window.location='/'"
-            />
-        </td>
-        <td align="left">
-          <h2 style="margin: 0px">
-            <span
-              class="read_page_nav read_page_disabled"
-              id="navPrev10"
-              onclick="goto_relative_page(-10)"
-              >&#171;</span>
-            <span
-              class="read_page_nav read_page_disabled"
-              id="navPrev"
-              onclick="goto_relative_page(-1)"
-              >&#8249;</span>
 
-            <span id="page_indicator">{{ page_num }}/{{ page_count }}</span>
+    <div id="menuToggle" class="reading_header_left">
+      <input id="menu_hamburger_check" name="hamburger_check" type="checkbox" />
+      <span class="hamburger"></span>
+      <span class="hamburger"></span>
+      <span class="hamburger"></span>
+      <ul id="reading_menu">
+        <li>
+          <button class="text-options-button font-minus" title="Decrease font size"></button>
+          <button class="text-options-button font-plus" title="Increase font size"></button>
+          &nbsp;
+          <button class="text-options-button lh-minus" title="Decrease line height"></button>
+          <button class="text-options-button lh-plus" title="Increase line height"></button>
+        </li>
+        <li>
+          <button class="text-options-button width-minus" title="Decrease content width"></button>
+          <button class="text-options-button width-plus" title="Increase content width"></button>
+          &nbsp;
+          <button class="text-options-button column-one" title="One column text"></button>
+          <button class="text-options-button column-two" title="Two column text"></button>
+        </li>
+        {% if book.source_uri %}
+        <li><a href="{{ book.source_uri }}" target="_blank" tabindex="-1">Show source URL</a></li>
+        {% endif %}
+        <li><a id="editText" href="" onclick="edit_current_page(); return false;">Edit page</a></li>
+        <li><a id="next_theme" onclick="next_theme(); return false;" title="Next theme">Next theme (m)</a></li>
+        <li><a id="toggle_highlights" onclick="toggle_highlight(); return false;" title="Toggle highlights">Toggle highlights (h)</a></li>
+        <li><a id="keyboard_shortcuts" title="Keyboard shortcuts">Keyboard shortcuts</a></li>
+      </ul>
+    </div>
 
-            <span
-              class="read_page_nav read_page_disabled"
-              id="navNext"
-              onclick="goto_relative_page(1)"
-              >&#8250;</span>
+    <div id="menuToggle" class="reading_header_left">
+      <img
+        src="{{ url_for('static', filename='img/lute.png') }}"
+        class="lutelogo_small"
+        style="cursor: pointer"
+        onclick="window.location='/'" />
+    </div>
 
-            <span
-              class="read_page_nav read_page_disabled"
-              id="navNext10"
-              onclick="goto_relative_page(10)"
-              >&#187;</span>
-          </h2>
-        </td>
-        <td align="right">
-          <span><a id="reading_home_link" class="home-link" href="/">Home</a></span>
-          {% if book.source_uri %}
-          <a href="{{ book.source_uri }}" target="_blank" tabindex="-1">
-            <img
-              src="{{ url_for('static', filename='icn/external.png') }}"
-              title="Show source URL" />
-          </a>
-          {% endif %}
-          <span id="editText" style="cursor: pointer" onclick="edit_current_page()">
-            <img
-              src="{{ url_for('static', filename='icn/document--pencil.png') }}"
-              title="Edit"
-              alt="Edit" />
-          </span>
-          <img
-            id="keyboard_shortcuts"
-            style="margin-right: 10px"
-            src="{{ url_for('static', filename='icn/question-balloon.png') }}"
-            title="Keyboard shortcuts"
-          />
-        </td>
-      </tr>
-    </table>
+    <div class="reading_header_middle">
+      <h2 style="margin: 0px">
+        <span
+          class="read_page_nav read_page_disabled"
+          id="navPrev10"
+          onclick="goto_relative_page(-10)"
+          >&#171;</span>
+        <span
+          class="read_page_nav read_page_disabled"
+          id="navPrev"
+          onclick="goto_relative_page(-1)"
+          >&#8249;</span>
+        <span id="page_indicator">{{ page_num }}/{{ page_count }}</span>
+        <span
+          class="read_page_nav read_page_disabled"
+          id="navNext"
+          onclick="goto_relative_page(1)"
+          >&#8250;</span>
+        <span
+          class="read_page_nav read_page_disabled"
+          id="navNext10"
+          onclick="goto_relative_page(10)"
+          >&#187;</span>
+      </h2>
+    </div>
+
+    <div class="reading_header_right">
+      <a id="reading_home_link" class="home-link" href="/">Home</a>
+    </div>
 
   </div>
 
@@ -123,21 +132,13 @@
               <option value="60">60 sec</option>
             </select>
           </div>
-          <!-- <div class="playback-rate-container"> -->
           <button id="playback-rate-btn" class="audio-button"><span>1.0</span></button>
-          <!-- </div> -->
         </div>
       </div>
       <div class="audio-player-right-container">
-        <!-- <div class="volume-container"> -->
-          <!-- <button id="volume-on-btn"><span></span></button> -->
         <input type="range" class="volume" max="100" value="100"/>
-        <!-- </div> -->
         <div class="bookmark-buttons-container">
-          <!-- <div class="bookmark-btn-container"> -->
           <button id="bkm-save-btn" class="audio-button"></button>
-            <!-- <button id="bkm-delete-btn"></button> -->
-          <!-- </div> -->
           <div class="bookmark-jump-container">
             <button id="bkm-prev-btn" class="audio-button"></button>
             <button id="bkm-next-btn" class="audio-button"></button>
@@ -148,39 +149,50 @@
     </div>
   </div>
 
-  <h2 id="thetexttitle">{{ book.title }}</h2>
+  <h2 id="thetexttitle" class="hide">{{ book.title }}</h2>
 
   <div id="thetext" {% if is_rtl %}dir="rtl" {% endif %}>
     ...
   </div>
 
   <div id="reading-footer" style="text-align: center">
-    <h2>
-      <span
-        id="footerMarkRestAsKnown"
-        style="cursor: pointer"
-        onclick="handle_page_done(true, 0)"
-        title="Mark rest as known, mark page as read">
-        <img src="{{ url_for('static', filename='icn/tick.png') }}" />
-      </span>
-
+    <p>
       <span
         id="footerMarkRestAsKnownNextPage"
-        style="cursor: pointer"
+        style="cursor: pointer; color: #4CBB17;"
         onclick="handle_page_done(true, 1)"
         title="Mark rest as known, mark page as read, then go to next page">
-        <img src="{{ url_for('static', filename='icn/tick.png') }}" />&#8250;
+        &#x2714;
       </span>
 
       <span
         id="footerNextPage"
-        style="cursor: pointer"
+        style="cursor: pointer; font-size: 1.5em; font-weight: bold;"
         onclick="handle_page_done(false, 1)"
-        title="Mark page as read, then go to next page"
-        >&#8250;</span>
-    </h2>
+        title="Mark page as read, then go to next page">
+        &#8250;
+      </span>
+    </p>
 
     <div id="final_page_controls" class="hide">
+      <p>
+        <span
+          id="footerMarkRestAsKnown"
+          style="cursor: pointer; color: #4CBB17;"
+          onclick="handle_page_done(true, 0)"
+          title="Mark rest as known, mark page as read">
+          &#x2714;
+        </span>
+
+        <span
+          id="footerDone"
+          style="cursor: pointer;"
+          onclick="handle_page_done(false, 0)"
+          title="Mark page as read">
+          &#x2714;
+        </span>
+      </p>
+
       <h2>&#127881;</h2>
       <p>
         <a
@@ -200,6 +212,7 @@
     </div>
 
   </div>
+  <div class="btm-margin-container"></div>
 </div>
 
 <div id="read_pane_right">
@@ -228,22 +241,46 @@
   </iframe>
 </div>
 
+</div>
+
 <script>
   $(document).ready(function () {
-    goto_relative_page(0);
-    initialize_player();
+    if (have_audio_file()) {
+      // Don't actually load the source -- for some reason,
+      // the ajax page load was causing the audio src to
+      // only load occasionally!  Not sure why.  Source loading
+      // is handled in load_player_source().
+      $('div.audio-player-container').show();
+    }
+    goto_relative_page(0, true);
+
+    // If the css slide-in menu is open, clicking away from it closes the menu.
+    // The menu is handled via css, so we have to update the checkbox state.
+    $(document).click(function(event) {
+      const target = $(event.target);
+      const menu_clicked = (target.closest('#menuToggle').length != 0);
+      const menu_open = $('#menu_hamburger_check').is(':checked');
+      if(menu_open && !menu_clicked) {
+        $('#menu_hamburger_check').prop("checked", false);
+      }
+    });
   });
 
-  // If book_audio_file is not null, stream the file.
-  let initialize_player = function() {
-    const have_file = ($('#book_audio_file').val() != '');
-    if (!have_file) {
-      return;
-    }
 
-    $('div.audio-player-container').show();
-    t = parseFloat($('#book_audio_current_pos').val());
+  let have_audio_file = function() {
+    return ($('#book_audio_file').val() != '');
+  }
+
+  /**
+   * Actually set the player source, loading the file,
+   * and load all bookmarks etc.
+   */
+  let load_player_source = function() {
     const book_id = $('#book_id').val();
+    // console.log('setting source to ' + `/useraudio/stream/${book_id}`);
+    player.src = `/useraudio/stream/${book_id}`;
+
+    t = parseFloat($('#book_audio_current_pos').val());
     player.currentTime = t;
     timeline.value = t;
 
@@ -256,7 +293,6 @@
       bookmarksArray.push(b);
     }
 
-    player.src = `/useraudio/stream/${book_id}`;
     start_player_post_loop();
   };
 
@@ -316,8 +352,16 @@
   };
 
 
-  // Go to page relative to that stored in page_num input.
-  function goto_relative_page(p) {
+  /**
+   * Go to page relative to that stored in page_num input.
+   *
+   * On first load of page, load_source_file is set to true.
+   * It appears that for Firefox the player source can't be set
+   * while the page content is being ajax'd in.  This makes
+   * _NO SENSE AT ALL_ but moving the player source loading
+   * to the ajax "success" function worked.  ???
+   */
+  function goto_relative_page(p, load_source_file = false) {
     const bookid = $('#book_id').val();
     const pagenum = parseInt($('#page_num').val());
     const maxpage = parseInt($('#page_count').val());
@@ -344,6 +388,12 @@
         set_page_fraction();
         set_footer_control_visibility();
         show_hide_title(relpage);
+
+        // Magic hack for player source to load consistently
+        // in Firefox.
+        if (load_source_file && have_audio_file()) {
+          load_player_source();
+        }
       }
     );
   }

@@ -12,4 +12,5 @@
       data_reading="{{ item.reading }}"
 {% if item.wo_id is not none %}
       data_wid="{{ item.wo_id }}"
-{% endif %}>{{ item.html_display_text | safe }}</span>
+{% endif %}><ruby>{{ item.html_display_text | safe }}<rp>(</rp><rt>{{ item.reading }}</rt><rp>)</rp></ruby>
+</span>

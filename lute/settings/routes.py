@@ -55,7 +55,7 @@ class UserSettingsForm(FlaskForm):
         ("alphabet", "Romaji"),
     ]
     japanese_reading = SelectField("Pronunciation characters", choices=reading_choices)
-    unidic_choices = [("novel", "novel"), ("normal", "normal")]
+    unidic_choices = [("spoken", "spoken"), ("writing", "writing")]
     unidic_types = SelectField("Unidic", choices=unidic_choices)
 
     def validate_backup_dir(self, field):

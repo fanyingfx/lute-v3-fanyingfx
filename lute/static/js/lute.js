@@ -265,7 +265,7 @@ function select_ended(e) {
     return;
   }
 
-  const textparts = selected.toArray().map((el) => $(el).text());
+  const textparts = selected.toArray().map((el) => $(el).attr('data_text'));
   const text = textparts.join('').trim();
   const lemmaparts= selected.toArray().map((el)=>{
     let lemma= $(el).attr('data_lemma')
@@ -276,6 +276,8 @@ function select_ended(e) {
   const lemma = lemmaparts.join('').trim();
   const readingparts= selected.toArray().map((el)=>{
     let reading= $(el).attr('data_reading')
+    if (reading===''){
+    reading=$(el).attr('data_text')}
     return reading
 
   })
@@ -286,7 +288,7 @@ function select_ended(e) {
     return;
   }
 
-  showEditFrame(selection_start_el, { textparts: textparts, lemma: lemma});
+  showEditFrame(selection_start_el, { textparts: textparts, lemma: lemma, reading: reading});
   selection_start_el = null;
 }
 

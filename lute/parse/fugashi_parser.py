@@ -1,4 +1,5 @@
 import re
+from functools import lru_cache
 from typing import List, Any
 from typing import List
 import jaconv
@@ -24,7 +25,7 @@ class FugashiParser(AbstractParser):
     # unidic can download from  https://clrd.ninjal.ac.jp/unidic/
     # _tagger = Tagger("-d .unidics/unidic-csj-202302")
     _tagger = Tagger()
-    _tagger_type = "normal"
+    _tagger_type = "spoken"
     _cache = {}
 
     @classmethod
@@ -36,23 +37,17 @@ class FugashiParser(AbstractParser):
         return "Japanese"
 
     @classmethod
-    def _get_cache(cls, key):
-        return FugashiParser._cache.get(key)
-
-    @classmethod
-    def _set_cache(cls, key, res):
-        FugashiParser._cache[key] = res
-
-    @classmethod
+    @lru_cache()
     def parse_para(cls, text: str, language) -> list[list[str | Any] | list[str]]:
         lines = []
 
-        if FugashiParser._get_cache(text):
-            return FugashiParser._get_cache(text)
         for tok in FugashiParser._tagger(text.strip()):
-            reading_is_kana = tok.feature.kana
+            reading_is_kana = FugashiParser._string_is_hiragana(tok.surface)
             reading = tok.feature.kana
-            if reading_is_kana or not reading:
+            is_forein = tok.feature.goshu == "外"
+            if is_forein:
+                reading = tok.feature.lemma.split("-")[-1]
+            elif reading_is_kana or not reading:
                 reading = ""
             else:
                 reading = jaconv.kata2hira(reading)
@@ -69,9 +64,9 @@ class FugashiParser(AbstractParser):
         lines.append(["EOP", "3", "7", "8", ""])
         # res = [line_to_token(lin) for lin in lines]
 
-        FugashiParser._set_cache(text, lines)
         return lines
 
+    @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         """
         Parse the string using Sudachi
@@ -116,14 +111,14 @@ class FugashiParser(AbstractParser):
         return "\u3040" <= c <= "\u309F"
 
     @classmethod
-    def switch_tagger(cls, type="novel"):
-        if type == "normal":
-            cls._tagger = Tagger()
-            cls._tagger_type = "normal"
+    def switch_tagger(cls, type="writing"):
+        dict_config = current_app.env_config
+        if type == "spoken":
+            cls._tagger = Tagger(f"-d {dict_config.userunidic['s']}")
+            cls._tagger_type = "spoken"
         else:
-            dict_config = current_app.env_config
-            cls._tagger = Tagger(f"-d {dict_config.userunidic}")
-            cls._tagger_type = "novel"
+            cls._tagger = Tagger(f"-d {dict_config.userunidic['w']}")
+            cls._tagger_type = "writing"
         cls._cache = {}
 
     def get_reading(self, text: str):

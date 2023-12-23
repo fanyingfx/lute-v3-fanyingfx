@@ -51,7 +51,10 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.datapath = config.get("DATAPATH", self._get_appdata_dir())
         self.userimagespath = os.path.join(self.datapath, "userimages")
         self.useraudiopath = os.path.join(self.datapath, "useraudio")
-        self.userunidic = os.path.join(self.datapath, "unidic-csj")
+        self.userunidic = {
+            "s": os.path.join(self.datapath, "unidic-csj"),
+            "w": os.path.join(self.datapath, "unidic-cwj"),
+        }
         self.dbfilename = os.path.join(self.datapath, self.dbname)
 
         # Path to db backup.

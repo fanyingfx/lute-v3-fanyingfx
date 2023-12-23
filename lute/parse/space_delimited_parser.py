@@ -14,9 +14,8 @@ import re
 from functools import lru_cache
 from typing import List
 from lute.parse.base import ParsedToken, AbstractParser
-from lute.utils.english_lemma import lemmatize_tokens
-import spacy
 from collections import namedtuple
+import spacy
 
 RawToken = namedtuple("RawToken", ["token", "is_word", "is_end_of_sent", "lemma"])
 
@@ -37,12 +36,6 @@ class SpaceDelimitedParser(AbstractParser):
         self.cache = {}
         self.nlp_cache = {}
 
-    def _set_cache(self, k, v):
-        self.cache[k] = v
-
-    def _get_from_cache(self, k):
-        return self.cache[k]
-
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         "Return parsed tokens."
         clean_text = re.sub(r" +", " ", text)
@@ -61,13 +54,11 @@ class SpaceDelimitedParser(AbstractParser):
         result = [[match.group(), match.start()] for match in matches]
         return result
 
+    @lru_cache()
     def _parse_to_tokens(self, text: str, lang):
         """
         Returns ParsedToken array for given language.
         """
-        key = hash(text)
-        if key in self.cache:
-            return self._get_from_cache(key)
         replacements = lang.character_substitutions.split("|")
         for replacement in replacements:
             fromto = replacement.strip().split("=")
@@ -88,33 +79,30 @@ class SpaceDelimitedParser(AbstractParser):
             tokens.extend(self.parse_para(para, lang))
             if i != (pcount - 1):
                 tokens.append(RawToken("¶", False, True, ""))
+        ## pop the last "¶"
+        tokens.pop()
 
         res = [
             ParsedToken(tok.token, tok.is_word, tok.is_end_of_sent, tok.lemma)
             for tok in tokens
         ]
-        self._set_cache(key, res)
         return res
 
+    @lru_cache()
     def parse_para(self, text: str, lang):
         """
         Parse a string, appending the tokens to the list of tokens.
         """
 
         toks = []
-        key = hash(text)
-        if key in self.cache:
-            return self._get_from_cache(key)
         doc = nlp(text)
 
         for tok in doc:
             toks.append(
-                # ParsedToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
                 RawToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
             )
             if tok.whitespace_ != "":
                 toks.append(RawToken(tok.whitespace_, False, False, ""))
-        self._set_cache(key, toks)
         return toks
 
 

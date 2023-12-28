@@ -14,6 +14,9 @@ from pypinyin import pinyin
 from lute.parse.base import AbstractParser
 from lute.parse.base import ParsedToken
 import importlib
+from hanlp.utils import log_util
+
+log_util.enable_debug(False)
 
 
 CHINESE_PUNCTUATIONS = (
@@ -37,13 +40,17 @@ class MandarinParser(AbstractParser):
             current_app.env_config.datapath,
             f"mandarin.user_dict.txt",
         )
+        if not os.path.exists(dict_path):
+            return
         zws = "\u200B"
         with open(dict_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
         od = OrderedDict()
-        for word in lines:
-            key = word.replace(",", "").strip()
-            od[key] = word.strip("").split(",")
+        for term in lines:
+            if term.strip() == "":
+                continue
+            key = term.replace(",", "").strip()
+            od[key] = term.strip().split(",")
 
         self.load_dict(od)
 

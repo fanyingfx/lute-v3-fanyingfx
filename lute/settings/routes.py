@@ -21,7 +21,6 @@ from lute.models.setting import UserSetting
 from lute.themes.service import list_themes
 from lute.db import db
 from lute.parse.mecab_parser import JapaneseParser
-from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.registry import parser_instances, get_parser
 
 

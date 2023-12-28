@@ -85,3 +85,4 @@ zipp==3.17.0
 openepub==0.0.6
 jieba==0.42.1
 pypinyin==0.50.0
+hanlp==2.1.0b55

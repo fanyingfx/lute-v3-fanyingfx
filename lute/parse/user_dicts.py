@@ -36,6 +36,7 @@ def load_user_dict(language):
     else:
         with open(dict_path, "r", encoding="utf-8") as f:
             lines = f.readlines()
+        lines = [term.strip() for term in lines]
     od = OrderedDict()
     for word in lines:
         od[word] = word.strip().split(",")
@@ -53,4 +54,4 @@ def update_user_dict(language, od):
     for _, v in language.parser.get_user_dict().items():
         res.append(",".join(v))
     with open(dict_path, "w", encoding="utf-8") as f:
-        f.writelines(res)
+        f.write("\n".join(res))

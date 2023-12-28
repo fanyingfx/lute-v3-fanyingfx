@@ -3,11 +3,14 @@
 """
 
 from datetime import datetime
-from flask import Blueprint, flash, render_template, redirect, request
 from flask import Blueprint, flash, request, render_template, redirect, jsonify
-from lute.read.service import get_paragraphs, set_unknowns_to_known
+from lute.read.service import (
+    get_paragraphs,
+    set_unknowns_to_known,
+)
+from lute.parse.user_dicts import update_user_dict
 from lute.read.forms import TextForm
-from lute.term.model import Repository
+from lute.term.model import Repository, find_lang
 from lute.term.routes import handle_term_form
 from lute.models.book import Book, Text
 from lute.models.term import Term as DBTerm
@@ -168,7 +171,14 @@ def term_form(langid, text):
     reading = request.args.get("reading", default=None, type=str) or request.form.get(
         "romanization", None
     )
+    tokens_raw = request.args.get("textparts", None)
+
     repo = Repository(db)
+    if tokens_raw:
+        tokens = tokens_raw.split(",")
+        d = {tokens_raw.replace(",", ""): tokens}
+        lang = find_lang(langid)
+        update_user_dict(lang, d)
     term = repo.find_or_new(langid, text, lemma, reading)
 
     return handle_term_form(

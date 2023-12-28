@@ -448,3 +448,7 @@ class Repository:
         if term is None:
             return []
         return self._get_all_refs(term.children)
+
+
+def find_lang(langid):
+    return Language.find(langid)

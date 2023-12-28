@@ -3,16 +3,18 @@ Default using jieba to parse Chinese.
 https://github.com/fxsjy/jieba
 
 """
+import os
+from collections import OrderedDict
 from typing import List
 from functools import lru_cache
-import logging
-import jieba
 from itertools import chain
+
+from flask import current_app
 from pypinyin import pinyin
 from lute.parse.base import AbstractParser
 from lute.parse.base import ParsedToken
+import importlib
 
-jieba.setLogLevel(logging.INFO)
 
 CHINESE_PUNCTUATIONS = (
     r"！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏.\n"
@@ -24,17 +26,59 @@ class MandarinParser(AbstractParser):
     Using jieba to parse the Mandarin
     """
 
-    _seg = lambda text: jieba.cut(text, cut_all=False)
+    def __init__(self):
+        super().__init__()
+        self.user_dict = {}
+        self.dict_loaded = False
+        self._cache = {}
+
+    def load_dict_from_file(self):
+        dict_path = os.path.join(
+            current_app.env_config.datapath,
+            f"mandarin.user_dict.txt",
+        )
+        zws = "\u200B"
+        with open(dict_path, "r", encoding="utf-8") as f:
+            lines = f.readlines()
+        od = OrderedDict()
+        for word in lines:
+            key = word.replace(",", "").strip()
+            od[key] = word.strip("").split(",")
+
+        self.load_dict(od)
+
+    def load_dict(self, dict_set):
+        if dict_set and not self.dict_loaded:
+            self.user_dict = dict_set
+            MandarinParser._seg.dict_force = dict_set
+        print("Dict loaded.")
+        self.dict_loaded = True
+
+    def update_dict(self, od: dict):
+        self.user_dict.update(od)
+        MandarinParser._seg.dict_force = self.user_dict
 
     @classmethod
+    @lru_cache()
     def is_supported(cls):
-        return True
+        """
+        Using lru_cache to make the test execution run fast,
+        otherwise the test execution will run very slowly,
+        the process of checking whether the hanlp package is installed can be slow.
+        If hanlp is not installed, using jieba as default chinese parser.
+        """
+        is_supported = False
+        if importlib.util.find_spec("hanlp"):
+            hanlp = importlib.import_module("hanlp")
+            MandarinParser._seg = hanlp.load(hanlp.pretrained.tok.FINE_ELECTRA_SMALL_ZH)
+            is_supported = True
+
+        return is_supported
 
     @classmethod
     def name(cls):
         return "Mandarin"
 
-    @lru_cache()
     def parse_para(self, para_text):
         """
         Parsing the paragraph
@@ -49,13 +93,13 @@ class MandarinParser(AbstractParser):
             para_result.append((tok, is_word, _pinyin))
         return para_result
 
-    @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List:
         """
         Parsing the text by paragraph, then generate the ParsedToken List,
         for the correct token order.
         cached the parsed result
         """
+        self.load_dict_from_file()
         tokens = []
         for para in text.split("\n"):
             para = para.strip()
@@ -67,8 +111,13 @@ class MandarinParser(AbstractParser):
         res = []
         for tok, is_word, _pinyin in tokens:
             is_eos = tok == "¶"
-            lemma = tok
 
             res.append(ParsedToken(tok, is_word, is_eos, None, _pinyin))
 
         return res
+
+    def is_dict_loaded(self):
+        return self.dict_loaded
+
+    def get_user_dict(self):
+        return self.user_dict

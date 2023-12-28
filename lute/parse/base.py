@@ -158,3 +158,15 @@ class AbstractParser(ABC):
         but some (like Turkish) need special handling.
         """
         return text.lower()
+
+    def is_dict_loaded(self):
+        return True
+
+    def load_dict(self, dict_set):
+        pass
+
+    def update_dict(self, tokens):
+        pass
+
+    def get_user_dict(self):
+        return dict()

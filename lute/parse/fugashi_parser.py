@@ -100,15 +100,11 @@ class FugashiParser(AbstractParser):
     #   how-to-check-if-text-is-japanese-hiragana-in-python
     @staticmethod
     def _char_is_hiragana(c) -> bool:
-        return "\u3040" <= c <= "\u309F"
+        return ("\u3040" <= c <= "\u309F") or c in ("ー",)
 
     @staticmethod
     def _string_is_hiragana(s: str) -> bool:
         return all(FugashiParser._char_is_hiragana(c) for c in s)
-
-    @classmethod
-    def _char_is_hiragana(cls, c) -> bool:
-        return "\u3040" <= c <= "\u309F"
 
     @classmethod
     def switch_tagger(cls, type="writing"):

@@ -38,7 +38,7 @@ class FugashiParser(AbstractParser):
 
     @classmethod
     @lru_cache()
-    def parse_para(cls, text: str, language) -> list[list[str | Any] | list[str]]:
+    def parse_para(cls, text: str, language):
         lines = []
 
         for tok in FugashiParser._tagger(text.strip()):

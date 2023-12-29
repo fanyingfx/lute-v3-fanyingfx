@@ -4,12 +4,9 @@ Parser registry.
 List of available parsers.
 """
 
-from lute.models.setting import UserSetting
 
 from lute.parse.base import AbstractParser
 from lute.parse.space_delimited_parser import SpaceDelimitedParser, TurkishParser
-
-# from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.mecab_parser import JapaneseParser
 from lute.parse.character_parser import ClassicalChineseParser
 from lute.parse.mandarin_parser import MandarinParser

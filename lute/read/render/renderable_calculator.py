@@ -156,7 +156,7 @@ class RenderableCalculator:
                 rc.length = term.token_count
                 rc.is_word = 1
                 rc.lemma = text_lemma.get(loc["text"])
-                rc.reading = text_reading.get(loc["text"], "")
+                rc.reading = text_reading.get(loc["text"], None) or term.romanization
 
                 termcandidates.append(rc)
                 candidates[rc.id] = rc

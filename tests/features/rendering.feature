@@ -422,11 +422,11 @@ Feature: Rendering
         And text:
             2後ヲウメニ能問アラ費理セイ北多国び持困寿ながち。
         Then rendered should be:
-            2/後/ヲ/ウメニ/能/問/アラ/費/理/セイ/北/多国/び/持/困/寿/な/がち/。
+            2/後/ヲ/ウメ/ニ/能/問/アラ/費/理/セイ/北/多国/び/持/困/寿/な/がち/。
         Given terms:
             ながち
         Then rendered should be:
-            2/後/ヲ/ウメニ/能/問/アラ/費/理/セイ/北/多国/び/持/困/寿/ながち(1)/。
+            2/後/ヲ/ウメ/ニ/能/問/アラ/費/理/セイ/北/多国/び/持/困/寿/ながち(1)/。
 
 
     Scenario: Japanese multiword
@@ -446,11 +446,11 @@ Feature: Rendering
         And text:
             1234おれの方が強い。
         Then rendered should be:
-            1234/おれ/の/方/が/強い/。
+            1/2/3/4/おれ/の/方/が/強い/。
         Given terms:
             おれの方
         Then rendered should be:
-            1234/おれの方(1)/が/強い/。
+            1/2/3/4/おれの方(1)/が/強い/。
 
 
     Scenario: Bug fix: ru at end of sentence

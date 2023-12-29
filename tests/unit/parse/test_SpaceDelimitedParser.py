@@ -46,17 +46,57 @@ def test_end_of_sentence_stored_in_parsed_tokens(spanish):
     s = "Tengo un gato.\nTengo dos."
 
     expected = [
-        ("Tengo", True, False, "tengo"),
-        (" ", False, False, None),
-        ("un", True, False, "un"),
-        (" ", False, False, None),
-        ("gato", True, False, "gato"),
-        (".", False, True, None),
-        ("¶", False, True, None),
-        ("Tengo", True, False, "tengo"),
-        (" ", False, False, None),
-        ("dos", True, False, "do"),
-        (".", False, True, None),
+        ("Tengo", True, False),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "un",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "gato",
+            True,
+            False,
+        ),
+        (
+            ".",
+            False,
+            True,
+        ),
+        (
+            "¶",
+            False,
+            True,
+        ),
+        (
+            "Tengo",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "dos",
+            True,
+            False,
+        ),
+        (
+            ".",
+            False,
+            True,
+        ),
     ]
 
     assert_tokens_equals(s, spanish, expected)
@@ -67,15 +107,51 @@ def test_exceptions_are_considered_when_splitting_sentences(english):
     s = "1. Mrs. Jones is here."
 
     expected = [
-        ("1. ", False, True, None),
-        ("Mrs.", True, False, "mrs."),
-        (" ", False, False, None),
-        ("Jones", True, False, "jones"),
-        (" ", False, False, None),
-        ("is", True, False, "be"),
-        (" ", False, False, None),
-        ("here", True, False, "here"),
-        (".", False, True, None),
+        (
+            "1. ",
+            False,
+            True,
+        ),
+        (
+            "Mrs.",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "Jones",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "is",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "here",
+            True,
+            False,
+        ),
+        (
+            ".",
+            False,
+            True,
+        ),
     ]
 
     assert_tokens_equals(s, english, expected)
@@ -87,14 +163,46 @@ def test_single_que(spanish):
     """
     text = "Tengo que y qué."
     expected = [
-        ("Tengo", True, False, "tengo"),
-        (" ", False, False, None),
-        ("que", True, False, "que"),
-        (" ", False, False, None),
-        ("y", True, False, "y"),
-        (" ", False, False, None),
-        ("qué", True, False, "qué"),
-        (".", False, True, None),
+        (
+            "Tengo",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "que",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "y",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "qué",
+            True,
+            False,
+        ),
+        (
+            ".",
+            False,
+            True,
+        ),
     ]
     assert_tokens_equals(text, spanish, expected)
 
@@ -107,14 +215,46 @@ def test_EE_UU_exception_should_be_considered(spanish):
     spanish.exceptions_split_sentences = "EE.UU."
 
     expected = [
-        ("Estamos", True, False, "estamos"),
-        (" ", False, False, None),
-        ("en", True, False, "en"),
-        (" ", False, False, None),
-        ("EE.UU.", True, False, "ee.uu."),
-        (" ", False, False, None),
-        ("hola", True, False, "hola"),
-        (".", False, True, None),
+        (
+            "Estamos",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "en",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "EE.UU.",
+            True,
+            False,
+        ),
+        (
+            " ",
+            False,
+            False,
+        ),
+        (
+            "hola",
+            True,
+            False,
+        ),
+        (
+            ".",
+            False,
+            True,
+        ),
     ]
 
     assert_tokens_equals(s, spanish, expected)
@@ -127,7 +267,11 @@ def test_just_EE_UU(spanish):
     s = "EE.UU."
     spanish.exceptions_split_sentences = "EE.UU."
     expected = [
-        ("EE.UU.", True, False, "ee.uu."),
+        (
+            "EE.UU.",
+            True,
+            False,
+        ),
     ]
     assert_tokens_equals(s, spanish, expected)
 

@@ -261,7 +261,7 @@ function select_ended(e) {
     return;
   }
 
-  const textparts = selected.toArray().map((el) => $(el).text());
+  const textparts = selected.toArray().map((el) => $(el).data('text'));
   const text = textparts.join('').trim();
   const lemmaparts= selected.toArray().map((el)=>{
     let lemma= $(el).data('lemma')

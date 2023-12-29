@@ -7,27 +7,29 @@ List of available parsers.
 from lute.models.setting import UserSetting
 
 from lute.parse.base import AbstractParser
-from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.space_delimited_parser import SpaceDelimitedParser, TurkishParser
-from lute.parse.mecab_parser import JapaneseParser
-from lute.parse.sudachi_parser import SudachiParser
 from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.character_parser import ClassicalChineseParser
-from lute.parse.unidic2ud_parser import Unidic2udParser
+from lute.parse.mandarin_parser import MandarinParser
+from lute.parse.english_parser import EnglishParser
 
 # List of ALL parsers available, not necessarily all supported.
 # This design feels fishy, but it suffices for now.
 parsers = {
     "spacedel": SpaceDelimitedParser,
+    "english": EnglishParser,
     "turkish": TurkishParser,
     "japanese": FugashiParser,
     "classicalchinese": ClassicalChineseParser,
+    "mandarin": MandarinParser,
 }
 parser_instances = {}
 
 
 def _init_jp_parser():
-    unidic_type = UserSetting.get_value("unidic_types")
+    unidic_type = "spoken"
+    if UserSetting.key_exists("unidic_types"):
+        unidic_type = UserSetting.get_value("unidic_types")
     parser_instances["japanese"] = parsers["japanese"]()
     parser_instances["japanese"].switch_tagger(unidic_type)
 

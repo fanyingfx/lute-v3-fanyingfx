@@ -5,7 +5,8 @@ https://github.com/fxsjy/jieba
 """
 from typing import List
 from functools import lru_cache
-import logging
+from itertools import chain
+from pypinyin import pinyin
 import spacy
 
 from lute.parse.base import AbstractParser
@@ -22,7 +23,7 @@ class MandarinParser(AbstractParser):
     Using jieba to parse the Mandarin
     """
 
-    _seg = spacy.load("zh_core_web_lg")
+    _seg = spacy.load("zh_core_web_sm")
 
     @classmethod
     def is_supported(cls):
@@ -40,7 +41,11 @@ class MandarinParser(AbstractParser):
         para_result = []
         for tok in MandarinParser._seg(para_text):
             is_word = not tok.is_punct
-            para_result.append((tok.text, is_word))
+            _pinyin = ""
+            if is_word:
+                _pinyin_list = list(chain.from_iterable(pinyin(tok.text)))
+                _pinyin = " ".join(_pinyin_list)
+            para_result.append((tok.text, is_word, _pinyin))
         return para_result
 
     @lru_cache()
@@ -54,9 +59,15 @@ class MandarinParser(AbstractParser):
         for para in text.split("\n"):
             para = para.strip()
             tokens.extend(self.parse_para(para))
-            tokens.append(["¶", False])
+            tokens.append(["¶", False, ""])
         # Remove the trailing ¶
         # by stripping it from the result
         tokens.pop()
+        res = []
+        for tok, is_word, _pinyin in tokens:
+            is_eos = tok == "¶"
+            lemma = tok
 
-        return [ParsedToken(tok, is_word, tok == "¶") for tok, is_word in tokens]
+            res.append(ParsedToken(tok, is_word, is_eos, lemma, _pinyin))
+
+        return res

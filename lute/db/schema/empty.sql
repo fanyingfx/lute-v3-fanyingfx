@@ -175,6 +175,7 @@ INSERT INTO settings VALUES('backup_dir','user',NULL);
 INSERT INTO settings VALUES('backup_count','user','5');
 INSERT INTO settings VALUES('mecab_path','user',NULL);
 INSERT INTO settings VALUES('custom_styles','user','/* Custom css to modify Lute''s appearance. */');
+INSERT INTO settings VALUES('unidic_types','spoken',NULL);
 CREATE UNIQUE INDEX "LgName" ON "languages" ("LgName");
 CREATE UNIQUE INDEX "TgText" ON "tags" ("TgText");
 CREATE UNIQUE INDEX "T2Text" ON "tags2" ("T2Text");

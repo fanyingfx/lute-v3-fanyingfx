@@ -7,6 +7,8 @@ from typing import List
 from functools import lru_cache
 import logging
 import jieba
+from itertools import chain
+from pypinyin import pinyin
 from lute.parse.base import AbstractParser
 from lute.parse.base import ParsedToken
 
@@ -26,7 +28,6 @@ class MandarinParser(AbstractParser):
 
     @classmethod
     def is_supported(cls):
-
         return True
 
     @classmethod
@@ -41,7 +42,11 @@ class MandarinParser(AbstractParser):
         para_result = []
         for tok in MandarinParser._seg(para_text):
             is_word = tok not in CHINESE_PUNCTUATIONS
-            para_result.append((tok, is_word))
+            _pinyin = ""
+            if is_word:
+                _pinyin_list = list(chain.from_iterable(pinyin(tok)))
+                _pinyin = "".join(_pinyin_list) + " "
+            para_result.append((tok, is_word, _pinyin))
         return para_result
 
     @lru_cache()
@@ -55,9 +60,15 @@ class MandarinParser(AbstractParser):
         for para in text.split("\n"):
             para = para.strip()
             tokens.extend(self.parse_para(para))
-            tokens.append(["¶", False])
+            tokens.append(["¶", False, ""])
         # Remove the trailing ¶
         # by stripping it from the result
         tokens.pop()
+        res = []
+        for tok, is_word, _pinyin in tokens:
+            is_eos = tok == "¶"
+            lemma = tok
 
-        return [ParsedToken(tok, is_word, tok == "¶") for tok, is_word in tokens]
+            res.append(ParsedToken(tok, is_word, is_eos, None, _pinyin))
+
+        return res

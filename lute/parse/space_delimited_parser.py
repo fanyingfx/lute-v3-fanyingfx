@@ -19,7 +19,7 @@ import spacy
 
 RawToken = namedtuple("RawToken", ["token", "is_word", "is_end_of_sent", "lemma"])
 
-nlp = spacy.load("en_core_web_sm")
+nlp = spacy.load("en_core_web_lg")
 
 
 class SpaceDelimitedParser(AbstractParser):

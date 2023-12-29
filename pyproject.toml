@@ -19,6 +19,7 @@ authors = [
   {name = "Jeff Zohrab", email = "jzohrab@gmail.com"}
 ]
 readme = "README_PyPi.md"
+
 dependencies = [
   "Flask-SQLAlchemy>=3.1.1,<4",
   "Flask-WTF>=1.2.1,<2",
@@ -29,7 +30,8 @@ dependencies = [
   "beautifulsoup4>=4.12.2,<5",
   "PyYAML>=6.0.1,<7",
   "toml>=0.10.2,<1",
-  "waitress>=2.1.2,<3"
+  "waitress>=2.1.2,<3",
+  "openepub>=0.0.6,<1"
 ]
 
 [project.scripts]

@@ -26,12 +26,11 @@ parsers = {
 parser_instances = {}
 
 
-def _init_jp_parser():
-    unidic_type = "spoken"
+def _init_jp_parser(name):
+    parser_instances["japanese"] = parsers["japanese"]()
     if UserSetting.key_exists("unidic_types"):
         unidic_type = UserSetting.get_value("unidic_types")
-    parser_instances["japanese"] = parsers["japanese"]()
-    parser_instances["japanese"].switch_tagger(unidic_type)
+        parser_instances["japanese"].switch_tagger(unidic_type)
 
 
 def _supported_parsers():

@@ -67,7 +67,7 @@ jobs:
           python-version: '3.8'
           cache: 'pip' # caching pip dependencies
 
-      - run: pip install -r requirements.txt
+      - run: pip install flit
       - name: Build package
         run: |
             flit build

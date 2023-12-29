@@ -5,7 +5,7 @@ sentence_translation: "*https://www.deepl.com/translator#en/en/###"
 # show_romanization: 
 # right_to_left: 
 
-parser_type: english
+#parser_type: english
 # character_substitutions:
 # split_sentences: 
 # split_sentence_exceptions:

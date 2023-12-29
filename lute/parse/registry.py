@@ -8,29 +8,22 @@ from lute.models.setting import UserSetting
 
 from lute.parse.base import AbstractParser
 from lute.parse.space_delimited_parser import SpaceDelimitedParser, TurkishParser
-from lute.parse.fugashi_parser import FugashiParser
+
+# from lute.parse.fugashi_parser import FugashiParser
+from lute.parse.mecab_parser import JapaneseParser
 from lute.parse.character_parser import ClassicalChineseParser
 from lute.parse.mandarin_parser import MandarinParser
-from lute.parse.english_parser import EnglishParser
 
 # List of ALL parsers available, not necessarily all supported.
 # This design feels fishy, but it suffices for now.
 parsers = {
     "spacedel": SpaceDelimitedParser,
-    "english": EnglishParser,
     "turkish": TurkishParser,
-    "japanese": FugashiParser,
+    "japanese": JapaneseParser,
     "classicalchinese": ClassicalChineseParser,
     "mandarin": MandarinParser,
 }
 parser_instances = {}
-
-
-def _init_jp_parser(name):
-    parser_instances["japanese"] = parsers["japanese"]()
-    if UserSetting.key_exists("unidic_types"):
-        unidic_type = UserSetting.get_value("unidic_types")
-        parser_instances["japanese"].switch_tagger(unidic_type)
 
 
 def _supported_parsers():
@@ -47,11 +40,8 @@ def get_parser(parser_name) -> AbstractParser:
     if parser_name in _supported_parsers():
         if parser_name in parser_instances:
             return parser_instances[parser_name]
-        if parser_name == "japanese":
-            _init_jp_parser()
-        else:
-            pclass = parsers[parser_name]
-            parser_instances[parser_name] = pclass()
+        pclass = parsers[parser_name]
+        parser_instances[parser_name] = pclass()
         return parser_instances[parser_name]
 
     raise ValueError(f"Unknown parser type '{parser_name}'")

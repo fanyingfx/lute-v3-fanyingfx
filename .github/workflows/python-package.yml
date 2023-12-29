@@ -61,6 +61,7 @@ jobs:
     needs: check-update
     if: needs.check-update.outputs.build == '1'
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
           python-version: '3.8'

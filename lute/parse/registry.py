@@ -14,7 +14,6 @@ from lute.parse.sudachi_parser import SudachiParser
 from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.character_parser import ClassicalChineseParser
 from lute.parse.unidic2ud_parser import Unidic2udParser
-from lute.parse.morden_chinese import MordenChineseParser
 
 # List of ALL parsers available, not necessarily all supported.
 # This design feels fishy, but it suffices for now.
@@ -23,7 +22,6 @@ parsers = {
     "turkish": TurkishParser,
     "japanese": FugashiParser,
     "classicalchinese": ClassicalChineseParser,
-    "chinese": MordenChineseParser,
 }
 parser_instances = {}
 

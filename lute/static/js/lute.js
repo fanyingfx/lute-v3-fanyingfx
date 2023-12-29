@@ -108,7 +108,7 @@ function showEditFrame(el, extra_args = {}) {
   const lid = parseInt(el.data('lang-id'));
 
   let text = extra_args.textparts ?? [ el.data('text') ];
-  let lemma = extra_args.lemma ?? [el.attr('lemma')];
+  let lemma = extra_args.lemma ?? [el.data('lemma')];
   let reading = extra_args.reading ?? [el.data('reading')]
   extra_args.lemma = lemma;
   extra_args.reading = reading

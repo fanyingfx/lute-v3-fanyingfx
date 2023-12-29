@@ -20,10 +20,7 @@ def get_terms_from_db(language):
 
 
 def load_user_dict(language):
-    dict_path = os.path.join(
-        current_app.env_config.datapath,
-        f"{language.parser.name().replace(' ','').lower()}.user_dict.txt",
-    )
+    dict_path = get_dict_path(language)
     zws = "\u200B"
     if not os.path.exists(dict_path):
         terms = get_terms_from_db(language)
@@ -44,14 +41,30 @@ def load_user_dict(language):
     language.parser.load_dict(od)
 
 
-def update_user_dict(language, od):
-    dict_path = os.path.join(
-        current_app.env_config.datapath,
-        f"{language.parser.name().replace(' ','').lower()}.user_dict.txt",
-    )
-    language.parser.update_dict(od)
+def _write_ud_to_file(ud, dict_path):
     res = []
-    for _, v in language.parser.get_user_dict().items():
+    for _, v in ud.items():
         res.append(",".join(v))
     with open(dict_path, "w", encoding="utf-8") as f:
         f.write("\n".join(res))
+
+
+def get_dict_path(language):
+    return os.path.join(
+        current_app.env_config.datapath,
+        f"{language.parser.name().replace(' ','').lower()}.user_dict.txt",
+    )
+
+
+def delete_from_user_dict(language, k, v):
+    dict_path = get_dict_path(language)
+    language.parser.delete_from_user_dict(k, v)
+    ud = language.parser.get_user_dict()
+    _write_ud_to_file(ud, dict_path)
+
+
+def update_user_dict(language, od):
+    dict_path = get_dict_path(language)
+    language.parser.update_dict(od)
+    ud = language.parser.get_user_dict()
+    _write_ud_to_file(ud, dict_path)

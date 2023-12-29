@@ -10,6 +10,7 @@ from lute.term.model import Repository, Term
 from lute.db import db
 from lute.term.forms import TermForm
 import lute.utils.formutils
+from lute.parse.user_dicts import delete_from_user_dict
 
 bp = Blueprint("term", __name__, url_prefix="/term")
 
@@ -208,5 +209,9 @@ def delete(termid):
     repo = Repository(db)
     term = repo.load(termid)
     repo.delete(term)
+    zws = "\b200b"
+    k = term.text_lc
+    v = k.split(zws)
+    delete_from_user_dict(term.language, k, v)
     repo.commit()
     return redirect("/term/index", 302)

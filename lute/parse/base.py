@@ -170,3 +170,6 @@ class AbstractParser(ABC):
 
     def get_user_dict(self):
         return dict()
+
+    def delete_from_user_dict(self, k, v):
+        pass

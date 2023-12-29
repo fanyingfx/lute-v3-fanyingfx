@@ -58,11 +58,11 @@ class MandarinParser(AbstractParser):
         if dict_set and not self.dict_loaded:
             self.user_dict = dict_set
             MandarinParser._seg.dict_force = dict_set
-        print("Dict loaded.")
         self.dict_loaded = True
 
-    def update_dict(self, od: dict):
-        self.user_dict.update(od)
+    def update_dict(self, od=None):
+        if od:
+            self.user_dict.update(od)
         MandarinParser._seg.dict_force = self.user_dict
 
     @classmethod
@@ -128,3 +128,8 @@ class MandarinParser(AbstractParser):
 
     def get_user_dict(self):
         return self.user_dict
+
+    def delete_from_user_dict(self, k, v):
+        if k in self.user_dict and v == self.user_dict[k]:
+            self.user_dict.pop(k)
+        self.update_dict()

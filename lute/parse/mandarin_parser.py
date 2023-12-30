@@ -120,7 +120,7 @@ class MandarinParser(AbstractParser):
         tokens.pop()
         res = []
         for tok, is_word, _pinyin in tokens:
-            is_eos = tok == "¶"
+            is_eos = tok == "¶" or tok in language.regexp_split_sentences
 
             res.append(ParsedToken(tok, is_word, is_eos, tok, _pinyin))
 

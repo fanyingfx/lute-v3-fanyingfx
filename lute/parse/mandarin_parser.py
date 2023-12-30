@@ -26,7 +26,7 @@ CHINESE_PUNCTUATIONS = (
 
 class MandarinParser(AbstractParser):
     """
-    Using jieba to parse the Mandarin
+    Using hanlp to parse the Mandarin
     """
 
     def __init__(self):

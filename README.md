@@ -6,7 +6,7 @@ https://github.com/fanyingfx/lute-v3/assets/57335844/88519b5b-49b8-4bbd-b5f0-00b
 
 
 
-This is modified version of lute, it supports Chinese, accurately it's Mandarin.
+This is modified version of lute, it supports Chinese, accurately, it's Mandarin.
 
 ## Installation
 The Installation are similar as installing Lute using pip . Only need to replace the Install Lute command 

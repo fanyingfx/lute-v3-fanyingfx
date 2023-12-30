@@ -123,7 +123,7 @@ class MandarinParser(AbstractParser):
         for tok, is_word, _pinyin in tokens:
             is_eos = tok == "¶"
 
-            res.append(ParsedToken(tok, is_word, is_eos, None, _pinyin))
+            res.append(ParsedToken(tok, is_word, is_eos, tok, _pinyin))
 
         return res
 

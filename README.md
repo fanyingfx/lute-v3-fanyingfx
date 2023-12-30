@@ -17,8 +17,9 @@ pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag
 to install the lute supporting Chinese.
 
 ## Migration
-Because of some big change in the codebase so some features may not add to the lute.
-I am also working on adding Chinese support to original version lute, but need some time to find a suitable solution to not make a big change in Lute's code.
+Because of some big change in the codebase, some features may not add to the lute.
+I am also working on adding Chinese support to original lute, but need some time to find a suitable solution to not make a big change in Lute's code.
+
 The database is full compatible with lute's db, but I also recommend you to create a new database to use.
 
 If you want to migrate previous lute to this version, you can copy your previous database and then in this version of lute's Language Setting,

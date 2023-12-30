@@ -9,8 +9,13 @@ https://github.com/fanyingfx/lute-v3/assets/57335844/88519b5b-49b8-4bbd-b5f0-00b
 This is modified version of lute, it supports Chinese, accurately it's Mandarin.
 
 ## Installation
-And you can find the latest release in the [release page](https://github.com/fanyingfx/lute-v3/releases).
+The Installation are similar as installing Lute using pip . Only need to replace the Install Lute command 
+`pip install --upgrade lute3`
+> If your system is Linux I recommand to install pytorch cpu version first `pip install torch --extra-index-url https://download.pytorch.org/whl/cpu`
+
+You can find the latest release in the [release page](https://github.com/fanyingfx/lute-v3/releases).
 and copy the *.whl link then you can use command 
+
 ```
 pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag>/lute3-<version>-none-any.whl --upgrade
 ```

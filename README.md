@@ -23,7 +23,7 @@ and copy the *.whl link then you can use command
 
 
 ```
-pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag>/lute3-<version>-none-any.whl --upgrade
+pip install https://github.com/fanyingfx/lute-v3/releases/download/3.0.8b1.dev2/lute3-3.0.8b1.dev2-py3-none-any.whl --upgrade
 ```
 to install the lute supporting Chinese.
 
@@ -36,6 +36,10 @@ The database is full compatible with lute's db, but I also recommend you to crea
 If you want to migrate previous lute to this version, you can copy your previous database and then in this version of lute's Language Setting,
 change the Parse as to Mandarin.
 ![image](https://github.com/fanyingfx/lute-v3/assets/57335844/7ce900cb-fd09-4962-9214-37c45762ae41)
+
+## About showing pinyin
+![image](https://github.com/fanyingfx/lute-v3/assets/57335844/14c9a6e6-388c-467c-9496-a9aa93c0dd9d)
+You can change the **Show reading** on the settings page.
 
 ## User Defined Dictionary
 Another thing, it supports the user defined Chinese words dictionary to make parsed result more correct.

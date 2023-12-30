@@ -46,6 +46,7 @@ class UserSettingsForm(FlaskForm):
     current_theme = SelectField("Theme", choices=list_themes())
     custom_styles = TextAreaField("Custom styles")
     show_highlights = BooleanField("Highlight terms by status")
+    show_reading = BooleanField("Show reading")
 
     mecab_path = StringField("MECAB_PATH environment variable")
     reading_choices = [
@@ -108,6 +109,7 @@ def edit_settings():
     form.backup_warn.data = int(form.backup_warn.data or 0)
     form.backup_auto.data = int(form.backup_auto.data or 0)
     form.show_highlights.data = int(form.show_highlights.data or 0)
+    form.show_reading.data = int(form.show_reading.data or 0)
 
     return render_template("settings/form.html", form=form)
 

@@ -436,7 +436,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.flash_message: str = None
         self.lemma: str = None
         self.reading: str = None
-        self.show_reading = False
+        self.show_reading = True
 
     def load_term_data(self, term):
         """

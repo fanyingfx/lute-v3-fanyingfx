@@ -9,8 +9,8 @@
       data-status-class="{{ item.status_class }}"
       data-order="{{ item.order }}"
       data-lemma="{{ item.lemma }}"
-      data-reading="{{ item.reading or item.romanization }}"
+      data-reading="{{ item.romanization or item.reading }}"
 {% if item.wo_id is not none %}
       data-wid="{{ item.wo_id }}"
-{% endif %}><ruby>{{ item.html_display_text | safe }}<rp>(</rp><rt>{{ item.reading or item.romanization }}</rt><rp>)</rp></ruby>
+{% endif %}><ruby>{{ item.html_display_text | safe }}<rp>(</rp><rt>{{  item.romanization or item.reading }}&nbsp</rt><rp>)</rp></ruby>
 </span>

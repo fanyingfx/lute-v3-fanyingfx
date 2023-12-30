@@ -174,11 +174,6 @@ def term_form(langid, text):
     tokens_raw = request.args.get("textparts", None)
 
     repo = Repository(db)
-    if tokens_raw:
-        tokens = tokens_raw.split(",")
-        d = {tokens_raw.replace(",", ""): tokens}
-        lang = find_lang(langid)
-        update_user_dict(lang, d)
     term = repo.find_or_new(langid, text, lemma, reading)
 
     return handle_term_form(
@@ -187,6 +182,7 @@ def term_form(langid, text):
         "/read/frameform.html",
         render_template("/read/updated.html", term_text=term.text),
         embedded_in_reading_frame=True,
+        tokens_raw=tokens_raw,
     )
 
 

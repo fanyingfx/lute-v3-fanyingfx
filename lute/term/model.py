@@ -243,6 +243,12 @@ class Repository:
             return
         self.db.session.delete(dbt)
 
+    def delete_by_termid(self, termid):
+        dbt = DBTerm.find(termid)
+        if dbt is None:
+            return
+        self.db.session.delete(dbt)
+
     def commit(self):
         """
         Commit everything.

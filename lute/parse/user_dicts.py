@@ -6,9 +6,11 @@ from lute.db import db
 from lute.models.term import Term
 import os
 
+ZWS = "\u200B"
+
 
 def get_terms_from_db(language):
-    words = (
+    terms = (
         db.session.query(Term)
         .filter(
             Term.language == language,
@@ -16,17 +18,16 @@ def get_terms_from_db(language):
         )
         .all()
     )
-    return words
+    return [term.text for term in terms]
 
 
 def load_user_dict(language):
     dict_path = get_dict_path(language)
-    zws = "\u200B"
-    if not os.path.exists(dict_path):
+    if not os.path.exists(dict_path) or os.stat(dict_path).st_size > 2:
         terms = get_terms_from_db(language)
         lines = []
         for term in terms:
-            lines.append(term.replace(zws, ","))
+            lines.append(term.replace(ZWS, ","))
 
         with open(dict_path, "w", encoding="utf-8") as f:
             f.write("\n".join(lines))
@@ -56,7 +57,10 @@ def get_dict_path(language):
     )
 
 
-def delete_from_user_dict(language, k, v):
+def delete_from_user_dict(term):
+    language = term.language
+    k = term.text_lc.replace(ZWS, "")
+    v = term.text_lc.split(ZWS)
     dict_path = get_dict_path(language)
     language.parser.delete_from_user_dict(k, v)
     ud = language.parser.get_user_dict()

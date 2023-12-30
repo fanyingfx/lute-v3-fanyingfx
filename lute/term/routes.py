@@ -10,7 +10,7 @@ from lute.term.model import Repository, Term
 from lute.db import db
 from lute.term.forms import TermForm
 import lute.utils.formutils
-from lute.parse.user_dicts import delete_from_user_dict
+from lute.parse.user_dicts import delete_from_user_dict, update_user_dict
 
 bp = Blueprint("term", __name__, url_prefix="/term")
 
@@ -52,7 +52,12 @@ def datatables_active_source():
 
 
 def handle_term_form(
-    term, repo, form_template_name, return_on_success, embedded_in_reading_frame=False
+    term,
+    repo,
+    form_template_name,
+    return_on_success,
+    embedded_in_reading_frame=False,
+    tokens_raw=None,
 ):
     """
     Handle a form post.
@@ -70,6 +75,16 @@ def handle_term_form(
     form.language_id.choices = lute.utils.formutils.language_choices()
 
     if form.validate_on_submit():
+        if tokens_raw:
+            multi_term = tokens_raw.replace(",", "")
+            tokens = tokens_raw.split(",")
+            d = {multi_term: tokens}
+            # lang = find_lang(langid)
+            lang = term.language
+            update_user_dict(lang, d)
+            term_old = repo.find(lang.id, multi_term)
+            if term_old is not None:
+                repo.delete_by_termid(term_old.id)
         form.populate_obj(term)
         repo.add(term)
         repo.commit()
@@ -208,10 +223,7 @@ def delete(termid):
     """
     repo = Repository(db)
     term = repo.load(termid)
-    repo.delete(term)
-    zws = "\b200b"
-    k = term.text_lc
-    v = k.split(zws)
-    delete_from_user_dict(term.language, k, v)
+    repo.delete_by_termid(termid)
+    delete_from_user_dict(term)
     repo.commit()
     return redirect("/term/index", 302)

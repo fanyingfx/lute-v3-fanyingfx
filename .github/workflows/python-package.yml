@@ -23,7 +23,7 @@ jobs:
         id: vars
         run: |
           ver=$(ls dist | grep '.*whl' | awk -F '-' '{print $2}')
-          if [  $(git tag -l "${{ version }}") ]; then
+          if [  $(git tag -l "$ver") ]; then
             echo "Targe version exists."
             echo "build=0" >> $GITHUB_OUTPUT
             echo "version=$ver" >> $GITHUB_OUTPUT

@@ -16,6 +16,14 @@ pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag
 ```
 to install the lute supporting Chinese.
 
+## Migration
+Because of some big change in the codebase so some features may not add to the lute.
+I am also working on adding Chinese support to original version lute, but need some time to find a suitable solution to not make a big change in Lute's code.
+The database is full compatible with lute's db, but I also recommend you to create a new database to use.
+
+If you want to migrate previous lute to this version, you can copy your previous database and then in this version of lute's Language Setting,
+change the Parse as to Mandarin.
+![image](https://github.com/fanyingfx/lute-v3/assets/57335844/7ce900cb-fd09-4962-9214-37c45762ae41)
 
 ## User Defined Dictionary
 Another thing, it supports the user define Chinese words dictionary to make parsed result more correct.
@@ -27,13 +35,7 @@ in the file:
 ```
 You can also add your define terms in the file , only Chinese  with English comma ',' not Chinese's comma '，'
 
-## About
-Because of some big change in the codebase so some features may not add to the lute.
-I am also working on adding Chinese support to original version lute, but need some time to find a suitable solution to not make a big change in Lute's code.
-The database is full compatible with lute's db, but I also recommend you to create a new database to use.
 
-If you want to migrate previous lute to this version, you can copy your previous database and then in this version of lute's Language Setting,
-change the Parse as to Mandarin.
 
 ## 
 You can reach me in Lute's discord server @fanyingfx

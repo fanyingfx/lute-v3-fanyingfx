@@ -364,7 +364,7 @@ let handle_copy = function(e) {
 }
 
 let copy_text_to_clipboard = function(textitemspans, show_flash = true) {
-  const copytext = textitemspans.map(s => $(s).text()).join('');
+  const copytext = textitemspans.map(s => $(s).data('text')).join('');
 
   // console.log('copying ' + copytext);
   var textArea = document.createElement("textarea");
@@ -610,7 +610,7 @@ function update_status_for_elements(new_status, elements) {
     return;
   const firstel = $(elements[0]);
   const langid = firstel.data('lang-id');
-  const texts = elements.map(el => $(el).text());
+  const texts = elements.map(el => $(el).data('text'));
 
   data = JSON.stringify({
     langid: langid,

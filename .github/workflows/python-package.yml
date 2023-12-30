@@ -22,15 +22,15 @@ jobs:
       - name: Set tag var
         id: vars
         run: |
-          version=$(ls dist | grep '.*whl' | awk -F '-' '{print $2}')
+          ver=$(ls dist | grep '.*whl' | awk -F '-' '{print $2}')
           if [  $(git tag -l "${{ version }}") ]; then
             echo "Targe version exists."
             echo "build=0" >> $GITHUB_OUTPUT
-            echo "version=$version" >> $GITHUB_OUTPUT
+            echo "version=$ver" >> $GITHUB_OUTPUT
           else
             echo "Target version is not built."
             echo "build=1" >> $GITHUB_OUTPUT
-            echo "version=$version" >> $GITHUB_OUTPUT
+            echo "version=$ver" >> $GITHUB_OUTPUT
 
           fi
         

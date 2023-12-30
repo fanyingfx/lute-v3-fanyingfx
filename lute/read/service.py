@@ -10,6 +10,7 @@ from lute.parse.base import ParsedToken
 from lute.read.render.renderable_calculator import RenderableCalculator
 from lute.term.model import Repository
 from lute.db import db
+from flask import current_app
 
 
 def find_all_Terms_in_string(s, language, tokens=None):
@@ -122,7 +123,8 @@ def get_paragraphs(text):
             language, terms, sentence_tokens
         )
         textitems = [
-            i.make_text_item(pnum, sentence_num, text.id, language) for i in renderable
+            i.make_text_item(pnum, sentence_num, text.id, language, show_reading)
+            for i in renderable
         ]
         return RenderableSentence(sentence_num, textitems)
 

@@ -274,7 +274,9 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
     def order_end(self) -> int:
         return self.pos + self.length - 1
 
-    def make_text_item(self, p_num: int, se_id: int, text_id: int, lang: Language):
+    def make_text_item(
+        self, p_num: int, se_id: int, text_id: int, lang: Language, show_reading=False
+    ):
         """
         Create a TextItem for final rendering.
         """
@@ -292,6 +294,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.text_length = len(self.text)
         t.lemma = self.lemma
         t.reading = self.reading
+        t.show_reading = show_reading
 
         t.load_term_data(self.term)
 
@@ -433,6 +436,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.flash_message: str = None
         self.lemma: str = None
         self.reading: str = None
+        self.show_reading = False
 
     def load_term_data(self, term):
         """

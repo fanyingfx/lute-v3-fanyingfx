@@ -48,7 +48,7 @@ def get_parser(parser_name) -> AbstractParser:
         if parser_name in parser_instances:
             return parser_instances[parser_name]
         if parser_name == "japanese":
-            _init_jp_parser()
+            _init_jp_parser(parser_name)
         else:
             pclass = parsers[parser_name]
             parser_instances[parser_name] = pclass()

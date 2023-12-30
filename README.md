@@ -27,7 +27,7 @@ change the Parse as to Mandarin.
 ![image](https://github.com/fanyingfx/lute-v3/assets/57335844/7ce900cb-fd09-4962-9214-37c45762ae41)
 
 ## User Defined Dictionary
-Another thing, it supports the user define Chinese words dictionary to make parsed result more correct.
+Another thing, it supports the user defined Chinese words dictionary to make parsed result more correct.
 after start the lute and mark some terms in reading, then in the lute's data folder you can find a file `mandarin.user_dict.txt`.
 in the file: 
 ```

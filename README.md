@@ -1,5 +1,11 @@
 # Lute v3 with chinese support
 
+
+
+https://github.com/fanyingfx/lute-v3/assets/57335844/88519b5b-49b8-4bbd-b5f0-00b68ba29909
+
+
+
 This is modified version of lute, it supports Chinese, accurately it's Mandarin.
 
 ## Installation

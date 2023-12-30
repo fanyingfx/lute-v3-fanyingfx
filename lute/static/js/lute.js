@@ -437,7 +437,7 @@ let show_translation = function(e) {
   tis = get_textitems_spans(e);
   if (tis == null)
     return;
-  const sentence = tis.map(s => $(s).text()).join('');
+  const sentence = tis.map(s => $(s).data('text')).join('');
 
   const userdict = $('#translateURL').text();
   if (userdict == null || userdict == '')

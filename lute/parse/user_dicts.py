@@ -23,7 +23,7 @@ def get_terms_from_db(language):
 
 def load_user_dict(language):
     dict_path = get_dict_path(language)
-    if not os.path.exists(dict_path) or os.stat(dict_path).st_size > 2:
+    if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
         terms = get_terms_from_db(language)
         lines = []
         for term in terms:

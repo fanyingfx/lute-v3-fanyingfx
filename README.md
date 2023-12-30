@@ -1,30 +1,34 @@
-# Lute v3
+# Lute v3 with chinese support
 
-[![tests](https://github.com/jzohrab/lute_v3/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/jzohrab/lute_v3/actions/workflows/ci.yml?query=branch%3Amaster)
-[![code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![linting: pylint](https://img.shields.io/badge/linting-pylint-yellowgreen)](https://github.com/pylint-dev/pylint)
-[![coverage](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/jzohrab/a15001ec2ff889f7be0b553df9881566/raw/covbadge.json)](https://github.com/jzohrab/lute_v3/actions/workflows/ci.yml?query=branch%3Amaster)
-[![Discord Server](https://badgen.net/badge/icon/discord?icon=discord&label)](https://discord.gg/CzFUQP5m8u)
+This is modified version of lute, it supports Chinese, accurately it's Mandarin.
+
+## Installation
+And you can find the latest release in the [release page](https://github.com/fanyingfx/lute-v3/releases).
+and copy the *.whl link then you can use command 
+```
+pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag>/lute3-<version>-none-any.whl --upgrade
+```
+to install the lute supporting Chinese.
 
 
-This repo contains the source code for Lute v3.  Lute (Learning Using Texts) v3 is a full rewrite in Python and Flask of the original [Lute v1 and v2](https://github.com/jzohrab/lute) PHP project.
+## User Defined Dictionary
+Another thing, it supports the user define Chinese words dictionary to make parsed result more correct.
+after start the lute and mark some terms in reading, then in the lute's data folder you can find a file `mandarin.user_dict.txt`.
+in the file: 
+```
+竹条,编 // it means you make the parser always pase "竹条编" as "竹条" and "编", this is for multiple-words terms
+珍珠鸟 // it mean parser will parse 珍珠鸟 as one terms
+```
+You can also add your define terms in the file , only Chinese  with English comma ',' not Chinese's comma '，'
 
-![Lute v3 demo](https://github.com/jzohrab/lute-manual/assets/1637133/7e7f5f66-20bb-4e94-a11c-7b7ffc43255a)
+## About
+Because of some big change in the codebase so some features may not add to the lute.
+I am also working on adding Chinese support to original version lute, but need some time to find a suitable solution to not make a big change in Lute's code.
+The database is full compatible with lute's db, but I also recommend you to create a new database to use.
 
-# Getting Started
+If you want to migrate previous lute to this version, you can copy your previous database and then in this version of lute's Language Setting,
+change the Parse as to Mandarin.
 
-## Users
+## 
+You can reach me in Lute's discord server @fanyingfx
 
-To learn more about Lute v3, or to install it for your own use and study, please see the [Lute v3 manual](https://jzohrab.github.io/lute-manual/).  Hop onto the [Discord](https://discord.gg/CzFUQP5m8u) too.
-
-## Developing
-
-For more information on building and developing, please see [Development](./docs/development.md).
-
-## Contributing
-
-If you'd like to contribute code to Lute (hooray!), check out the [Contribution Guidelines](./docs/contributing.md).  And with every repo star, an angel gets its wings.
-
-# License
-
-Lute uses the MIT license: [LICENSE](./LICENSE.txt)

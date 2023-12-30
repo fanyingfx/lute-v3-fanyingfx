@@ -36,6 +36,8 @@ class MandarinParser(AbstractParser):
         self._cache = {}
 
     def load_dict_from_file(self):
+        if self.dict_loaded:
+            return
         dict_path = os.path.join(
             current_app.env_config.datapath,
             f"mandarin.user_dict.txt",
@@ -52,22 +54,18 @@ class MandarinParser(AbstractParser):
             key = term.replace(",", "").strip()
             od[key] = term.strip().split(",")
 
-        self.load_dict(od)
-
-    def load_dict(self, od):
-        if not self.dict_loaded:
-            self.reload_dict(od)
+        self.reload_dict(od)
         self.dict_loaded = True
 
     def reload_dict(self, dict_set):
         if dict_set:
             self.user_dict = dict_set
-            MandarinParser._seg.dict_force = dict_set
+            # MandarinParser._seg.dict_force = dict_set.copy()
 
     def update_dict(self, od=None):
         if od:
             self.user_dict.update(od)
-        MandarinParser._seg.dict_force = self.user_dict
+        # MandarinParser._seg.dict_force = self.user_dict.copy()
 
     @classmethod
     @lru_cache()
@@ -95,6 +93,7 @@ class MandarinParser(AbstractParser):
         Parsing the paragraph
         """
         para_result = []
+        MandarinParser._seg.dict_force = self.user_dict
         for tok in MandarinParser._seg(para_text):
             is_word = tok not in CHINESE_PUNCTUATIONS
             _pinyin = ""
@@ -136,4 +135,4 @@ class MandarinParser(AbstractParser):
     def delete_from_user_dict(self, k, v):
         if k in self.user_dict and v == self.user_dict[k]:
             self.user_dict.pop(k)
-            self.reload_dict(self.user_dict)
+            self.reload_dict(self.user_dict.copy())

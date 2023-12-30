@@ -349,7 +349,7 @@ class Repository:
         term.text_lc = dbterm.text_lc
         term.original_text = text
         term.text = text
-        term.lemma = dbterm.lemma
+        # term.lemma = dbterm.lemma
 
         term.status = dbterm.status
         term.translation = dbterm.translation

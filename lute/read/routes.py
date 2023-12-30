@@ -174,7 +174,7 @@ def term_form(langid, text):
     tokens_raw = request.args.get("textparts", None)
 
     repo = Repository(db)
-    term = repo.find_or_new(langid, text, lemma, reading)
+    term = repo.find_or_new(langid, text, None, reading)
 
     return handle_term_form(
         term,

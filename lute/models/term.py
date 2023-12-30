@@ -123,7 +123,7 @@ class Term(
     translation = db.Column("WoTranslation", db.String(500))
     romanization = db.Column("WoRomanization", db.String(100))
     token_count = db.Column("WoTokenCount", db.Integer)
-    lemma = db.Column("WoLemma", db.String(100))
+    # lemma = db.Column("WoLemma", db.String(100))
 
     language = db.relationship("Language")
     term_tags = db.relationship("TermTag", secondary="wordtags")

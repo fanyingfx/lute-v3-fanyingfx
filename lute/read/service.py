@@ -4,7 +4,6 @@ Reading helpers.
 import re
 from sqlalchemy import func
 
-from lute.parse.user_dicts import load_user_dict
 from lute.models.term import Term, Status
 from lute.models.book import Text
 from lute.parse.base import ParsedToken
@@ -33,7 +32,7 @@ def find_all_Terms_in_string(s, language, tokens=None):
     if tokens is None:
         cleaned = re.sub(r"\s+", " ", s)
         tokens = language.get_parsed_tokens(cleaned)
-    load_user_dict(language)
+    # load_user_dict(language)
 
     parser = language.parser
 

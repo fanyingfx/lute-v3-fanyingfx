@@ -23,7 +23,7 @@ and copy the *.whl link then you can use command
 
 
 ```
-pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag>/lute3-<version>-none-any.whl --upgrade
+pip install https://github.com/fanyingfx/lute-v3/releases/download/3.0.8b1.dev2/lute3-3.0.8b1.dev2-py3-none-any.whl --upgrade
 ```
 to install the lute supporting Chinese.
 

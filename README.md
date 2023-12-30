@@ -15,6 +15,8 @@ The Installation are similar as installing Lute using pip . Only need to replace
 
 You can find the latest release in the [release page](https://github.com/fanyingfx/lute-v3/releases).
 and copy the *.whl link then you can use command 
+![image](https://github.com/fanyingfx/lute-v3/assets/57335844/f8163364-de3c-4534-ac9b-1e96f776f611)
+
 
 ```
 pip install https://github.com/fanyingfx/lute-v3/releases/downlonad/<release tag>/lute3-<version>-none-any.whl --upgrade

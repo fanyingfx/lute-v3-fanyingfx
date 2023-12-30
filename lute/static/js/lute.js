@@ -611,10 +611,12 @@ function update_status_for_elements(new_status, elements) {
   const firstel = $(elements[0]);
   const langid = firstel.data('lang-id');
   const texts = elements.map(el => $(el).data('text'));
+  const reading = elements.map(el => $(el).data('reading'));
 
   data = JSON.stringify({
     langid: langid,
     terms: texts,
+    reading: reading,
     new_status: new_status
   });
 

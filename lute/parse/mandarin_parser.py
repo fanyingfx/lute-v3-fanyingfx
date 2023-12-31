@@ -16,6 +16,8 @@ from lute.parse.base import ParsedToken
 import importlib
 from hanlp.utils import log_util
 
+from lute.parse.user_dicts import load_from_db, load_from_file
+
 log_util.enable_debug(False)
 
 
@@ -35,24 +37,17 @@ class MandarinParser(AbstractParser):
         self.dict_loaded = False
         self._cache = {}
 
-    def load_dict_from_file(self):
+    def load_dict_from_file(self,language):
         if self.dict_loaded:
             return
         dict_path = os.path.join(
             current_app.env_config.datapath,
             f"mandarin.user_dict.txt",
         )
-        if not os.path.exists(dict_path):
-            return
-        zws = "\u200B"
-        with open(dict_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-        od = OrderedDict()
-        for term in lines:
-            if term.strip() == "":
-                continue
-            key = term.replace(",", "").strip()
-            od[key] = term.strip().split(",")
+        if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
+            od = load_from_db(language)
+        else:
+            od = load_from_file(language)
 
         self.reload_dict(od)
         self.dict_loaded = True
@@ -109,7 +104,7 @@ class MandarinParser(AbstractParser):
         for the correct token order.
         cached the parsed result
         """
-        self.load_dict_from_file()
+        self.load_dict_from_file(language)
         tokens = []
         for para in text.split("\n"):
             para = para.strip()

@@ -20,6 +20,37 @@ def get_terms_from_db(language):
     )
     return [term.text for term in terms]
 
+def load_from_db(language):
+
+    dict_path = get_dict_path(language)
+
+    if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
+        terms = get_terms_from_db(language)
+        lines = []
+        for term in terms:
+            lines.append(term.replace(ZWS, ","))
+
+        with open(dict_path, "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+
+        od = OrderedDict()
+        for word in lines:
+            od[word] = word.strip().split(",")
+        return od
+
+def load_from_file(language):
+    dict_path = get_dict_path(language)
+    with open(dict_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    od = OrderedDict()
+    for term in lines:
+        if term.strip() == "":
+            continue
+        key = term.replace(",", "").strip()
+        od[key] = term.strip().split(",")
+    return od
+
+
 
 def load_user_dict(language):
     dict_path = get_dict_path(language)

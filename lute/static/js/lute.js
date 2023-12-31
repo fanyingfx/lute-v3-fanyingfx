@@ -613,6 +613,7 @@ function update_status_for_elements(new_status, elements) {
   const texts = elements.map(el => $(el).data('text'));
   const reading = elements.map(el => $(el).data('reading'));
 
+
   data = JSON.stringify({
     langid: langid,
     terms: texts,

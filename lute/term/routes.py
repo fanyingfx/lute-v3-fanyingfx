@@ -191,10 +191,10 @@ def bulk_update_status():
     terms = data.get("terms")
     language_id = int(data.get("langid"))
     new_status = int(data.get("new_status"))
-    reading = data.get('reading')
+    readings = data.get('reading')
 
     repo = Repository(db)
-    for t in terms:
+    for t,reading in zip(terms,readings):
         term = repo.find_or_new(language_id, t)
         term.status = new_status
         term.romanization = reading

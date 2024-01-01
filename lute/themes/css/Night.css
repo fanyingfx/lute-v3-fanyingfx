@@ -1,3 +1,10 @@
+@font-face {
+    font-family: "SarasaSC";
+    src: url("SarasaGothicSC-Regular.ttf") format("ttf");
+
+    font-style: normal;
+    font-weight: normal;
+}
 body {
   background-color: #121212; /* black paper */
   color: #F3F4F4; /* grey font */
@@ -58,7 +65,7 @@ textarea {
 }
 
  div#thetext p { line-height: 1.5; }
- span.textitem { font-family: Georgia; color: #F3F4F4;}
+ span.textitem { font-family: SarasaSC; color: #F3F4F4;}
  span.status0 { background-color: transparent; color: #59c7fa; } /* ice blue */
  span.status1 { background-color: #7a3d58; } /* pink highlight */
  span.status2 { background-color: #82621a; } /* yellow highlight */

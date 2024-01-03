@@ -79,10 +79,10 @@
     <tr>
       <td align="right">
         <a href="" onclick="show_term_sentences(); return false;">Sentences</a>
+          {% if term.id %}
+              <button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>
+          {% endif %}
         <button id="submit" type="submit" class="btn btn-primary">Save</button>
-        {% if term.id %}
-        <button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>
-        {% endif %}
       </td>
     </tr>
 

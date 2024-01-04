@@ -3,7 +3,14 @@
 <div class="flash-notice-narrow">{{ error }}</div>
 {% endfor %}
 {% endfor %}
-
+<style>
+    /* Style to position the element at the bottom */
+    .bottom-element {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
 <form name="term_form" method="POST">
   {{ form.hidden_tag() }}
 
@@ -87,7 +94,17 @@
     </tr>
 
   </tbody>
+    <tfoot>
+  <tr>
+      <td class="bottom-element">
+          <input type="text" id="_searchword" name="_searchword">
+        <button type="button" onclick="searchword(); return false;">Search</button>
+      </td>
+  </tr>
+
+  </tfoot>
   </table>
+
 
 </form>
 
@@ -424,6 +441,25 @@
         window.location.href = '/term/index';
       }
     });
+  }
+    function searchword(){
+      const langid = $('#language_id').val();
+    if (langid == null || langid == '' || parseInt(langid) == 0) {
+      alert('Please select a language.');
+      return;
+    }
+
+    const termdicts = LANGUAGES[langid].term;
+    console.log(termdicts);
+     let termdictindex= 0;
+    const dicturl = termdicts[termdictindex];
+      const word = document.getElementById("_searchword").value;
+      const url = get_lookup_url(dicturl, word);
+      top.frames.dictframe.location.href = url;
+
+
+
+
   }
 
 </script>

@@ -169,8 +169,11 @@ def term_form(langid, text):
     lemma = request.args.get("lemma", default=None, type=str)
 
     reading = request.args.get("reading", default=None, type=str) or request.form.get(
-        "romanization", None
+        "romanization", ""
     )
+    # TODO find a better way to handle reading for multi-term
+    if reading.replace("None", "").replace("・", "").strip() == "":
+        reading = ""
     tokens_raw = request.args.get("textparts", None)
 
     repo = Repository(db)

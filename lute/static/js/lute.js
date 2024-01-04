@@ -117,10 +117,11 @@ let tooltip_textitem_hover_content = function (el, setContent) {
 
 function showEditFrame(el, extra_args = {}) {
   const lid = parseInt(el.data('lang-id'));
+  console.log({editFrame:extra_args})
 
   let text = extra_args.textparts ?? [ el.data('text') ];
-  let lemma = extra_args.lemma ?? [el.data('lemma')];
-  let reading = extra_args.reading ?? [el.data('reading')]
+  let lemma = extra_args.lemmaparts ?? [el.data('lemma')];
+  let reading = extra_args.readingparts ?? [el.data('reading')]
   extra_args.lemma = lemma;
   extra_args.reading = reading
   const sendtext = text.join('');
@@ -280,22 +281,20 @@ function select_ended(e) {
     return lemma
 
   })
-  const lemma = lemmaparts.join('').trim();
+  // const lemma = lemmaparts.join('').trim();
   const readingparts= selected.toArray().map((el)=>{
-    let reading= $(el).data('reading')
-    if (reading===''){
-      reading=$(el).data('text')}
-    return reading
+    return $(el).data('reading')
 
   })
-  const reading= readingparts.join('').trim();
+  const reading = readingparts.join('・').trim()
+  // const reading= readingparts.join('').trim();
   if (text.length > 250) {
     alert(`Selections can be max length 250 chars ("${text}" is ${text.length} chars)`);
     start_hover_mode();
     return;
   }
 
-  showEditFrame(selection_start_el, { textparts: textparts, lemma: lemma, reading: reading});
+  showEditFrame(selection_start_el, { textparts: textparts, lemmaparts: lemmaparts, readingparts: reading});
   selection_start_el = null;
 }
 

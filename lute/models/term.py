@@ -157,7 +157,7 @@ class Term(
     def __init__(self, language=None, text=None, lemma=None):
         self.status = 1
         self.translation = None
-        self.romanization = None
+        self.romanization = ""
         self.term_tags = []
         self.parents = []
         self.children = []

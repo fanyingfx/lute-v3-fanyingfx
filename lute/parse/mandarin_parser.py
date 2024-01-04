@@ -63,7 +63,7 @@ class MandarinParser(AbstractParser):
     def update_dict(self, od=None):
         if od:
             self.user_dict.update(od)
-        # MandarinParser._seg.dict_force = self.user_dict.copy()
+            # MandarinParser._seg.dict_force = self.user_dict.copy()
 
     @classmethod
     @lru_cache()

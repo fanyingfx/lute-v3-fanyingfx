@@ -37,6 +37,11 @@ def load_from_db(language):
 
 def load_from_file(language):
     dict_path = get_dict_path(language)
+    if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
+        f = open(dict_path, "w", encoding="utf-8")
+        f.close()
+        return {}
+
     with open(dict_path, "r", encoding="utf-8") as f:
         lines = f.readlines()
     odf = {}

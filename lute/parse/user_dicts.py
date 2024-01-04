@@ -48,8 +48,8 @@ def load_from_file(language):
     for term in lines:
         if term.strip() == "":
             continue
-        key = term.replace(",", "").strip()
-        odf[key] = term.strip().split(",")
+        key = term.replace(",", "").replace('，','').strip()
+        odf[key] = term.strip().replace('，',',').split(",")
     return odf
 
 

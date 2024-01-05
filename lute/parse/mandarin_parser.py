@@ -16,6 +16,9 @@ from lute.parse.base import ParsedToken
 import importlib
 from hanlp.utils import log_util
 
+from cachetools import cached
+from cachetools.keys import hashkey
+
 from lute.parse.user_dicts import load_from_db, load_from_file
 
 log_util.enable_debug(False)
@@ -81,11 +84,18 @@ class MandarinParser(AbstractParser):
             is_supported = True
 
         return is_supported
+    def get_hashable(self):
+        return tuple((k,tuple(v)) for k,v in self.user_dict.items())
+
 
     @classmethod
     def name(cls):
         return "Mandarin"
 
+    @cached(
+        cache={},
+        key=lambda self, para_text : hashkey(self.get_hashable(), para_text)
+    )
     def parse_para(self, para_text):
         """
         Parsing the paragraph
@@ -101,6 +111,10 @@ class MandarinParser(AbstractParser):
             para_result.append((tok, is_word, _pinyin))
         return para_result
 
+    @cached(
+        cache={},
+        key=lambda self, para_text,*args: hashkey(self.get_hashable(), para_text)
+    )
     def get_parsed_tokens(self, text: str, language) -> List:
         """
         Parsing the text by paragraph, then generate the ParsedToken List,

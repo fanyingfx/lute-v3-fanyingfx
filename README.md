@@ -2,7 +2,8 @@
 
 
 
-https://github.com/fanyingfx/lute-v3/assets/57335844/88519b5b-49b8-4bbd-b5f0-00b68ba29909
+https://github.com/fanyingfx/lute-v3/assets/57335844/885fdc68-bf08-41dd-8553-b1d45f9aa9b0
+
 
 
 
@@ -32,9 +33,7 @@ If you want to migrate previous lute to this version, you can copy your previous
 change the Parse as to Mandarin.
 ![image](https://github.com/fanyingfx/lute-v3/assets/57335844/7ce900cb-fd09-4962-9214-37c45762ae41)
 
-## About showing pinyin
 
-You can change the **Show Pronunciation** in page left pane menu.
 
 ## User Defined Dictionary
 Another thing, it supports the user defined Chinese words dictionary to make parsed result more correct.

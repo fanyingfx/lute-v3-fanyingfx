@@ -7,7 +7,7 @@ https://github.com/fanyingfx/lute-v3/assets/57335844/885fdc68-bf08-41dd-8553-b1d
 
 
 
-This is modified version of lute, it supports Chinese, accurately, it's Mandarin.
+This is modified version of [Lute](https://github.com/jzohrab/lute-v3), it supports Chinese, accurately, it's Mandarin.
 
 ## Installation and Upgrade
 
@@ -59,4 +59,5 @@ You can also add your define terms in the file , only Chinese  with English comm
 
 ## 
 You can reach me by email: `fanyingfx@outlook.com`.
+or find me in the Lute Discord @fanyingfx and send me any problem by DM about the Chinese forked Lute.(Lute's developers are too busy and Lute is for multilanguage, so I don't want to occupy too much public space about Chinese fork's problem, and I am happy to receive questions.)
 

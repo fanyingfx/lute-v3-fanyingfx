@@ -40,14 +40,9 @@ class MandarinParser(AbstractParser):
         self.dict_loaded = False
         self._cache = {}
 
-    def load_dict_from_file(self,language):
+    def full_load_dict(self, language):
         if self.dict_loaded:
             return
-        # dict_path = os.path.join(
-        #     current_app.env_config.datapath,
-        #     f"mandarin.user_dict.txt",
-        # )
-        # if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
 
         ud = load_from_db(language)
         udf = load_from_file(language)
@@ -121,7 +116,7 @@ class MandarinParser(AbstractParser):
         for the correct token order.
         cached the parsed result
         """
-        self.load_dict_from_file(language)
+        self.full_load_dict(language)
         tokens = []
         for para in text.split("\n"):
             para = para.strip()

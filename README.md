@@ -10,22 +10,17 @@ This is modified version of lute, it supports Chinese, accurately, it's Mandarin
 
 ## Installation
 
-**Because parsing Chinese using [hanlp](https://github.com/hankcs/HanLP), which needs pytorch, make sure your python version support pytorch, 
-recommend python version is python 3.10.x**
+At first, you should Install Python and [activate virtual environment](./README_PyPi.md)
 
-The Installation are similar as installing Lute using pip . Only need to replace the Install Lute command 
-`pip install --upgrade lute3`
-> If your system is Linux I recommand to install pytorch cpu version first `pip install torch --extra-index-url https://download.pytorch.org/whl/cpu`
-
-You can find the latest release in the [release page](https://github.com/fanyingfx/lute-v3/releases).
-and copy the *.whl link then you can use command 
-![image](https://github.com/fanyingfx/lute-v3/assets/57335844/f8163364-de3c-4534-ac9b-1e96f776f611)
-
+After the virtual environment activated, you could using  command
 
 ```
-pip install https://github.com/fanyingfx/lute-v3/releases/download/3.0.8b1.dev2/lute3-3.0.8b1.dev2-py3-none-any.whl --upgrade
+pip install  https://github.com/fanyingfx/lute-v3/releases/download/3.0.9a1.dev5/lute3-3.0.9a1.dev5-py3-none-any.whl --upgrade
 ```
 to install the lute supporting Chinese.
+
+And you can check the latest version from repo's page
+and replace the link to the latest version link.
 
 ## Migration
 Because of some big change in the codebase, some features may not add to the lute.
@@ -38,8 +33,8 @@ change the Parse as to Mandarin.
 ![image](https://github.com/fanyingfx/lute-v3/assets/57335844/7ce900cb-fd09-4962-9214-37c45762ae41)
 
 ## About showing pinyin
-![image](https://github.com/fanyingfx/lute-v3/assets/57335844/14c9a6e6-388c-467c-9496-a9aa93c0dd9d)
-You can change the **Show reading** on the settings page.
+
+You can change the **Show Pronunciation** in page left pane menu.
 
 ## User Defined Dictionary
 Another thing, it supports the user defined Chinese words dictionary to make parsed result more correct.
@@ -54,5 +49,5 @@ You can also add your define terms in the file , only Chinese  with English comm
 
 
 ## 
-You can reach me in Lute's discord server @fanyingfx
+You can reach me in Lute's discord server @fanyingfx and send DM to me.
 

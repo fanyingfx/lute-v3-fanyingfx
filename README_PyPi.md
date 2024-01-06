@@ -8,9 +8,7 @@ Lute is for learning foreign languages through reading.  `lute3` is a rewrite of
 
 ## Requirements
 
-Python 3.8+ (tested with python 3.8 through 3.11)
-
-Japanese learners will also need to install MeCab.
+Recommend version: **Python 3.10.x** (Python version bigger than 3.8 and smaller than 3.10.x is ok)
 
 ## Install
 
@@ -20,7 +18,7 @@ Create a new folder (e.g. `lute3`) anywhere on your system.
 
 ```
 # Set up the virtual environment
-python3.8 -m venv myenv
+python -m venv myenv
 
 # Activate it (Mac or *nix)
 source myenv/bin/activate

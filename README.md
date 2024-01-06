@@ -58,5 +58,5 @@ You can also add your define terms in the file , only Chinese  with English comm
 
 
 ## 
-You can reach me in Lute's discord server @fanyingfx and send DM to me.
+You can reach me by email: `fanyingfx@outlook.com`.
 

@@ -9,7 +9,9 @@ https://github.com/fanyingfx/lute-v3/assets/57335844/885fdc68-bf08-41dd-8553-b1d
 
 This is modified version of lute, it supports Chinese, accurately, it's Mandarin.
 
-## Installation
+## Installation and Upgrade
+
+### Installation
 
 At first, you should Install Python and [activate virtual environment](./README_PyPi.md)
 
@@ -22,6 +24,14 @@ to install the lute supporting Chinese.
 
 And you can check the latest version from repo's page
 and replace the link to the latest version link.
+
+### Upgrade
+
+
+
+https://github.com/fanyingfx/lute-v3/assets/57335844/ca991279-2643-4256-bbd9-43220979b6ef
+
+
 
 ## Migration
 Because of some big change in the codebase, some features may not add to the lute.

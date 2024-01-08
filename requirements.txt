@@ -84,4 +84,7 @@ WTForms==3.0.1
 zipp==3.17.0
 openepub==0.0.6
 pypinyin==0.50.0
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.1.2
 hanlp==2.1.0b55
+cachetools==5.3.2

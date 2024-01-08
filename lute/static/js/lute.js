@@ -509,6 +509,25 @@ function toggle_highlight() {
     }
   });
 }
+function toggle_reading() {
+  $.ajax({
+    url: '/theme/toggle_reading',
+    type: 'post',
+    dataType: 'JSON',
+    contentType: 'application/json',
+    success: function(response) {
+      location.reload();
+    },
+    error: function(response, status, err) {
+      const msg = {
+        response: response,
+        status: status,
+        error: err
+      };
+      console.log(`failed: ${JSON.stringify(msg, null, 2)}`);
+    }
+  });
+}
 
 
 function handle_keydown (e) {
@@ -532,6 +551,7 @@ function handle_keydown (e) {
   const kT = 84; // T)ranslate
   const kM = 77; // The(M)e
   const kH = 72; // Toggle H)ighlight
+  const kP = 80; // Toggle P)ronunciation
   const k1 = 49;
   const k2 = 50;
   const k3 = 51;
@@ -552,6 +572,7 @@ function handle_keydown (e) {
   map[kT] = () => show_translation(e);
   map[kM] = () => next_theme();
   map[kH] = () => toggle_highlight();
+  map[kP] = () => toggle_reading();
   map[k1] = () => update_status_for_marked_elements(1);
   map[k2] = () => update_status_for_marked_elements(2);
   map[k3] = () => update_status_for_marked_elements(3);

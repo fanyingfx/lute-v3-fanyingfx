@@ -42,3 +42,10 @@ def toggle_highlight():
     UserSetting.set_value("show_highlights", not b)
     db.session.commit()
     return jsonify("ok")
+@bp.route("/toggle_reading", methods=["POST"])
+def toggle_reading():
+    "Fix the highlight."
+    b = bool(int(UserSetting.get_value("show_reading")))
+    UserSetting.set_value("show_reading", not b)
+    db.session.commit()
+    return jsonify("ok")

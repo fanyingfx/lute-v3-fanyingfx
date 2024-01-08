@@ -46,7 +46,7 @@ class UserSettingsForm(FlaskForm):
     current_theme = SelectField("Theme", choices=list_themes())
     custom_styles = TextAreaField("Custom styles")
     show_highlights = BooleanField("Highlight terms by status")
-    show_reading = BooleanField("Show reading")
+    show_reading = BooleanField("Show Pronunciation")
 
     mecab_path = StringField("MECAB_PATH environment variable")
     reading_choices = [

@@ -78,7 +78,8 @@ class FugashiParser(AbstractParser):
         for para in text.split("\n"):
             if para.startswith("<img"):
                 # TODO for img
-                img_src = para.replace("<img=", "")
+                # img_src = para.replace("<img=", "")
+                img_src = para + "\n"
                 lines.append([img_src, "", None, None, None, True])
             else:
                 lines.extend(FugashiParser.parse_para(para.rstrip(), language))
@@ -86,7 +87,7 @@ class FugashiParser(AbstractParser):
         def line_to_token(lin):
             """Convert parsed line to a ParsedToken."""
             term, node_type, third, lemma, reading, is_img = lin
-            is_eos = term in language.regexp_split_sentences
+            is_eos = is_img or term in language.regexp_split_sentences
             if term == "EOP" and third == "7":
                 term = "¶"
             is_word = (

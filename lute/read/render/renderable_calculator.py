@@ -306,7 +306,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.show_reading = show_reading
         t.is_img = self.is_img
         if t.is_img:
-            t.img_src = f"/bookimages/{bookid}/{self.text}"
+            t.img_src = f"/bookimages/{bookid}/{self.text.replace('<img=','').strip()}"
 
         t.load_term_data(self.term)
 

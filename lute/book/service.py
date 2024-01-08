@@ -16,7 +16,6 @@ from werkzeug.utils import secure_filename
 
 from lute.book import epub_utils
 from lute.book.model import Book
-import ebooklib
 from ebooklib import epub
 from bs4 import BeautifulSoup
 

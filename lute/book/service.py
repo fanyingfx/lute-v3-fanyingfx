@@ -3,6 +3,7 @@ book helper routines.
 """
 
 import os
+import tempfile
 from datetime import datetime
 
 # pylint: disable=unused-import
@@ -12,7 +13,12 @@ from bs4 import BeautifulSoup
 from flask import current_app, flash
 from openepub import Epub, EpubError
 from werkzeug.utils import secure_filename
+
+from lute.book import epub_utils
 from lute.book.model import Book
+import ebooklib
+from ebooklib import epub
+from bs4 import BeautifulSoup
 
 
 class BookImportException(Exception):
@@ -80,6 +86,27 @@ def get_epub_content(epub_file_field_data):
         msg = f"Could not parse {epub_file_field_data.filename} (error: {str(e)})"
         raise BookImportException(message=msg, cause=e) from e
     return content
+
+
+def get_epub_content_new(epub_file):
+    content = ""
+    with tempfile.NamedTemporaryFile() as fp:
+        epub_file.stream.seek(0)
+        fp.write(epub_file.stream.read())
+        book = epub.read_epub(fp.name)
+    img_data = epub_utils.get_images(book)
+
+    book_data = epub_utils.parse_epub(book)
+    return book_data, img_data
+
+
+def save_image(filename, content, bookid):
+    img_dir = os.path.join(current_app.env_config.bookimagespath, str(bookid))
+    if not os.path.exists(img_dir):
+        os.makedirs(img_dir)
+    fp = os.path.join(img_dir, filename)
+    with open(fp, "wb") as f:
+        f.write(content)
 
 
 def book_from_url(url):

@@ -142,6 +142,7 @@ class RenderableCalculator:
             rendered[rc.pos] = rc.id
             text_lemma[tok.token] = tok.lemma
             text_reading[tok.token] = tok.reading
+            rc.is_img = tok.is_img
 
         # 3.  Create candidates for all the terms.
         termcandidates = []
@@ -260,6 +261,8 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         self.render: bool = True
         self.lemma = None
         self.reading = None
+        self.is_img = False
+        self.img_src = ""
 
     def __repr__(self):
         parts = [f"pos {self.pos}", f"render {self.render}" f"(id {self.id})"]
@@ -275,7 +278,13 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         return self.pos + self.length - 1
 
     def make_text_item(
-        self, p_num: int, se_id: int, text_id: int, lang: Language, show_reading=False
+        self,
+        p_num: int,
+        se_id: int,
+        text_id: int,
+        lang: Language,
+        show_reading=False,
+        bookid=0,
     ):
         """
         Create a TextItem for final rendering.
@@ -295,6 +304,9 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.lemma = self.lemma
         t.reading = self.reading
         t.show_reading = show_reading
+        t.is_img = self.is_img
+        if t.is_img:
+            t.img_src = f"/bookimages/{bookid}/{self.text}"
 
         t.load_term_data(self.term)
 
@@ -437,6 +449,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.lemma: str = None
         self.reading: str = None
         self.show_reading = True
+        self.is_img = False
 
     def load_term_data(self, term):
         """

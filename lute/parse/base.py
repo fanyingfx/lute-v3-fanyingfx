@@ -36,6 +36,7 @@ class ParsedToken:
         is_end_of_sentence: bool = False,
         lemma=None,
         reading="",
+        is_img=False,
     ):
         self.token = token
         self.is_word = is_word
@@ -56,9 +57,10 @@ class ParsedToken:
             ParsedToken.cls_paragraph_number += 1
         self.lemma = lemma
         self.reading = reading
+        self.is_img = is_img
 
     def __repr__(self):
-        return f'<"{self.token}" (word: {self.is_word}, eos: {self.is_end_of_sentence}, lemma: {self.lemma})>'
+        return f'<"{self.token}" (word: {self.is_word}, eos: {self.is_end_of_sentence}, lemma: {self.lemma}, is_image: {self.is_img})>'
 
 
 class SentenceGroupIterator:

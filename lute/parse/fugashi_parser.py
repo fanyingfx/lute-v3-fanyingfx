@@ -58,10 +58,11 @@ class FugashiParser(AbstractParser):
                     "-1" if tok.is_unk else "0",
                     tok.feature.orthBase,
                     reading,
+                    False,
                 ]
             )
 
-        lines.append(["EOP", "3", "7", "8", ""])
+        lines.append(["EOP", "3", "7", "8", "", False])
         # res = [line_to_token(lin) for lin in lines]
 
         return lines
@@ -75,22 +76,25 @@ class FugashiParser(AbstractParser):
         lines = []
 
         for para in text.split("\n"):
-            lines.extend(FugashiParser.parse_para(para.rstrip(), language))
+            if para.startswith("<img"):
+                # TODO for img
+                img_src = para.replace("<img=", "")
+                lines.append([img_src, "", None, None, None, True])
+            else:
+                lines.extend(FugashiParser.parse_para(para.rstrip(), language))
 
         def line_to_token(lin):
             """Convert parsed line to a ParsedToken."""
-            term, node_type, third, lemma, reading = lin
+            term, node_type, third, lemma, reading, is_img = lin
             is_eos = term in language.regexp_split_sentences
             if term == "EOP" and third == "7":
                 term = "¶"
-            # all_word_types=['名詞', '記号', '感動詞', '副詞', '形状詞', '補助記号', '接尾辞', '形容詞', '助詞', '連体詞',
-            #        '接続詞', '接頭辞', '代名詞', '動詞'
             is_word = (
                 node_type in "2678" and third is not None
             )  # or node_type in "2678"
             if not is_word:
                 reading = ""
-            return ParsedToken(term, is_word, is_eos, lemma, reading)
+            return ParsedToken(term, is_word, is_eos, lemma, reading, is_img)
 
         tokens = [line_to_token(lin) for lin in lines]
         return tokens

@@ -40,14 +40,14 @@ class MandarinParser(AbstractParser):
     def load_dict_from_file(self,language):
         if self.dict_loaded:
             return
-        dict_path = os.path.join(
-            current_app.env_config.datapath,
-            f"mandarin.user_dict.txt",
-        )
-        if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
-            od = load_from_db(language)
-        else:
-            od = load_from_file(language)
+        # dict_path = os.path.join(
+        #     current_app.env_config.datapath,
+        #     f"mandarin.user_dict.txt",
+        # )
+        # if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
+        od = load_from_db(language)
+        # else:
+        #     od = load_from_file(language)
 
         self.reload_dict(od)
         self.dict_loaded = True

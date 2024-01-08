@@ -89,6 +89,7 @@ def get_paragraphs(text):
         return []
 
     language = text.book.language
+    book_id = text.book.id
 
     # Hacky reset of state of ParsedToken state.
     # _Shouldn't_ matter ... :-(
@@ -126,7 +127,9 @@ def get_paragraphs(text):
         )
 
         textitems = [
-            i.make_text_item(pnum, sentence_num, text.id, language, show_reading)
+            i.make_text_item(
+                pnum, sentence_num, text.id, language, show_reading, text.book.id
+            )
             for i in renderable
         ]
         return RenderableSentence(sentence_num, textitems)

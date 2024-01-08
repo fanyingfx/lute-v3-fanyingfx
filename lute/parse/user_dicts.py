@@ -20,8 +20,8 @@ def get_terms_from_db(language):
     )
     return [term.text for term in terms]
 
-def load_from_db(language):
 
+def load_from_db(language):
     dict_path = get_dict_path(language)
 
     if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
@@ -38,6 +38,7 @@ def load_from_db(language):
             od[word] = word.strip().split(",")
         return od
 
+
 def load_from_file(language):
     dict_path = get_dict_path(language)
     with open(dict_path, "r", encoding="utf-8") as f:
@@ -51,26 +52,25 @@ def load_from_file(language):
     return od
 
 
-
-def load_user_dict(language):
-    dict_path = get_dict_path(language)
-    if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
-        terms = get_terms_from_db(language)
-        lines = []
-        for term in terms:
-            lines.append(term.replace(ZWS, ","))
-
-        with open(dict_path, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines))
-    else:
-        with open(dict_path, "r", encoding="utf-8") as f:
-            lines = f.readlines()
-        lines = [term.strip() for term in lines]
-    od = OrderedDict()
-    for word in lines:
-        od[word] = word.strip().split(",")
-
-    language.parser.load_dict(od)
+# def load_user_dict(language):
+#     dict_path = get_dict_path(language)
+#     if not os.path.exists(dict_path) or os.stat(dict_path).st_size < 2:
+#         terms = get_terms_from_db(language)
+#         lines = []
+#         for term in terms:
+#             lines.append(term.replace(ZWS, ","))
+#
+#         with open(dict_path, "w", encoding="utf-8") as f:
+#             f.write("\n".join(lines))
+#     else:
+#         with open(dict_path, "r", encoding="utf-8") as f:
+#             lines = f.readlines()
+#         lines = [term.strip() for term in lines]
+#     od = OrderedDict()
+#     for word in lines:
+#         od[word] = word.strip().split(",")
+#
+#     language.parser.load_dict(od)
 
 
 def _write_ud_to_file(ud, dict_path):
@@ -92,14 +92,14 @@ def delete_from_user_dict(term):
     language = term.language
     k = term.text_lc.replace(ZWS, "")
     v = term.text_lc.split(ZWS)
-    dict_path = get_dict_path(language)
+    # dict_path = get_dict_path(language)
     language.parser.delete_from_user_dict(k, v)
-    ud = language.parser.get_user_dict()
-    _write_ud_to_file(ud, dict_path)
+    # ud = language.parser.get_user_dict()
+    # _write_ud_to_file(ud, dict_path)
 
 
 def update_user_dict(language, od):
-    dict_path = get_dict_path(language)
+    # dict_path = get_dict_path(language)
     language.parser.update_dict(od)
-    ud = language.parser.get_user_dict()
-    _write_ud_to_file(ud, dict_path)
+    # ud = language.parser.get_user_dict()
+    # _write_ud_to_file(ud, dict_path)

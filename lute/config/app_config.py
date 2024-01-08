@@ -51,6 +51,7 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.datapath = config.get("DATAPATH", self._get_appdata_dir())
         self.userimagespath = os.path.join(self.datapath, "userimages")
         self.useraudiopath = os.path.join(self.datapath, "useraudio")
+        self.bookimagespath = os.path.join(self.datapath, "bookimages")
         self.userchinesedict = os.path.join(self.datapath, "userchinesedict.txt")
         self.userunidic = {
             "s": os.path.join(self.datapath, "unidic-csj"),

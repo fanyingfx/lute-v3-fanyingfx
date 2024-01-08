@@ -12,6 +12,8 @@ from flask import (
     redirect,
     flash,
 )
+
+from lute.book.service import delete_book_image
 from lute.utils.data_tables import DataTablesFlaskParamParser
 from lute.book import service
 from lute.book.datatables import get_data_tables_list
@@ -170,5 +172,6 @@ def delete(bookid):
     "Archive a book."
     b = DBBook.find(bookid)
     db.session.delete(b)
+    delete_book_image(bookid)
     db.session.commit()
     return redirect("/", 302)

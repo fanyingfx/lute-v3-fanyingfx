@@ -9,7 +9,6 @@ from datetime import datetime
 # pylint: disable=unused-import
 from tempfile import TemporaryFile, SpooledTemporaryFile
 import requests
-from bs4 import BeautifulSoup
 from flask import current_app, flash
 from openepub import Epub, EpubError
 from werkzeug.utils import secure_filename
@@ -18,6 +17,7 @@ from lute.book import epub_utils
 from lute.book.model import Book
 from ebooklib import epub
 from bs4 import BeautifulSoup
+import shutil
 
 
 class BookImportException(Exception):
@@ -106,6 +106,15 @@ def save_image(filename, content, bookid):
     fp = os.path.join(img_dir, filename)
     with open(fp, "wb") as f:
         f.write(content)
+
+
+def delete_book_image(bookid):
+    img_dir = os.path.join(current_app.env_config.bookimagespath, str(bookid))
+    if os.path.exists(img_dir):
+        try:
+            shutil.rmtree(img_dir)
+        except:
+            pass
 
 
 def book_from_url(url):

@@ -19,7 +19,7 @@ import spacy
 
 RawToken = namedtuple("RawToken", ["token", "is_word", "is_end_of_sent", "lemma"])
 
-nlp = spacy.load("en_core_web_md")
+nlp = spacy.load("en_core_web_sm")
 
 
 class EnglishParser(AbstractParser):
@@ -54,18 +54,18 @@ class EnglishParser(AbstractParser):
         result = [[match.group(), match.start()] for match in matches]
         return result
 
-    @lru_cache()
+    # @lru_cache()
     def _parse_to_tokens(self, text: str, lang):
         """
         Returns ParsedToken array for given language.
         """
-        replacements = lang.character_substitutions.split("|")
-        for replacement in replacements:
-            fromto = replacement.strip().split("=")
-            if len(fromto) >= 2:
-                rfrom = fromto[0].strip()
-                rto = fromto[1].strip()
-                text = text.replace(rfrom, rto)
+        # replacements = lang.character_substitutions.split("|")
+        # for replacement in replacements:
+        #     fromto = replacement.strip().split("=")
+        #     if len(fromto) >= 2:
+        #         rfrom = fromto[0].strip()
+        #         rto = fromto[1].strip()
+        #         text = text.replace(rfrom, rto)
 
         text = text.replace("\r\n", "\n")
         text = text.replace("{", "[")
@@ -90,13 +90,15 @@ class EnglishParser(AbstractParser):
         ]
         return res
 
-    @lru_cache()
+    # @lru_cache()
     def parse_para(self, text: str, lang):
         """
         Parse a string, appending the tokens to the list of tokens.
         """
 
         toks = []
+        if " " not in text.strip():
+            return [RawToken(text, True, False, text)]
         doc = nlp(text)
 
         for tok in doc:

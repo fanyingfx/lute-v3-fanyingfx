@@ -4,7 +4,7 @@
 ENV: prod
 DBNAME: lute.db
 #ENV: dev
-#DBNAME: lute.db
+#DBNAME: teslute.db
 #DATAPATH: /home/fan/.local/share/test_lute
 # DATAPATH is not set: user data should be
 # stored in PlatformDirs.user_data_dir

@@ -26,7 +26,6 @@ class FugashiParser(AbstractParser):
     # _tagger = Tagger("-d .unidics/unidic-csj-202302")
     _tagger = Tagger()
     _tagger_type = "spoken"
-    _cache = {}
 
     @classmethod
     def is_supported(cls):
@@ -37,8 +36,15 @@ class FugashiParser(AbstractParser):
         return "Japanese"
 
     @classmethod
-    @lru_cache()
+    # @lru_cache()
     def parse_para(cls, text: str, language):
+        # get word character regex
+        word_characters = bytes(language.word_characters, "utf-8").decode(
+            "unicode_escape"
+        )
+
+        if text.strip() != "" and not re.match(f"[{word_characters}]+", text):
+            return [[text, "x", "", "", "", False], ["EOP", "3", "7", "8", "", False]]
         lines = []
 
         for tok in FugashiParser._tagger(text.strip()):
@@ -67,7 +73,7 @@ class FugashiParser(AbstractParser):
 
         return lines
 
-    @lru_cache()
+    # @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         """
         Parse the string using Sudachi

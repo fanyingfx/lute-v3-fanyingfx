@@ -18,5 +18,5 @@ def get_image(bookid, img_name):
     datapath = current_app.config["DATAPATH"]
     directory = os.path.join(datapath, "bookimages", str(bookid))
     filename = img_name
-    print(directory, img_name)
+    # print(directory, img_name)
     return send_from_directory(directory, filename)

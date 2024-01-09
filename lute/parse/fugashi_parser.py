@@ -39,12 +39,12 @@ class FugashiParser(AbstractParser):
     # @lru_cache()
     def parse_para(cls, text: str, language):
         # get word character regex
-        word_characters = bytes(language.word_characters, "utf-8").decode(
-            "unicode_escape"
-        )
-
-        if text.strip() != "" and not re.match(f"[{word_characters}]+", text):
-            return [[text, "x", "", "", "", False], ["EOP", "3", "7", "8", "", False]]
+        # word_characters = bytes(language.word_characters, "utf-8").decode(
+        #     "unicode_escape"
+        # )
+        #
+        # if text.strip() != "" and not re.match(f"[{word_characters}]+", text):
+        #     return [[text, "x", "", "", "", False], ["EOP", "3", "7", "8", "", False]]
         lines = []
 
         for tok in FugashiParser._tagger(text.strip()):

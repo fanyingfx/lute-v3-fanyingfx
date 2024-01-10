@@ -59,5 +59,5 @@ You can also add your define terms in the file , only Chinese  with English comm
 
 ## 
 You can reach me by email: `fanyingfx@outlook.com`.
-or find me in the Lute Discord @fanyingfx and send me any problem in the *Mandarin parser fork issue?* Trread about the Chinese forked Lute issues.
+or find me in the Lute Discord @fanyingfx and send me any problem in the *Mandarin parser fork issue?* Thread about the Chinese forked Lute issues.
 

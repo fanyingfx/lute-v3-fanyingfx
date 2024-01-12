@@ -11,6 +11,7 @@ from tempfile import TemporaryFile, SpooledTemporaryFile
 import requests
 from flask import current_app, flash
 from openepub import Epub, EpubError
+from pypdf import PdfReader
 from werkzeug.utils import secure_filename
 
 from lute.book import epub_utils
@@ -85,6 +86,21 @@ def get_epub_content(epub_file_field_data):
         msg = f"Could not parse {epub_file_field_data.filename} (error: {str(e)})"
         raise BookImportException(message=msg, cause=e) from e
     return content
+
+
+def get_pdf_content_from_form(pdf_file_field_data):
+    "Get content as a single string from a PDF file using PyPDF2."
+    content = ""
+    try:
+        pdf_reader = PdfReader(pdf_file_field_data)
+
+        for page in pdf_reader.pages:
+            content += page.extract_text()
+
+        return content
+    except Exception as e:
+        msg = f"Could not parse {pdf_file_field_data.filename} (error: {str(e)})"
+        raise BookImportException(message=msg, cause=e) from e
 
 
 def get_epub_content_new(epub_file):

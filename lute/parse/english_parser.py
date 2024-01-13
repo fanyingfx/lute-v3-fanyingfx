@@ -17,7 +17,9 @@ from lute.parse.base import ParsedToken, AbstractParser
 from collections import namedtuple
 import spacy
 
-RawToken = namedtuple("RawToken", ["token", "is_word", "is_end_of_sent", "lemma"])
+RawToken = namedtuple(
+    "RawToken", ["token", "is_word", "is_end_of_sent", "lemma", "reading", "is_img"]
+)
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -74,18 +76,26 @@ class EnglishParser(AbstractParser):
         tokens = []
         paras = text.split("\n")
         pcount = len(paras)
-        EOP = RawToken("¶", False, True, "")
+        EOP = RawToken("¶", False, True, "", "", False)
 
         for i, para in enumerate(paras):
-            tokens.extend(self.parse_para(para, lang))
-            if i != (pcount - 1):
-                tokens.append(RawToken("¶", False, True, ""))
+            if para.startswith("<img"):
+                # TODO for img
+                # img_src = para.replace("<img=", "")
+                img_src = para + "\n"
+                tokens.append(RawToken(img_src, False, None, None, "", True))
+            else:
+                tokens.extend(self.parse_para(para, lang))
+                if i != (pcount - 1):
+                    tokens.append(RawToken("¶", False, True, "", "", False))
         ## pop the last "¶"
         if tokens and tokens[-1] == EOP:
             tokens.pop()
 
         res = [
-            ParsedToken(tok.token, tok.is_word, tok.is_end_of_sent, tok.lemma)
+            ParsedToken(
+                tok.token, tok.is_word, tok.is_end_of_sent, tok.lemma, "", tok.is_img
+            )
             for tok in tokens
         ]
         return res
@@ -98,13 +108,15 @@ class EnglishParser(AbstractParser):
 
         toks = []
         if " " not in text.strip():
-            return [RawToken(text, True, False, text)]
+            return [RawToken(text, True, False, text, "", False)]
         doc = nlp(text)
 
         for tok in doc:
             toks.append(
-                RawToken(tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_)
+                RawToken(
+                    tok.text, not tok.is_punct, tok.is_sent_end, tok.lemma_, "", False
+                )
             )
             if tok.whitespace_ != "":
-                toks.append(RawToken(tok.whitespace_, False, False, ""))
+                toks.append(RawToken(tok.whitespace_, False, False, "", "", False))
         return toks

@@ -9,6 +9,7 @@
         position: fixed;
         bottom: 0;
         width: 100%;
+        padding-left: 2px;
     }
 </style>
 
@@ -82,10 +83,12 @@
   </form>
 </div>
 <div>
+<div id="wordsearchbox" class="bottom-element">
 
         <input type="text" id="_searchword" name="_searchword">
         <button type="button" onclick="searchword(); return false;">Search</button>
 
+</div>
 </div>
 
 
@@ -438,5 +441,15 @@
 
 
   }
+    const searchwordbox = document.getElementById("_searchword");
+
+    // Add event listener for keypress event
+    searchwordbox.addEventListener("keypress", function(event) {
+      // Check if the pressed key is Enter (keyCode 13)
+      if (event.key === "Enter") {
+        // Call a function or perform an action when Enter key is pressed
+        searchword();
+      }
+    });
 
 </script>

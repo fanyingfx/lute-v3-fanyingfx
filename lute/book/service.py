@@ -97,7 +97,7 @@ def get_pdf_content_from_form(pdf_file_field_data):
         for page in pdf_reader.pages:
             content += page.extract_text()
 
-        return content
+        return content, []
     except Exception as e:
         msg = f"Could not parse {pdf_file_field_data.filename} (error: {str(e)})"
         raise BookImportException(message=msg, cause=e) from e

@@ -256,7 +256,8 @@ def _create_app(app_config, extra_config):
     app = Flask(__name__, instance_path=app_config.datapath)
 
     config = {
-        "SECRET_KEY": "some_secret",
+        # "SECRET_KEY": "some_secret",
+        "WTF_CSRF_ENABLED": False,
         "DATABASE": app_config.dbfilename,
         "ENV": app_config.env,
         "SQLALCHEMY_DATABASE_URI": f"sqlite:///{app_config.dbfilename}",

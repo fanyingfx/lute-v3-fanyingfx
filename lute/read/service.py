@@ -81,6 +81,86 @@ class RenderableSentence:
         return f'<RendSent {self.sentence_id}, {len(self.textitems)} items, "{s}">'
 
 
+def parse_paragraphs(text,language):
+    """
+    Get array of arrays of RenderableSentences for the given Text.
+    """
+    if text.strip()=="":
+        return ""
+    # language = text.book.language
+    # book_id = text.book.id
+
+    # Hacky reset of state of ParsedToken state.
+    # _Shouldn't_ matter ... :-(
+    ParsedToken.reset_counters()
+    tokens = language.get_parsed_tokens(text)
+    tokens = [t for t in tokens if t.token != "¶"]
+
+    # Brutal hack ... the RenderableCalculator requires the
+    # ParsedTokens to be in contiguous order, but the above list
+    # comprehension can cause some tokens to get removed.  In addition
+    # (and this is the worst part), for some reason the tests fail in
+    # CI, but _inconsistently_, with the token order numbers.  The
+    # order sometimes jumps by 2 ... I really can't explain it.  So,
+    # as a _complete hack_, I'm re-numbering the tokens now, to ensure
+    # they're in order.
+    tokens.sort(key=lambda x: x.order)
+    if len(tokens) > 0:
+        n = tokens[0].order
+        for t in tokens:
+            t.order = n
+            n += 1
+
+    terms = find_all_Terms_in_string(text, language, tokens)
+    show_reading = bool(int(UserSetting.get_value("show_reading")))
+
+    def make_RenderableSentence(pnum, sentence_num, tokens, terms):
+        """
+        Make a RenderableSentences using the tokens present in
+        that sentence.  The current text and language are pulled
+        into the function from the closure.
+        """
+        sentence_tokens = [t for t in tokens if t.sentence_number == sentence_num]
+        renderable = RenderableCalculator.get_renderable(
+            language, terms, sentence_tokens
+        )
+
+        textitems = [
+            i.make_text_item(
+                pnum, sentence_num, 0, language, show_reading, 0
+            )
+            for i in renderable
+        ]
+        def parse_textitem(textitem):
+            return {
+                "text": textitem.text,
+                "reading": textitem.reading,
+                "status": textitem.wo_status or textitem.status_class.replace('status',''),
+                "lemma": textitem.lemma,
+                "is_word": textitem.is_word
+
+            }
+        res= [parse_textitem(textitem) for textitem in textitems]
+
+        return res
+
+    def unique(arr):
+        return list(set(arr))
+
+    renderable_paragraphs = []
+    paranums = sorted(unique([t.paragraph_number for t in tokens]))
+    for pnum in paranums:
+        paratokens = [t for t in tokens if t.paragraph_number == pnum]
+        senums = sorted(unique([t.sentence_number for t in paratokens]))
+
+        # A renderable paragraph is a collection of
+        # RenderableSentences.
+        renderable_sentences = [
+            make_RenderableSentence(pnum, senum, paratokens, terms) for senum in senums
+        ]
+        renderable_paragraphs.append(renderable_sentences)
+
+    return renderable_paragraphs
 def get_paragraphs(text):
     """
     Get array of arrays of RenderableSentences for the given Text.

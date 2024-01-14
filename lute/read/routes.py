@@ -7,6 +7,7 @@ from flask import Blueprint, flash, request, render_template, redirect, jsonify
 from lute.read.service import (
     get_paragraphs,
     set_unknowns_to_known,
+    parse_paragraphs
 )
 from lute.parse.user_dicts import update_user_dict
 from lute.read.forms import TextForm
@@ -14,6 +15,7 @@ from lute.term.model import Repository, find_lang
 from lute.term.routes import handle_term_form
 from lute.models.book import Book, Text
 from lute.models.term import Term as DBTerm
+from lute.models.language import Language
 from lute.models.setting import UserSetting
 from lute.book.stats import mark_stale
 from lute.db import db
@@ -239,6 +241,17 @@ def term_popup(termid):
 @bp.route("/flashcopied", methods=["GET"])
 def flashcopied():
     return render_template("read/flashcopied.html")
+
+@bp.post("/parse_text")
+def parse_text():
+    data=request.json
+    if 'text' not in data or 'language' not in data:
+        return jsonify({"error": ""})
+    text = data['text']
+    language = data['language']
+    lang=Language.find_by_name(language)
+    paras= parse_paragraphs(text,lang)
+    return jsonify(paras)
 
 
 @bp.route("/editpage/<int:bookid>/<int:pagenum>", methods=["GET", "POST"])

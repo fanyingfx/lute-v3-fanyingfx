@@ -69,6 +69,8 @@ def handle_term_form(
     template on success.
     """
     form = TermForm(obj=term)
+    # parents = [{"value": p} for p in term.parents]
+    # form.parentslist.data = json.dumps(parents)
 
     # Flash messages get added on things like term imports.
     # The user opening the form is treated as an acknowledgement.
@@ -88,6 +90,12 @@ def handle_term_form(
             if term_old is not None:
                 repo.delete_by_termid(term_old.id)
         form.populate_obj(term)
+
+        # parents_list_data = request.form.get("parentslist", "")
+        # parents_list = json.loads(parents_list_data) if parents_list_data else []
+        # parents = [h["value"] for h in parents_list]
+        # term.parents = parents
+
         repo.add(term)
         repo.commit()
         return return_on_success

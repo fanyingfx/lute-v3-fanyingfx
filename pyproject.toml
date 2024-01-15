@@ -9,7 +9,7 @@ build-backend = "flit_core.buildapi"
 name = "lute"
 
 [project]
-name = "lute3"
+name = "lute3_fy"
 
 dynamic = ['version']
 

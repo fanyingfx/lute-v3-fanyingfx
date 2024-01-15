@@ -26,12 +26,15 @@ parsers = {
 parser_instances = {}
 
 
-def _init_jp_parser(name):
+def _init_jp_parser():
     parser_instances["japanese"] = parsers["japanese"]()
     if UserSetting.key_exists("unidic_types"):
         unidic_type = UserSetting.get_value("unidic_types")
         parser_instances["japanese"].switch_tagger(unidic_type)
 
+_special_init_langs={
+    "japanese": _init_jp_parser,
+}
 
 def _supported_parsers():
     "Get the supported parsers."
@@ -47,8 +50,8 @@ def get_parser(parser_name) -> AbstractParser:
     if parser_name in _supported_parsers():
         if parser_name in parser_instances:
             return parser_instances[parser_name]
-        if parser_name == "japanese":
-            _init_jp_parser(parser_name)
+        if parser_name  in _special_init_langs:
+            _special_init_langs[parser_name]()
         else:
             pclass = parsers[parser_name]
             parser_instances[parser_name] = pclass()

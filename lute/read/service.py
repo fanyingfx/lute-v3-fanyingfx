@@ -11,6 +11,7 @@ from lute.parse.base import ParsedToken
 from lute.read.render.renderable_calculator import RenderableCalculator
 from lute.term.model import Repository
 from lute.db import db
+from itertools import chain
 from flask import current_app
 
 
@@ -160,7 +161,7 @@ def parse_paragraphs(text,language):
         ]
         renderable_paragraphs.append(renderable_sentences)
 
-    return renderable_paragraphs
+    return chain(renderable_paragraphs)
 def get_paragraphs(text):
     """
     Get array of arrays of RenderableSentences for the given Text.

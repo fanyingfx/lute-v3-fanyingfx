@@ -148,3 +148,4 @@ cython_debug/
 .idea/
 config.dev.yml
 node_modules/
+/lute/translation/fanyikey.yaml

@@ -48,6 +48,7 @@ from lute.themes.routes import bp as themes_bp
 from lute.stats.routes import bp as stats_bp
 from lute.cli.commands import bp as cli_bp
 from lute.dict.routes import bp as dict_bp
+from lute.translation.routes import bp as trans_bp
 
 
 def _setup_app_dirs(app_config):
@@ -119,18 +120,18 @@ def _add_base_routes(app, app_config):
         # Only back up if we have books, otherwise the backup is
         # kicked off when the user empties the demo database.
         if (
-            is_production
-            and have_books
-            and backupservice.should_run_auto_backup(bkp_settings)
+                is_production
+                and have_books
+                and backupservice.should_run_auto_backup(bkp_settings)
         ):
             return redirect("/backup/backup", 302)
 
         refresh_stats()
         warning_msg = backupservice.backup_warning(bkp_settings)
         backup_show_warning = (
-            bkp_settings.backup_warn
-            and bkp_settings.backup_enabled
-            and warning_msg != ""
+                bkp_settings.backup_warn
+                and bkp_settings.backup_enabled
+                and warning_msg != ""
         )
 
         return render_template(
@@ -269,6 +270,8 @@ def _create_app(app_config, extra_config):
 
     final_config = {**config, **extra_config}
     app.config.from_mapping(final_config)
+    # https://stackoverflow.com/questions/14853694/python-jsonify-dictionary-in-utf-8
+    app.json.ensure_ascii = False
 
     # Attach the app_config to app so it's available at runtime.
     app.env_config = app_config
@@ -297,6 +300,7 @@ def _create_app(app_config, extra_config):
     app.register_blueprint(stats_bp)
     app.register_blueprint(cli_bp)
     app.register_blueprint(dict_bp)
+    app.register_blueprint(trans_bp)
     if app_config.is_test_db:
         app.register_blueprint(dev_api_bp)
 
@@ -304,9 +308,9 @@ def _create_app(app_config, extra_config):
 
 
 def create_app(
-    app_config_path=None,
-    extra_config=None,
-    output_func=None,
+        app_config_path=None,
+        extra_config=None,
+        output_func=None,
 ):
     """
     App factory.  Calls dbsetup, and returns Flask app.

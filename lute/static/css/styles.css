@@ -440,6 +440,11 @@ div#reading-footer span {
 
 }
 
+#translation-para{
+    margin-left: 20px;
+}
+
+
 #thetexttitle,
 div#thetext {
     padding: 0 2.2rem;

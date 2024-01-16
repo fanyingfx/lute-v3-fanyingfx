@@ -35,6 +35,9 @@ function start_hover_mode(should_clear_frames = true) {
   // console.log('CALLING RESET');
   load_reading_pane_globals();
   LUTE_HOVERING = true;
+  pp = document.getElementById("translation-para")
+  pp.innerText=""
+
 
   $('span.kwordmarked').removeClass('kwordmarked');
 
@@ -445,7 +448,31 @@ let move_cursor = function(shiftby, e) {
   }
 }
 
+let new_translation = function (e){
+  tis = get_textitems_spans(e);
+  if (tis == null)
+    return;
+  const sentence = tis.map(s => $(s).data('text')).join('');
+  const url = 'http://lute.local:5001/trans/baidu'
+  data={text: sentence}
+  $.ajax(
+      {
+        type: "Post",
+        url: url,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data){ pp=document.getElementById('translation-para'); pp.innerText=data.translation}
+      }
 
+  )
+  // $.post(url,JSON.stringify(data),(data)=>{
+  //   console.log(data)
+  //   $("#translation-para").text(data.translation)
+  // })
+
+
+}
 let show_translation = function(e) {
   tis = get_textitems_spans(e);
   if (tis == null)
@@ -572,7 +599,7 @@ function handle_keydown (e) {
   map[kUP] = () => increment_status_for_selected_elements(e, +1);
   map[kDOWN] = () => increment_status_for_selected_elements(e, -1);
   map[kC] = () => handle_copy(e);
-  map[kT] = () => show_translation(e);
+  map[kT] = () => new_translation(e);
   map[kM] = () => next_theme();
   map[kH] = () => toggle_highlight();
   map[kP] = () => toggle_reading();

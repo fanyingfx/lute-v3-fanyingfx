@@ -453,7 +453,7 @@ let new_translation = function (e){
   if (tis == null)
     return;
   const sentence = tis.map(s => $(s).data('text')).join('');
-  const url = 'http://lute.local:5001/trans/baidu'
+  const url = `${window.location.origin}/trans/baidu`
   data={text: sentence}
   $.ajax(
       {

@@ -123,7 +123,7 @@ let tooltip_textitem_hover_content = function (el, setContent) {
 
 function showEditFrame(el, extra_args = {}) {
   const lid = parseInt(el.data('lang-id'));
-  console.log({editFrame:extra_args})
+  // console.log({editFrame:extra_args})
 
   let text = extra_args.textparts ?? [ el.data('text') ];
   let lemma = extra_args.lemmaparts ?? [el.data('lemma')];

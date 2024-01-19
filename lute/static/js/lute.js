@@ -558,6 +558,34 @@ function toggle_reading() {
     }
   });
 }
+function playsound(data){
+    url='/tts'
+    bookid = data.bookid
+    filename= data.filename
+    resource=  `${url}/${bookid}/${filename}`
+    audio = new Audio(resource)
+    audio.play()
+}
+function gen_audio_and_play(e){
+  tis = get_textitems_spans(e);
+  if (tis == null)
+    return;
+  const text = tis.map(s => $(s).data('text')).join('');
+  // console.log(text)
+  pathname=window.location.pathname
+  bookid=pathname.replace('/read/','')
+  url=`/tts/genaudio/${bookid}`
+  fetch(url,
+      {method: "POST",
+      body: JSON.stringify({text: text}),
+         headers: {
+    "Content-type": "application/json; charset=UTF-8"
+  }
+})
+.then(data => {return data.json()})
+.then(res=> playsound(res))
+
+}
 
 
 function handle_keydown (e) {
@@ -582,6 +610,7 @@ function handle_keydown (e) {
   const kM = 77; // The(M)e
   const kH = 72; // Toggle H)ighlight
   const kP = 80; // Toggle P)ronunciation
+  const kR = 82; // TTS Reading
   const k1 = 49;
   const k2 = 50;
   const k3 = 51;
@@ -610,6 +639,7 @@ function handle_keydown (e) {
   map[k5] = () => update_status_for_marked_elements(5);
   map[kI] = () => update_status_for_marked_elements(98);
   map[kW] = () => update_status_for_marked_elements(99);
+  map[kR] = () => gen_audio_and_play(e)
 
   if (e.which in map) {
     let a = map[e.which];

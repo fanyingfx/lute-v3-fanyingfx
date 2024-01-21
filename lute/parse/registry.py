@@ -10,7 +10,7 @@ from lute.parse.base import AbstractParser
 from lute.parse.space_delimited_parser import SpaceDelimitedParser, TurkishParser
 from lute.parse.fugashi_parser import FugashiParser
 from lute.parse.character_parser import ClassicalChineseParser
-from lute.parse.mandarin_parser import MandarinParser
+# from lute.parse.mandarin_parser import MandarinParser
 from lute.parse.english_parser import EnglishParser
 
 # List of ALL parsers available, not necessarily all supported.
@@ -21,7 +21,7 @@ parsers = {
     "turkish": TurkishParser,
     "japanese": FugashiParser,
     "classicalchinese": ClassicalChineseParser,
-    "mandarin": MandarinParser,
+    # "mandarin": MandarinParser,
 }
 parser_instances = {}
 

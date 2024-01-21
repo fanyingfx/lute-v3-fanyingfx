@@ -466,12 +466,25 @@ let new_translation = function (e){
       }
 
   )
-  // $.post(url,JSON.stringify(data),(data)=>{
-  //   console.log(data)
-  //   $("#translation-para").text(data.translation)
-  // })
+}
+let analysis = function (e){
+  tis = get_textitems_spans(e);
+  if (tis == null)
+    return;
+  const sentence = tis.map(s => $(s).data('text')).join('');
+  const url = `${window.location.origin}/trans/ana`
+  data={text: sentence}
+  $.ajax(
+      {
+        type: "Post",
+        url: url,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data){ pp=document.getElementById('translation-para'); pp.innerText=data.ana}
+      }
 
-
+  )
 }
 let show_translation = function(e) {
   tis = get_textitems_spans(e);
@@ -611,6 +624,7 @@ function handle_keydown (e) {
   const kH = 72; // Toggle H)ighlight
   const kP = 80; // Toggle P)ronunciation
   const kR = 82; // TTS Reading
+  const kA = 65; // Analysis
   const k1 = 49;
   const k2 = 50;
   const k3 = 51;
@@ -629,6 +643,7 @@ function handle_keydown (e) {
   map[kDOWN] = () => increment_status_for_selected_elements(e, -1);
   map[kC] = () => handle_copy(e);
   map[kT] = () => new_translation(e);
+  map[kA] = () => analysis(e);
   map[kM] = () => next_theme();
   map[kH] = () => toggle_highlight();
   map[kP] = () => toggle_reading();

@@ -1,12 +1,23 @@
+import os
+import shutil
+
 import yaml
 from pathlib import Path
 from mdict_query.mdict_query import IndexBuilder
 from lute.config.app_config import AppConfig
-
 from lute.dict.mdx_util import get_local_resource, MDXDict,content_type_map
 
-
+def _create_prod_config_if_needed():
+    """
+    If config.yml is missing, create one from prod config.
+    """
+    config_file = os.path.join(AppConfig.configdir(), "config.yml")
+    if not os.path.exists(config_file):
+        prod_conf = os.path.join(AppConfig.configdir(), "config.yml.prod")
+        shutil.copy(prod_conf, config_file)
 def load_mdxdict_config():
+    # if app_config_path is None:
+    _create_prod_config_if_needed()
     app_conf_path = AppConfig.default_config_filename()
     dict_path = AppConfig(app_conf_path).dictpath
     with open(dict_path, 'r') as f:

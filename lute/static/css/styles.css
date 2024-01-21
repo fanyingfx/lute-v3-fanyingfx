@@ -447,7 +447,8 @@ div#reading-footer span {
 
     }
     #translation-para{
-        margin-left: 1.2rem;
+        margin-left: 0.6rem;
+        font-size: 0.65rem;
     }
 
     .scrollable-div {
@@ -468,7 +469,8 @@ div#reading-footer span {
 
     }
     #translation-para{
-        margin-left: 1.2rem;
+        margin-left: 0.6rem;
+        font-size: 0.6rem;
     }
 
     .scrollable-div {

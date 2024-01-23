@@ -461,6 +461,8 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.wo_id = term.id
         self.wo_status = term.status
         self.flash_message = term.get_flash_message()
+        if term.romanization is not None:
+            self.reading=term.romanization
 
         def has_extra(cterm):
             if cterm is None:

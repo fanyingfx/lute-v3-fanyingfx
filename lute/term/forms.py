@@ -11,6 +11,7 @@ from wtforms import (
     RadioField,
     TextAreaField,
     HiddenField,
+    BooleanField,
 )
 from wtforms import ValidationError
 from wtforms.validators import DataRequired
@@ -40,6 +41,7 @@ class TermForm(FlaskForm):
 
     status_choices = [(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (99, "Wkn"), (98, "Ign")]
     status = RadioField("Status", choices=status_choices)
+    sync_status = BooleanField("Link to parent")
 
     termtagslist = StringField("term_tags")
 

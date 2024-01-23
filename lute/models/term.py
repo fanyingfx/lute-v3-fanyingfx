@@ -124,6 +124,7 @@ class Term(
     romanization = db.Column("WoRomanization", db.String(100))
     token_count = db.Column("WoTokenCount", db.Integer)
     lemma = db.Column("WoLemma", db.String(100))
+    sync_status = db.Column("WoSyncStatus", db.Boolean)
 
     language = db.relationship("Language")
     term_tags = db.relationship("TermTag", secondary="wordtags")
@@ -158,6 +159,8 @@ class Term(
         self.status = 1
         self.translation = None
         self.romanization = ""
+        self.romanization = None
+        self.sync_status = False
         self.term_tags = []
         self.parents = []
         self.children = []

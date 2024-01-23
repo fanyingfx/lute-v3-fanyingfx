@@ -18,6 +18,8 @@ from flask import (
     send_from_directory,
     jsonify,
 )
+from sqlalchemy.event import listens_for
+from sqlalchemy.pool import Pool
 
 from lute.config.app_config import AppConfig
 from lute.db import db
@@ -121,18 +123,18 @@ def _add_base_routes(app, app_config):
         # Only back up if we have books, otherwise the backup is
         # kicked off when the user empties the demo database.
         if (
-                is_production
-                and have_books
-                and backupservice.should_run_auto_backup(bkp_settings)
+            is_production
+            and have_books
+            and backupservice.should_run_auto_backup(bkp_settings)
         ):
             return redirect("/backup/backup", 302)
 
         refresh_stats()
         warning_msg = backupservice.backup_warning(bkp_settings)
         backup_show_warning = (
-                bkp_settings.backup_warn
-                and bkp_settings.backup_enabled
-                and warning_msg != ""
+            bkp_settings.backup_warn
+            and bkp_settings.backup_enabled
+            and warning_msg != ""
         )
 
         return render_template(
@@ -278,6 +280,11 @@ def _create_app(app_config, extra_config):
     app.env_config = app_config
 
     db.init_app(app)
+
+    @listens_for(Pool, "connect")
+    def _pragmas_on_connect(dbapi_con, con_record):  # pylint: disable=unused-argument
+        dbapi_con.execute("pragma recursive_triggers = on;")
+
     with app.app_context():
         db.create_all()
         UserSetting.load()
@@ -310,9 +317,9 @@ def _create_app(app_config, extra_config):
 
 
 def create_app(
-        app_config_path=None,
-        extra_config=None,
-        output_func=None,
+    app_config_path=None,
+    extra_config=None,
+    output_func=None,
 ):
     """
     App factory.  Calls dbsetup, and returns Flask app.

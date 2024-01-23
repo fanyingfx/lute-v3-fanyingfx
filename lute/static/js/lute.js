@@ -552,6 +552,11 @@ function toggle_highlight() {
     }
   });
 }
+function edit_current_page() {
+            const bookid = $('#book_id').val();
+            const pagenum = parseInt($('#page_num').val());
+            location.href = `/read/editpage/${bookid}/${pagenum}`;
+        }
 function toggle_reading() {
   $.ajax({
     url: '/theme/toggle_reading',
@@ -623,8 +628,9 @@ function handle_keydown (e) {
   const kM = 77; // The(M)e
   const kH = 72; // Toggle H)ighlight
   const kP = 80; // Toggle P)ronunciation
-  const kR = 82; // TTS Reading
-  const kA = 65; // Analysis
+  const kR = 82; // R)ead aloud
+  const kA = 65; // A)nalysis
+  const kE = 69; //E)dit
   const k1 = 49;
   const k2 = 50;
   const k3 = 51;
@@ -654,7 +660,8 @@ function handle_keydown (e) {
   map[k5] = () => update_status_for_marked_elements(5);
   map[kI] = () => update_status_for_marked_elements(98);
   map[kW] = () => update_status_for_marked_elements(99);
-  map[kR] = () => gen_audio_and_play(e)
+  map[kR] = () => gen_audio_and_play(e);
+  map[kE] = () => edit_current_page();
 
   if (e.which in map) {
     let a = map[e.which];

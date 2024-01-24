@@ -1,15 +1,21 @@
 from flask import Blueprint,jsonify,request
 
-from lute.translation.services import baidu_translate
+from lute.translation.services import baidu_translate,youdao_translate
 from lute.parse.fugashi_parser import FugashiParser
+from lute.tts.multiplelang_detect import get_lang
 
 bp = Blueprint("trans", __name__, url_prefix="/trans")
 
 
 @bp.post('/baidu')
-def baidutrans():
+def trans2cn():
     text = request.json.get('text')
-    res={'translation': baidu_translate(text)}
+    lang=get_lang(text)
+    if lang == 'ja':
+        trans=youdao_translate(text)
+    else:
+        trans = baidu_translate(text)
+    res={'translation': trans}
     return jsonify(res)
 
 @bp.post('/ana')

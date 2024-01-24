@@ -28,7 +28,9 @@ class FugashiParser(AbstractParser):
     # _tagger = Tagger("-d .unidics/unidic-csj-202302")
     _tagger = Tagger()
     _tagger_type = "spoken"
-    _ana_tagger = Tagger("-d /home/fan/.local/share/unidic-csj-202302_full")
+    _ana_tagger = Tagger("-d /home/fan/.local/share/unidic-cwj-202302_full")
+    _w_tagger = Tagger("-d /home/fan/.local/share/unidic-cwj-202302_full")
+    _s_tagger = Tagger("-d /home/fan/.local/share/unidic-csj-202302_full")
 
     @classmethod
     def is_supported(cls):
@@ -42,9 +44,14 @@ class FugashiParser(AbstractParser):
     @classmethod
     # @lru_cache()
     def parse_para(cls, text: str, language):
+        """
+        https://clrd.ninjal.ac.jp/unidic/faq.html
+        """
         lines = []
-
-        for tok in FugashiParser._tagger(text.strip()):
+        tagger =cls._tagger
+        if text.startswith('「'):
+            tagger=cls._s_tagger
+        for tok in tagger(text.strip()):
             reading_is_kana = FugashiParser._string_is_hiragana(tok.surface)
             reading = tok.feature.kana
             is_forein = tok.feature.goshu == "外"
@@ -81,7 +88,6 @@ class FugashiParser(AbstractParser):
     # @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         """
-        Parse the string using Sudachi
         """
         text = re.sub(r"[ \t]+", " ", text).strip()
         lines = []
@@ -131,7 +137,6 @@ class FugashiParser(AbstractParser):
         else:
             cls._tagger = Tagger(f"-d {dict_config.userunidic['w']}")
             cls._tagger_type = "writing"
-        cls._cache = {}
 
     def get_reading(self, text: str):
         """
@@ -168,7 +173,11 @@ class FugashiParser(AbstractParser):
 
     @classmethod
     def analyse(cls, text):
-        tokens = cls._ana_tagger(text.strip())
+        print('analysis text',text)
+        tagger =cls._tagger
+        if text.startswith('「'):
+            tagger=cls._s_tagger
+        tokens = tagger(text.strip())
         l = []
 
         def halfwidth_to_fullwidth(text):
@@ -184,6 +193,7 @@ class FugashiParser(AbstractParser):
         for tok in tokens:
             lemma = tok.feature.lemma
             # orthbase = tok.feature.orthBase
+            fws = '\uff0a' # full-width space
             if tok.feature.goshu == "外":
                 lemma = lemma.split('-')[-1]
                 lemma = halfwidth_to_fullwidth(lemma)
@@ -193,12 +203,14 @@ class FugashiParser(AbstractParser):
                 pos1 = pos1.replace(o, r)
             c_type = tok.feature.cType
             c_form = tok.feature.cForm
-            c_type = c_type.replace('*', '\uff0a')
-            c_form = c_form.replace('*', '\uff0a')
+            c_type = c_type.replace('*', fws)
+            c_form = c_form.replace('*', fws)
             # if c_form=='*' and c_type=='*':
             #     c_form='\u3000'
             #     c_type='\u3000'
-            l.append((tok.surface, lemma, pos1, c_type, c_form))
+            rec = (tok.surface, lemma, pos1, c_type, c_form)
+            if all(rec):
+                l.append(rec)
         res = []
 
         def align(text, width):
@@ -209,7 +221,7 @@ class FugashiParser(AbstractParser):
             return text + full_width_space * padding_size
 
         for rec in l:
-            max_len = max([len(c) for c in rec])
+            max_len = max([len(c) for c in rec if c is not None])
             new_rec = [align(text, max_len) for text in rec]
             res.append(new_rec)
         transposed_array = list(map(list, zip(*res)))

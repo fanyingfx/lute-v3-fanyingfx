@@ -1,5 +1,5 @@
 from flask import Blueprint,jsonify,request
-
+import  traceback,sys
 from lute.translation.services import baidu_translate,youdao_translate
 from lute.parse.fugashi_parser import FugashiParser
 from lute.tts.multiplelang_detect import get_lang
@@ -21,9 +21,12 @@ def trans2cn():
 @bp.post('/ana')
 def japanese_analysis():
     text = request.json.get('text')
+    zws = '\u200b'
+    text = text.replace(zws,'')
     try:
         ana ='\n'.join(FugashiParser.analyse(text))
-    except:
+    except Exception as e:
         ana = 'analysis failed'
+        traceback.print_exc(file=sys.stdout)
     res ={'ana':ana}
     return jsonify(res)

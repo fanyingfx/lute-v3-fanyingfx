@@ -275,3 +275,27 @@ def edit_page(bookid, pagenum):
         return redirect(f"/read/{book.id}", 302)
 
     return render_template("read/page_edit_form.html", hide_top_menu=True, form=form)
+@bp.route("/editsentence/<int:bookid>/<int:pagenum>",methods=["GET","POST"])
+def edit_sentence(bookid, pagenum):
+    book = Book.find(bookid)
+    sentence = request.args.get('sentence')
+    if sentence is None or sentence.strip()=='':
+        return redirect("/", 302)
+    pagenum = _page_in_range(book, pagenum)
+    text = book.texts[pagenum - 1]
+    raw_text = text.text
+    raw_sentence = sentence
+    text.text= sentence
+    form = TextForm(obj=text)
+    if form.validate_on_submit():
+        new_senetence = form.data['text']
+        new_text = raw_text.replace(raw_sentence,new_senetence)
+        form.populate_obj(text)
+        text.text =new_text
+        db.session.add(text)
+        db.session.commit()
+        return redirect(f"/read/{book.id}", 302)
+
+    return render_template("read/page_edit_form.html", hide_top_menu=True, form=form)
+
+

@@ -552,10 +552,13 @@ function toggle_highlight() {
     }
   });
 }
-function edit_current_page() {
+function edit_current_sentence(e) {
             const bookid = $('#book_id').val();
             const pagenum = parseInt($('#page_num').val());
-            location.href = `/read/editpage/${bookid}/${pagenum}`;
+            const tis= get_textitems_spans(e);
+            const curr_sentence = tis.map(s => $(s).data('text')).join('');
+
+            location.href = `/read/editsentence/${bookid}/${pagenum}?sentence=${curr_sentence}`;
         }
 function toggle_reading() {
   $.ajax({
@@ -661,7 +664,7 @@ function handle_keydown (e) {
   map[kI] = () => update_status_for_marked_elements(98);
   map[kW] = () => update_status_for_marked_elements(99);
   map[kR] = () => gen_audio_and_play(e);
-  map[kE] = () => edit_current_page();
+  map[kE] = () => edit_current_sentence(e);
 
   if (e.which in map) {
     let a = map[e.which];

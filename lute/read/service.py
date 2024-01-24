@@ -2,6 +2,8 @@
 Reading helpers.
 """
 import re
+from functools import lru_cache
+
 from sqlalchemy import func
 
 from lute.models.setting import UserSetting
@@ -15,6 +17,7 @@ from itertools import chain
 from flask import current_app
 
 
+@lru_cache()
 def find_all_Terms_in_string(s, language, tokens=None):
     """
     Find all terms contained in the string s.
@@ -82,6 +85,7 @@ class RenderableSentence:
         return f'<RendSent {self.sentence_id}, {len(self.textitems)} items, "{s}">'
 
 
+@lru_cache()
 def parse_paragraphs(text,language):
     """
     Get array of arrays of RenderableSentences for the given Text.

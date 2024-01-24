@@ -169,6 +169,10 @@ def term_form(langid, text):
     Create or edit a term.
     """
     lemma = request.args.get("lemma", default=None, type=str)
+    if not lemma=="None":
+        lemma = lemma.replace(",","")
+    else :
+        lemma=text
 
     reading = request.args.get("reading", default=None, type=str) or request.form.get(
         "romanization", ""

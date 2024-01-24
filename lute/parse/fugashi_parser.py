@@ -38,22 +38,10 @@ class FugashiParser(AbstractParser):
     def name(cls):
         return "Japanese"
 
-    # @classmethod
-    # def analyse(cls,text:str):
-    #     tokens = FugashiParser._tagger(text.strip())
-    #     for tok in tokens:
-    #         print(tok,tok.feature.orthBase,tok.feature.pos1,tok.feature.cForm,tok.feature.cType)
 
     @classmethod
     # @lru_cache()
     def parse_para(cls, text: str, language):
-        # get word character regex
-        # word_characters = bytes(language.word_characters, "utf-8").decode(
-        #     "unicode_escape"
-        # )
-        #
-        # if text.strip() != "" and not re.match(f"[{word_characters}]+", text):
-        #     return [[text, "x", "", "", "", False], ["EOP", "3", "7", "8", "", False]]
         lines = []
 
         for tok in FugashiParser._tagger(text.strip()):
@@ -66,6 +54,9 @@ class FugashiParser(AbstractParser):
                 reading = ""
             else:
                 reading = jaconv.kata2hira(reading)
+            lemma = tok.feature.orthBase
+            if reading_is_kana:
+                lemma = tok.surface
             # if tok.feature.cForm !='*':
             # TODO add gramma attrs
             gramma_attrs = tok.feature.cForm + "," + tok.feature.cType
@@ -76,7 +67,7 @@ class FugashiParser(AbstractParser):
                     str(tok.char_type),
                     "-1" if tok.is_unk else "0",
                     # tok.feature.orthBase,
-                    tok.feature.lemma,
+                    lemma,
                     reading,
                     False,
                 ]

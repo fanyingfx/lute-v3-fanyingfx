@@ -556,7 +556,7 @@ function edit_current_sentence(e) {
             const bookid = $('#book_id').val();
             const pagenum = parseInt($('#page_num').val());
             const tis= get_textitems_spans(e);
-            const curr_sentence = tis.map(s => $(s).data('text')).join('');
+            const curr_sentence = tis.map(s => $(s).data('text').replace(/\u200B/g, '')).join('');
 
             location.href = `/read/editsentence/${bookid}/${pagenum}?sentence=${curr_sentence}`;
         }

@@ -57,7 +57,6 @@ class Book(
     language_id = db.Column(
         "BkLgID", db.Integer, db.ForeignKey("languages.LgID"), nullable=False
     )
-    word_count = db.Column("BkWordCount", db.Integer)
     source_uri = db.Column("BkSourceURI", db.String(length=1000))
     current_tx_id = db.Column("BkCurrentTxID", db.Integer, default=0)
     archived = db.Column("BkArchived", db.Boolean, default=False)
@@ -99,6 +98,17 @@ class Book(
     def page_count(self):
         return len(self.texts)
 
+    def page_in_range(self, n):
+        "Return page number that is in the book's page count."
+        ret = max(n, 1)
+        ret = min(ret, self.page_count)
+        return ret
+
+    def text_at_page(self, n):
+        "Return the text object at page n."
+        pagenum = self.page_in_range(n)
+        return self.texts[pagenum - 1]
+
     @property
     def is_supported(self):
         "True if the book's language's parser is supported."
@@ -121,8 +131,6 @@ class Book(
             return ret.strip()
 
         b = Book(title, language)
-        b.word_count = len([t for t in tokens if t.is_word])
-
         page_number = 0
         it = SentenceGroupIterator(tokens, max_word_tokens_per_text)
         while toks := it.next():
@@ -184,7 +192,11 @@ class Text(db.Model):
     @text.setter
     def text(self, s):
         self._text = s
-        self._load_sentences()
+        toks = self._get_parsed_tokens()
+        wordtoks = [t for t in toks if t.is_word]
+        self.word_count = len(wordtoks)
+        if self._read_date is not None:
+            self._load_sentences_from_tokens(toks)
 
     @property
     def read_date(self):
@@ -193,31 +205,24 @@ class Text(db.Model):
     @read_date.setter
     def read_date(self, s):
         self._read_date = s
-        self._load_sentences()
+        # Ensure loaded.
+        self.load_sentences()
 
-    def _load_sentences(self):
-        """
-        Parse the current text and create Sentence objects.
-        Sentences are only needed once the text has been read.
-        """
-        self.remove_sentences()
-
-        if self.read_date is None:
-            return
-
+    def _get_parsed_tokens(self):
+        "Return the tokens."
         lang = self.book.language
-        parser = lang.parser
-        parsedtokens = parser.get_parsed_tokens(self.text, lang)
+        return lang.parser.get_parsed_tokens(self.text, lang)
 
+    def _load_sentences_from_tokens(self, parsedtokens):
+        "Save sentences using the tokens."
+        self._remove_sentences()
         curr_sentence_tokens = []
         sentence_number = 1
-
         for pt in parsedtokens:
             curr_sentence_tokens.append(pt)
             if pt.is_end_of_sentence:
                 se = Sentence.from_tokens(curr_sentence_tokens, sentence_number)
-                self.add_sentence(se)
-
+                self._add_sentence(se)
                 # Reset for the next sentence.
                 curr_sentence_tokens = []
                 sentence_number += 1
@@ -225,15 +230,22 @@ class Text(db.Model):
         # Add any stragglers.
         if len(curr_sentence_tokens) > 0:
             se = Sentence.from_tokens(curr_sentence_tokens, sentence_number)
-            self.add_sentence(se)
+            self._add_sentence(se)
 
-    def add_sentence(self, sentence):
+    def load_sentences(self):
+        """
+        Parse the current text and create Sentence objects.
+        """
+        toks = self._get_parsed_tokens()
+        self._load_sentences_from_tokens(toks)
+
+    def _add_sentence(self, sentence):
         "Add a sentence to the Text."
         if sentence not in self.sentences:
             self.sentences.append(sentence)
             sentence.text = self
 
-    def remove_sentences(self):
+    def _remove_sentences(self):
         "Remove all sentence from the Text."
         for sentence in self.sentences:
             sentence.text = None

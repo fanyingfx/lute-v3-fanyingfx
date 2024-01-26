@@ -133,13 +133,13 @@ def handle_term_form(
 
     if form.validate_on_submit():
         if tokens_raw:
-            multi_term = tokens_raw.replace(",", "")
+            multi_term = tokens_raw.replace(",", "\u200b")
             tokens = tokens_raw.split(",")
             d = {multi_term: tokens}
             # lang = find_lang(langid)
             lang = term.language
             update_user_dict(lang, d)
-            term_old = repo.find(lang.id, multi_term)
+            term_old = repo.find(lang.id, multi_term,tokens)
             if term_old is not None:
                 repo.delete_by_termid(term_old.id)
         form.populate_obj(term)

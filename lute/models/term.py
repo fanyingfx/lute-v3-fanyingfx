@@ -155,7 +155,7 @@ class Term(
         cascade="all, delete-orphan",
     )
 
-    def __init__(self, language=None, text=None, lemma=None):
+    def __init__(self, language=None, text=None, lemma=None,raw_tokens=None):
         self.status = 1
         self.translation = None
         self.romanization = ""
@@ -167,6 +167,7 @@ class Term(
         self.images = []
         if language is not None:
             self.language = language
+        self.raw_tokens=raw_tokens
         if text is not None:
             self.text = text
         if lemma is not None:
@@ -202,11 +203,16 @@ class Term(
         t = t.replace(nbsp, " ")
 
         lang = self.language
-        tokens = lang.get_parsed_tokens(t)
+        if not self.raw_tokens:
+            tokens = lang.get_parsed_tokens(t)
+            tokens = [tok for tok in tokens if tok.token != "¶"]
+            tok_strings = [tok.token for tok in tokens]
+        else:
+            tok_strings = self.raw_tokens
 
         # Terms can't contain paragraph markers.
-        tokens = [tok for tok in tokens if tok.token != "¶"]
-        tok_strings = [tok.token for tok in tokens]
+        # tokens = [tok for tok in tokens if tok.token != "¶"]
+        # tok_strings = [tok.token for tok in tokens]
 
         t = zws.join(tok_strings)
         old_text_lc = self.text_lc

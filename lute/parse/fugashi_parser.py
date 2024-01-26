@@ -87,7 +87,7 @@ class FugashiParser(AbstractParser):
 
         return lines
 
-    @lru_cache()
+    # @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         """
         """

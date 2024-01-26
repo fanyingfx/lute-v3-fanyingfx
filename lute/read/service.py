@@ -1,240 +1,14 @@
 """
 Reading helpers.
 """
-import re
-from functools import lru_cache
 
-from sqlalchemy import func
-
-from lute.models.setting import UserSetting
 from lute.models.term import Term, Status
 from lute.models.book import Text
-from lute.parse.base import ParsedToken
-from lute.read.render.renderable_calculator import RenderableCalculator
+from lute.book.stats import mark_stale
+from lute.read.render.service import get_paragraphs
 from lute.term.model import Repository
+
 from lute.db import db
-from itertools import chain
-from flask import current_app
-
-
-def find_all_Terms_in_string(s, language, tokens=None):
-    """
-    Find all terms contained in the string s.
-
-    For example
-    - given s = "Here is a cat"
-    - given terms in the db: [ "cat", "a cat", "dog" ]
-
-    This would return the terms "cat" and "a cat".
-
-    The code first queries for exact single-token matches,
-    and then multiword matches, because that's much faster
-    than querying for everthing at once.  (This may no longer
-    be true, can change it later.)
-    """
-
-    # Extract word tokens from the input string
-    if tokens is None:
-        cleaned = re.sub(r"\s+", " ", s)
-        tokens = language.get_parsed_tokens(cleaned)
-    # load_user_dict(language)
-
-    parser = language.parser
-
-    # Query for terms with a single token that match the unique word tokens
-    word_tokens = filter(lambda t: t.is_word, tokens)
-    tok_strings = [parser.get_lowercase(t.token) for t in word_tokens]
-    tok_strings = list(set(tok_strings))
-    terms_matching_tokens = (
-        db.session.query(Term)
-        .filter(
-            Term.language == language,
-            Term.text_lc.in_(tok_strings),
-            Term.token_count == 1,
-        )
-        .all()
-    )
-
-    # Multiword terms have zws between all tokens.
-    # Create content string with zws between all tokens for the match.
-    zws = "\u200B"  # zero-width space
-    lctokens = [parser.get_lowercase(t.token) for t in tokens]
-    content = zws + zws.join(lctokens) + zws
-    contained_term_query = db.session.query(Term).filter(
-        Term.language == language,
-        Term.token_count > 1,
-        func.instr(content, Term.text_lc) > 0,
-    )
-    contained_terms = contained_term_query.all()
-
-    return terms_matching_tokens + contained_terms
-
-
-class RenderableSentence:
-    """
-    A collection of TextItems to be rendered.
-    """
-
-    def __init__(self, sentence_id, textitems):
-        self.sentence_id = sentence_id
-        self.textitems = textitems
-
-    def __repr__(self):
-        s = "".join([t.display_text for t in self.textitems])
-        return f'<RendSent {self.sentence_id}, {len(self.textitems)} items, "{s}">'
-
-
-def parse_paragraphs(text,language):
-    """
-    Get array of arrays of RenderableSentences for the given Text.
-    """
-    if text.strip()=="":
-        return ""
-    # language = text.book.language
-    # book_id = text.book.id
-
-    # Hacky reset of state of ParsedToken state.
-    # _Shouldn't_ matter ... :-(
-    ParsedToken.reset_counters()
-    tokens = language.get_parsed_tokens(text)
-    tokens = [t for t in tokens if t.token != "¶"]
-
-    # Brutal hack ... the RenderableCalculator requires the
-    # ParsedTokens to be in contiguous order, but the above list
-    # comprehension can cause some tokens to get removed.  In addition
-    # (and this is the worst part), for some reason the tests fail in
-    # CI, but _inconsistently_, with the token order numbers.  The
-    # order sometimes jumps by 2 ... I really can't explain it.  So,
-    # as a _complete hack_, I'm re-numbering the tokens now, to ensure
-    # they're in order.
-    tokens.sort(key=lambda x: x.order)
-    if len(tokens) > 0:
-        n = tokens[0].order
-        for t in tokens:
-            t.order = n
-            n += 1
-
-    terms = find_all_Terms_in_string(text, language, tokens)
-    show_reading = bool(int(UserSetting.get_value("show_reading")))
-
-    def make_RenderableSentence(pnum, sentence_num, tokens, terms):
-        """
-        Make a RenderableSentences using the tokens present in
-        that sentence.  The current text and language are pulled
-        into the function from the closure.
-        """
-        sentence_tokens = [t for t in tokens if t.sentence_number == sentence_num]
-        renderable = RenderableCalculator.get_renderable(
-            language, terms, sentence_tokens
-        )
-
-        textitems = [
-            i.make_text_item(
-                pnum, sentence_num, 0, language, show_reading, 0
-            )
-            for i in renderable
-        ]
-        def parse_textitem(textitem):
-            return {
-                "text": textitem.text,
-                "reading": textitem.reading,
-                "status": textitem.wo_status or textitem.status_class.replace('status',''),
-                "lemma": textitem.lemma,
-                "is_word": textitem.is_word
-
-            }
-        res= [parse_textitem(textitem) for textitem in textitems]
-
-        return res
-
-    def unique(arr):
-        return list(set(arr))
-
-    renderable_paragraphs = []
-    paranums = sorted(unique([t.paragraph_number for t in tokens]))
-    for pnum in paranums:
-        paratokens = [t for t in tokens if t.paragraph_number == pnum]
-        senums = sorted(unique([t.sentence_number for t in paratokens]))
-
-        # A renderable paragraph is a collection of
-        # RenderableSentences.
-        renderable_sentences = [
-            make_RenderableSentence(pnum, senum, paratokens, terms) for senum in senums
-        ]
-        renderable_paragraphs.append(renderable_sentences)
-
-    return chain(renderable_paragraphs)
-@lru_cache()
-def get_paragraphs(text):
-    """
-    Get array of arrays of RenderableSentences for the given Text.
-    """
-    if text.id is None:
-        return []
-
-    language = text.book.language
-    book_id = text.book.id
-
-    # Hacky reset of state of ParsedToken state.
-    # _Shouldn't_ matter ... :-(
-    ParsedToken.reset_counters()
-    tokens = language.get_parsed_tokens(text.text)
-    tokens = [t for t in tokens if t.token != "¶"]
-
-    # Brutal hack ... the RenderableCalculator requires the
-    # ParsedTokens to be in contiguous order, but the above list
-    # comprehension can cause some tokens to get removed.  In addition
-    # (and this is the worst part), for some reason the tests fail in
-    # CI, but _inconsistently_, with the token order numbers.  The
-    # order sometimes jumps by 2 ... I really can't explain it.  So,
-    # as a _complete hack_, I'm re-numbering the tokens now, to ensure
-    # they're in order.
-    tokens.sort(key=lambda x: x.order)
-    if len(tokens) > 0:
-        n = tokens[0].order
-        for t in tokens:
-            t.order = n
-            n += 1
-
-    terms = find_all_Terms_in_string(text.text, language, tokens)
-    show_reading = bool(int(UserSetting.get_value("show_reading")))
-
-    def make_RenderableSentence(pnum, sentence_num, tokens, terms):
-        """
-        Make a RenderableSentences using the tokens present in
-        that sentence.  The current text and language are pulled
-        into the function from the closure.
-        """
-        sentence_tokens = [t for t in tokens if t.sentence_number == sentence_num]
-        renderable = RenderableCalculator.get_renderable(
-            language, terms, sentence_tokens
-        )
-
-        textitems = [
-            i.make_text_item(
-                pnum, sentence_num, text.id, language, show_reading, text.book.id
-            )
-            for i in renderable
-        ]
-        return RenderableSentence(sentence_num, textitems)
-
-    def unique(arr):
-        return list(set(arr))
-
-    renderable_paragraphs = []
-    paranums = sorted(unique([t.paragraph_number for t in tokens]))
-    for pnum in paranums:
-        paratokens = [t for t in tokens if t.paragraph_number == pnum]
-        senums = sorted(unique([t.sentence_number for t in paratokens]))
-
-        # A renderable paragraph is a collection of
-        # RenderableSentences.
-        renderable_sentences = [
-            make_RenderableSentence(pnum, senum, paratokens, terms) for senum in senums
-        ]
-        renderable_paragraphs.append(renderable_sentences)
-
-    return renderable_paragraphs
 
 
 def set_unknowns_to_known(text: Text):
@@ -244,7 +18,7 @@ def set_unknowns_to_known(text: Text):
     """
     language = text.book.language
 
-    sentences = sum(get_paragraphs(text), [])
+    sentences = sum(get_paragraphs(text.text, text.book.language), [])
 
     tis = []
     for sentence in sentences:
@@ -253,9 +27,9 @@ def set_unknowns_to_known(text: Text):
 
     def is_unknown(ti):
         return (
-            ti.is_word == 1
-            and (ti.wo_id == 0 or ti.wo_id is None)
-            and ti.token_count == 1
+                ti.is_word == 1
+                and (ti.wo_id == 0 or ti.wo_id is None)
+                and ti.token_count == 1
         )
 
     unknowns = list(filter(is_unknown, tis))
@@ -295,3 +69,20 @@ def bulk_status_update(text: Text, terms_text_array, new_status):
         t.status = new_status
         repo.add(t)
     repo.commit()
+
+
+def start_reading(dbbook, pagenum, db_session):
+    "Start reading a page in the book, getting paragraphs."
+
+    text = dbbook.text_at_page(pagenum)
+    text.load_sentences()
+
+    mark_stale(dbbook)
+    dbbook.current_tx_id = text.id
+    db_session.add(dbbook)
+    db_session.add(text)
+    db_session.commit()
+
+    paragraphs = get_paragraphs(text.text, text.book.language, text.bk_id)
+
+    return paragraphs

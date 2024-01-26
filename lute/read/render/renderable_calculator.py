@@ -54,7 +54,7 @@ class RenderableCalculator:
             prevtok = tok
 
     def _get_renderable(
-        self, tokenlocator, terms, texttokens
+            self, tokenlocator, terms, texttokens
     ):  # pylint: disable=too-many-locals
         """
         Return RenderableCandidates that will **actually be rendered**.
@@ -264,7 +264,7 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         self.is_word: int = None
         self.render: bool = True
         self.lemma = None
-        self.reading = None
+        self.reading = ""
         self.is_img = False
         self.img_src = ""
 
@@ -282,13 +282,12 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         return self.pos + self.length - 1
 
     def make_text_item(
-        self,
-        p_num: int,
-        se_id: int,
-        text_id: int,
-        lang: Language,
-        show_reading=False,
-        bookid=0,
+            self,
+            p_num: int,
+            se_id: int,
+            lang: Language,
+            show_reading=False,
+            bookid=0,
     ):
         """
         Create a TextItem for final rendering.
@@ -305,13 +304,12 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.is_word = self.is_word
         t.text_length = len(self.text)
         t.lemma = self.lemma
-        t.reading = self.reading
+        if t.reading.strip()=="" and self.reading and self.reading.strip()!="":
+            t.reading=self.reading
         t.show_reading = show_reading
         t.is_img = self.is_img
         if t.is_img:
-            t.img_src = f"/bookimages/{bookid}/{self.text.replace('<img=','').strip()}"
-
-        t.load_term_data(self.term)
+            t.img_src = f"/bookimages/{bookid}/{self.text.replace('<img=', '').strip()}"
 
         return t
 
@@ -367,7 +365,7 @@ class TokenLocator:
             matchpos = match[1]
 
             # print(f"found match \"{matchtext}\" len={matchlen} pos={matchpos}")
-            original_subject_text = subj[matchpos : matchpos + matchlen]
+            original_subject_text = subj[matchpos: matchpos + matchlen]
             zws = "\u200B"
             t = original_subject_text.lstrip(zws).rstrip(zws)
             index = self.get_count_before(subj, matchpos)
@@ -428,7 +426,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
     certain situations.
     """
 
-    def __init__(self, term=None):
+    def __init__(self, term: Term = None):
         self.lang_id: int
         self.order: int
         self.text: str  # The original, un-overlapped text.
@@ -453,7 +451,8 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         # tooltip isn't useful.
         self._show_tooltip: bool = None
         self.lemma: str = None
-        self.reading: str = None
+
+        self.reading: str = term.romanization if term is not None and term.romanization is not None else ""
         self.show_reading = True
         self.is_img = False
 
@@ -553,9 +552,9 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         ]
 
         tooltip = (
-            st not in (Status.WELLKNOWN, Status.IGNORED)
-            or self.show_tooltip
-            or self.flash_message is not None
+                st not in (Status.WELLKNOWN, Status.IGNORED)
+                or self.show_tooltip
+                or self.flash_message is not None
         )
         if tooltip:
             classes.append("showtooltip")

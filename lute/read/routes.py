@@ -7,7 +7,7 @@ from flask import Blueprint, flash, request, render_template, redirect, jsonify
 from lute.read.service import (
     get_paragraphs,
     set_unknowns_to_known,
-    parse_paragraphs,
+    # parse_paragraphs,
     start_reading
 )
 from lute.parse.user_dicts import update_user_dict
@@ -19,7 +19,6 @@ from lute.models.term import Term as DBTerm
 from lute.models.language import Language
 from lute.models.setting import UserSetting
 from lute.db import db
-
 
 bp = Blueprint("read", __name__, url_prefix="/read")
 
@@ -112,22 +111,22 @@ def save_player_data():
     return jsonify("ok")
 
 
-@bp.route("/preloadpage/<int:bookid>/<int:pagenum>", methods=["GET"])
-def preload_page(bookid, pagenum):
-    "Method called by ajax, just for cache"
-    book = Book.find(bookid)
-    if book is None:
-        flash(f"No book matching id {bookid}")
-        return ""
-
-    pagenum = _page_in_range(book, pagenum)
-    # for cache
-    # page_num_next = _page_in_range(book, pagenum + 1)
-    # get_paragraphs(book.texts[page_num_next])
-    text = book.texts[pagenum - 1]
-    paragraphs = get_paragraphs(text)
-    return ""
-
+# @bp.route("/preloadpage/<int:bookid>/<int:pagenum>", methods=["GET"])
+# def preload_page(bookid, pagenum):
+#     "Method called by ajax, just for cache"
+#     book = Book.find(bookid)
+#     if book is None:
+#         flash(f"No book matching id {bookid}")
+#         return ""
+#
+#     pagenum = _page_in_range(book, pagenum)
+#     # for cache
+#     # page_num_next = _page_in_range(book, pagenum + 1)
+#     # get_paragraphs(book.texts[page_num_next])
+#     text = book.texts[pagenum - 1]
+#     paragraphs = get_paragraphs(text)
+#     return ""
+#
 
 @bp.route("/renderpage/<int:bookid>/<int:pagenum>", methods=["GET"])
 def render_page(bookid, pagenum):
@@ -152,10 +151,10 @@ def term_form(langid, text):
     Create or edit a term.
     """
     lemma = request.args.get("lemma", default=None, type=str)
-    if not lemma=="None":
-        lemma = lemma.replace(",","")
-    else :
-        lemma=text
+    if not lemma == "None":
+        lemma = lemma.replace(",", "")
+    else:
+        lemma = text
 
     reading = request.args.get("reading", default=None, type=str) or request.form.get(
         "romanization", ""
@@ -165,8 +164,10 @@ def term_form(langid, text):
         reading = ""
     tokens_raw = request.args.get("textparts", None)
 
+    raw_tokens = tokens_raw.split(",") if tokens_raw else None
+
     repo = Repository(db)
-    term = repo.find_or_new(langid, text, lemma, reading)
+    term = repo.find_or_new(langid, text, lemma, reading,raw_tokens)
 
     return handle_term_form(
         term,
@@ -229,16 +230,17 @@ def term_popup(termid):
 def flashcopied():
     return render_template("read/flashcopied.html")
 
-@bp.post("/parse_text")
-def parse_text():
-    data=request.json
-    if 'text' not in data or 'language' not in data:
-        return jsonify({"error": ""})
-    text = data['text']
-    language = data['language']
-    lang=Language.find_by_name(language)
-    paras= parse_paragraphs(text,lang)
-    return jsonify(paras)
+
+# @bp.post("/parse_text")
+# def parse_text():
+#     data=request.json
+#     if 'text' not in data or 'language' not in data:
+#         return jsonify({"error": ""})
+#     text = data['text']
+#     language = data['language']
+#     lang=Language.find_by_name(language)
+#     paras= parse_paragraphs(text,lang)
+#     return jsonify(paras)
 
 
 @bp.route("/editpage/<int:bookid>/<int:pagenum>", methods=["GET", "POST"])
@@ -257,22 +259,25 @@ def edit_page(bookid, pagenum):
         return redirect(f"/read/{book.id}", 302)
 
     return render_template("read/page_edit_form.html", hide_top_menu=True, form=form)
-@bp.route("/editsentence/<int:bookid>/<int:pagenum>",methods=["GET","POST"])
+
+
+@bp.route("/editsentence/<int:bookid>/<int:pagenum>", methods=["GET", "POST"])
 def edit_sentence(bookid, pagenum):
     book = Book.find(bookid)
     sentence = request.args.get('sentence')
-    if sentence is None or sentence.strip()=='':
+    if sentence is None or sentence.strip() == '':
         return redirect("/", 302)
     text = book.text_at_page(pagenum)
     raw_text = text.text
-    raw_sentence = sentence
-    text.text= sentence
+    # raw_sentence = sentence.replace('\u200b', '')
+    raw_sentence=sentence
+    text.text = sentence
     form = TextForm(obj=text)
     if form.validate_on_submit():
         new_senetence = form.data['text']
-        new_text = raw_text.replace(raw_sentence,new_senetence)
+        new_text = raw_text.replace(raw_sentence, new_senetence)
         form.populate_obj(text)
-        text.text =new_text
+        text.text = new_text
         db.session.add(text)
         db.session.commit()
         return redirect(f"/read/{book.id}", 302)

@@ -56,7 +56,7 @@ class EnglishParser(AbstractParser):
         result = [[match.group(), match.start()] for match in matches]
         return result
 
-    # @lru_cache()
+    @lru_cache()
     def _parse_to_tokens(self, text: str, lang):
         """
         Returns ParsedToken array for given language.
@@ -100,7 +100,7 @@ class EnglishParser(AbstractParser):
         ]
         return res
 
-    # @lru_cache()
+    @lru_cache()
     def parse_para(self, text: str, lang):
         """
         Parse a string, appending the tokens to the list of tokens.

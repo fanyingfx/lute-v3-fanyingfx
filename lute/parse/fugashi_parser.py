@@ -8,6 +8,8 @@ from lute.models.setting import UserSetting
 from fugashi import Tagger
 from flask import current_app
 
+kana_pattern = re.compile("[\u3040-\u309F\u30A0-\u30FFー]+")
+
 
 # TODO using https://github.com/KoichiYasuoka/UniDic2UD to parse Japanese
 #
@@ -42,7 +44,7 @@ class FugashiParser(AbstractParser):
 
 
     @classmethod
-    # @lru_cache()
+    @lru_cache()
     def parse_para(cls, text: str, language):
         """
         https://clrd.ninjal.ac.jp/unidic/faq.html
@@ -52,7 +54,7 @@ class FugashiParser(AbstractParser):
         if text.startswith('「'):
             tagger=cls._s_tagger
         for tok in tagger(text.strip()):
-            reading_is_kana = FugashiParser._string_is_hiragana(tok.surface)
+            reading_is_kana = FugashiParser._string_is_kana(tok.surface)
             reading = tok.feature.kana
             is_forein = tok.feature.goshu == "外"
             if is_forein:
@@ -85,7 +87,7 @@ class FugashiParser(AbstractParser):
 
         return lines
 
-    # @lru_cache()
+    @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         """
         """
@@ -120,13 +122,13 @@ class FugashiParser(AbstractParser):
     # Hiragana is Unicode code block U+3040 - U+309F
     # ref https://stackoverflow.com/questions/72016049/
     #   how-to-check-if-text-is-japanese-hiragana-in-python
-    @staticmethod
-    def _char_is_hiragana(c) -> bool:
-        return ("\u3040" <= c <= "\u309F") or c in ("ー",)
+    # @staticmethod
+    # def _char_is_kana(c) -> bool:
+    #     return
 
     @staticmethod
-    def _string_is_hiragana(s: str) -> bool:
-        return all(FugashiParser._char_is_hiragana(c) for c in s)
+    def _string_is_kana(s: str) -> bool:
+        return bool(kana_pattern.fullmatch(s))
 
     @classmethod
     def switch_tagger(cls, type="spoken"):
@@ -146,7 +148,7 @@ class FugashiParser(AbstractParser):
         doesn't add value (same as text).
         """
 
-        if self._string_is_hiragana(text):
+        if self._string_is_kana(text):
             return None
 
         readings = []

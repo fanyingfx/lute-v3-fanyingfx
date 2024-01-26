@@ -56,7 +56,7 @@ class ParsedToken:
         if self.token == "¶":
             ParsedToken.cls_paragraph_number += 1
         self.lemma = lemma
-        self.reading = reading
+        self.reading = reading or ""
         self.is_img = is_img
 
     def __repr__(self):

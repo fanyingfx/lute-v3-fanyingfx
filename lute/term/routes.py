@@ -107,12 +107,12 @@ def export_terms():
 
 
 def handle_term_form(
-    term,
-    repo,
-    form_template_name,
-    return_on_success,
-    embedded_in_reading_frame=False,
-    tokens_raw=None,
+        term,
+        repo,
+        form_template_name,
+        return_on_success,
+        embedded_in_reading_frame=False,
+        tokens_raw=None,
 ):
     """
     Handle a form post.
@@ -139,7 +139,7 @@ def handle_term_form(
             # lang = find_lang(langid)
             lang = term.language
             update_user_dict(lang, d)
-            term_old = repo.find(lang.id, multi_term,tokens)
+            term_old = repo.find(lang.id, multi_term, tokens)
             if term_old is not None:
                 repo.delete_by_termid(term_old.id)
         form.populate_obj(term)
@@ -264,7 +264,7 @@ def bulk_update_status():
     readings = data.get('reading')
 
     repo = Repository(db)
-    for t,reading in zip(terms,readings):
+    for t, reading in zip(terms, readings):
         term = repo.find_or_new(language_id, t)
         term.status = new_status
         term.romanization = reading

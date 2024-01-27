@@ -1,7 +1,5 @@
 {% for field_name, field_errors in form.errors.items() %}
-{% for error in field_errors %}
-<div class="flash-notice-narrow">{{ error }}</div>
-{% endfor %}
+    {% for error in field_errors %}<div class="flash-notice-narrow">{{ error }}</div>{% endfor %}
 {% endfor %}
 <style>
     /* Style to position the element at the bottom */
@@ -12,79 +10,62 @@
         padding-left: 2px;
     }
 </style>
-
 <div id="term-form-container">
-  <form id="term-form" name="term_form" method="POST">
-    {{ form.hidden_tag() }}
-    <div id="term">
-      <div id="languageSel"
-        {% if term.language_id is none and term.language is none %}
-        {# show the language select box. #}
-        {% else %}
-        style="display:none;"
-        {% endif %}>
-        {{ form.language_id(class="form-control") }}
-      </div>
-
-      {{ form.original_text }}
-
-      <div id="def-container">
-        {{ form.text(class="form-control", value=(form.original_text.data or '')) }}
-        <div class="term-element-box">
-          <img src="{{ url_for('static', filename='icn/external.png') }}" title="Lookup" onclick="do_term_lookup()" />
-          <img src="{{ url_for('static', filename='icn/eye.png') }}" title="Images" onclick="do_image_lookup()" />
+    <form id="term-form" name="term_form" method="POST">
+        {{ form.hidden_tag() }}
+        <div id="term">
+            <div id="languageSel"
+                {% if term.language_id is none and term.language is none %}
+                    {# show the language select box. #}
+                {% else %}
+                    style="display:none;"
+                {% endif %}>{{ form.language_id(class="form-control") }}</div>
+            {{ form.original_text }}
+            <div id="def-container">
+                {{ form.text(class="form-control", value=(form.original_text.data or '') ) }}
+                <div class="term-element-box">
+                    <img src="{{ url_for('static', filename='icn/external.png') }}"
+                         title="Lookup"
+                         onclick="do_term_lookup()" />
+                    <img src="{{ url_for('static', filename='icn/eye.png') }}"
+                         title="Images"
+                         onclick="do_image_lookup()" />
+                </div>
+            </div>
+            <div>{{ form.parentslist(class="form-control") }}</div>
+            <div {% if hide_pronunciation %}style="display:none;"{% endif %}>{{ form.romanization(class="form-control") }}</div>
+            <div id="translation-container">
+                <div>{{ form.translation }}</div>
+                <img {% if term.current_image %}style="grid-column: -1; display: block"{% endif %}
+                     class="zoomableTermImage"
+                     id="term_image"
+                     src="{{ form.current_image.object_data or '' }}" />
+            </div>
+            <div id="status-container">
+                {{ form.status(class="form-control") }}
+                <div id="sync-status-container">
+                    {{ form.sync_status(class="form-control", disabled=True) }}
+                    <label for="sync_status">Link to parent</label>
+                </div>
+            </div>
+            <div style="display: none">{{ form.current_image(class="form-control") }}</div>
+            <div>{{ form.termtagslist(class="form-control") }}</div>
+            <div id="term-button-container">
+                <a href="" onclick="show_term_sentences(); return false;">Sentences</a>
+                <div class="term-element-box">
+                    {% if term.id %}<button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>{% endif %}
+                    <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div>{{ form.parentslist(class="form-control") }}</div>
-  
-      <div {% if hide_pronunciation %}style="display:none;"{% endif %}>
-        {{ form.romanization(class="form-control") }}
-      </div>
-
-      <div id="translation-container">
-        <div>{{ form.translation }}</div>
-        <img {% if term.current_image %}style="grid-column: -1; display: block"{% endif %}
-        class="zoomableTermImage"
-        id="term_image"
-        src="{{ form.current_image.object_data or '' }}"/>
-      </div>
-
-      <div id="status-container">
-        {{ form.status(class="form-control") }}
-        <div id="sync-status-container">
-          {{ form.sync_status(class="form-control", disabled=True) }}
-          <label for="sync_status">Link to parent</label>
-        </div>
-      </div>
-
-      <div style="display: none">{{ form.current_image(class="form-control") }}</div>
-
-      <div>{{ form.termtagslist(class="form-control") }}</div>
-
-      <div id="term-button-container">
-        <a href="" onclick="show_term_sentences(); return false;">Sentences</a>
-        <div class="term-element-box">
-          {% if term.id %}
-          <button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>
-          {% endif %}
-          <button id="submit" type="submit" class="btn btn-primary">Save</button>
-        </div>
-      </div>
-    </div>
-  </form>
+    </form>
 </div>
 <div>
-<div id="wordsearchbox" class="bottom-element">
-
+    <div id="wordsearchbox" class="bottom-element">
         <input type="text" id="_searchword" name="_searchword">
         <button type="button" onclick="searchword(); return false;">Search</button>
-
+    </div>
 </div>
-</div>
-
-
-
 <script type="text/javascript">
 
   // The parent tag list, managed by tagify.

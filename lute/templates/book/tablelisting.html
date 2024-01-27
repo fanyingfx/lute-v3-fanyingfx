@@ -1,20 +1,18 @@
 <table id="booktable" class="table dataTable stripe">
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Language</th>
-      <th>Tags</th>
-      <th>Word count</th>
-      <th>Statuses</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Language</th>
+            <th>Tags</th>
+            <th>Word count</th>
+            <th>Statuses</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
 </table>
-
 {# Hidden form for archive, unarchive, delete. #}
 <form id="actionposter" method="post" action="">
 </form>
-
 <script>
 
   /* The book listing. */
@@ -149,11 +147,7 @@
       let display = "inline-flex"
       if (p < 1)
         display = "none";
-      return `<div
-        class="status-bar${stid} status-bar"
-        title="${title}: ${p}%"
-        style="flex: ${p}; display: ${display}"
-        ></div>`;
+      return `<div class="status-bar${stid} status-bar" title="${title}: ${p}%" style="flex: ${p}; display: ${display}"></div>`;
     };
 
     const bar_titles = {

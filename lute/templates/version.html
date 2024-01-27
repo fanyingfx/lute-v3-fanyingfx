@@ -1,25 +1,22 @@
 {% extends "base.html" %}
-
 {% block title %}Lute info{% endblock %}
 {% block header %}About Lute{% endblock %}
-
 {% block body %}
-
-<p>LUTE: Learning Using Texts v3 with Mandarin support.</p>
-
-<div style="margin-top:20px;">
-  <p>Version: {{ version }}</p>
-  <p>Data path: {{ datapath }}</p>
-  <p>Database: {{ database }}</p>
-  {% if is_docker %}
-  <p><i>Note these are paths in your container, not on the host.  You mounted host paths when you started the container.</i></p>
-  {% endif %}
-</div>
-
-<div style="margin-top:20px;">
-  <p>Repository: <a href="https://github.com/fanyingfx/lute-v3">lute-v3</a></p>
-  <p>Lute is released under the MIT License.</p>
-</div>
-
-
+    <p>LUTE: Learning Using Texts v3 with Mandarin support.</p>
+    <div style="margin-top:20px;">
+        <p>Version: {{ version }}</p>
+        <p>Data path: {{ datapath }}</p>
+        <p>Database: {{ database }}</p>
+        {% if is_docker %}
+            <p>
+                <i>Note these are paths in your container, not on the host.  You mounted host paths when you started the container.</i>
+            </p>
+        {% endif %}
+    </div>
+    <div style="margin-top:20px;">
+        <p>
+            Repository: <a href="https://github.com/fanyingfx/lute-v3">lute-v3</a>
+        </p>
+        <p>Lute is released under the MIT License.</p>
+    </div>
 {% endblock %}

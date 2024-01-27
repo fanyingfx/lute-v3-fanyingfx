@@ -1,40 +1,53 @@
 {% extends 'base.html' %}
-
 {% block title %}Edit Text{% endblock %}
 {% block header %}Edit Text{% endblock %}
-
 {% block body %}
-
-<h1>Edit Text</h1>
-
-{% for field_name, field_errors in form.errors.items() %}
-<p>{{ field_name }}
-  <ul>
-    {% for error in field_errors %}
-    <li>{{ error }}</li>
+    <h1>Edit Text</h1>
+    {% for field_name, field_errors in form.errors.items() %}
+        <p>
+            {{ field_name }}
+            <ul>
+                {% for error in field_errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        </p>
     {% endfor %}
-  </ul>
-</p>
-{% endfor %}
-
-<form method="POST">
-  {{ form.hidden_tag() }}
-
-  <table id="edit-page-table">
-    <tr><td>
-        {{ form.text(class="form-largetextarea") }}
-    </td></tr>
-    <tr><td>
-        <button id="submit" type="submit" class="btn btn-primary">Save</button>
-    </td></tr>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <table id="edit-page-table">
+            <tr>
+                <td>{{ form.text(class="form-largetextarea") }}</td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table>
+        <tr>
+            <td>
+                <button onclick="history.back()">Cancel</button>
+            </td>
+        </tr>
     </table>
-</form>
+    <script>
+        // Function to handle keydown event
+        function handleKeyDown(event) {
+            // Check if the event's target is not an input field
+                // Check if the key combination is Ctrl+S (for example)
+                if (event.ctrlKey && event.key === 's') {
+                    event.preventDefault(); // Prevent default browser behavior (saving page)
+                    // Your custom action here (e.g., save data)
+                    let form = document.getElementById("submit")
+                    form.click()
+                }else if(event.key==='Escape'){
+                      event.preventDefault();
+                    history.back()
+                }
+        }
 
-<table>
-  <tr><td>
-      <button onclick="history.back()">Cancel</button>
-  </td></tr>
-</table>
-
+        // Attach event listener to the document
+        document.addEventListener('keydown', handleKeyDown);
+    </script>
 {% endblock %}
-

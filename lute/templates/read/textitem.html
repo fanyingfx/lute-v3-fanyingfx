@@ -1,21 +1,21 @@
 {# Render a read.render.renderable_calculator.TextItem #}
 {% if not item.is_img %}
-<span id="{{ item.span_id }}"
-      class="{{ item.html_class_string }}"
-      data-lang-id="{{ item.lang_id }}"
-      data-paragraph-id="{{ item.para_id }}"
-      data-sentence-id="{{ item.se_id }}"
-      data-text="{{ item.text }}"
-      data-status-class="{{ item.status_class }}"
-      data-order="{{ item.order }}"
-      data-lemma="{{ item.lemma }}"
-      data-reading="{{  item.reading }}"
-{% if item.wo_id is not none %}
-      data-wid="{{ item.wo_id }}"
-{% endif %}><ruby>{{ item.html_display_text | safe }}<rp>(</rp><rt>{% if item.show_reading %}{{  item.reading }}&nbsp{% endif %}</rt><rp>)</rp></ruby>
+    <span id="{{ item.span_id }}"
+          class="{{ item.html_class_string }}"
+          data-lang-id="{{ item.lang_id }}"
+          data-paragraph-id="{{ item.para_id }}"
+          data-sentence-id="{{ item.se_id }}"
+          data-text="{{ item.text }}"
+          data-status-class="{{ item.status_class }}"
+          data-order="{{ item.order }}"
+          data-lemma="{{ item.lemma }}"
+          data-reading="{{ item.reading }}"
+          {% if item.wo_id is not none %}data-wid="{{ item.wo_id }}"{% endif %}><ruby>{{ item.html_display_text | safe }}<rp>(</rp><rt>
+        {% if item.show_reading %}{{ item.reading }}&nbsp{% endif %}
+    </rt><rp>)</rp></ruby>
 </span>
 {% else %}
-    <div>
-        <img src="{{ item.img_src }}" alt="{{ item.text }}"/>
-    </div>
+<div>
+    <img src="{{ item.img_src }}" alt="{{ item.text }}" />
+</div>
 {% endif %}

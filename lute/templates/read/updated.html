@@ -1,24 +1,22 @@
 <html>
-  <head>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.js') }}" charset="utf-8"></script>
-
-    <style>
+    <head>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='js/jquery.js') }}"
+                charset="utf-8"></script>
+        <style>
       .flash {
           margin-top: 20px;
           padding: 20px;
           background-color: #fff3cd;
           border-color: #ffeeba;
       }
-    </style>
-  </head>
-
-  <body>
-
-    <div id="flash" class="flash">
-      <p>&quot;{{ term_text }}&quot; updated.</p>
-    </div>
-
-    <script>
+        </style>
+    </head>
+    <body>
+        <div id="flash" class="flash">
+            <p>&quot;{{ term_text }}&quot; updated.</p>
+        </div>
+        <script>
       let reload_text_div = function() {
         const context = window.parent.document;
         const bookid = $('#book_id', context).val();
@@ -39,8 +37,6 @@
         reload_text_div();
         $('#flash').delay(1000).fadeOut();
       });
-    </script>
-
-  </body>
-
+        </script>
+    </body>
 </html>

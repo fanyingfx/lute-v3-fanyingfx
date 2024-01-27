@@ -1,71 +1,55 @@
 {% extends 'base.html' %}
-
 {% block title %}New Book{% endblock %}
 {% block header %}Create new book{% endblock %}
-
 {% block body %}
-
-{% for field_name, field_errors in form.errors.items() %}
-{% for error in field_errors %}
-<div class="flash-notice-narrow">{{ error }}</div>
-{% endfor %}
-{% endfor %}
-
-<form method="POST" enctype="multipart/form-data">
-  {{ form.hidden_tag() }}
-
-  <table id="book">
-  <tbody>
-
-    <tr id="languageSel" {% if not show_language_selector %}style="display:none;"{% endif %}>
-      <td>Language</td>
-      <td>{{ form.language_id(class="form-control") }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.title.label }}</td>
-      <td>{{ form.title(class="form-control") }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.text.label }}</td>
-      <td>{{ form.text(class="form-largetextarea") }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.textfile.label }} <i>(.txt, .epub, .pdf)</i></td>
-      <td>{{ form.textfile() }}</td>
-    </tr>
-
-    <tr>
-        <td> {{ form.max_page_tokens.label }}</td>
-        <td> {{ form.max_page_tokens(class="form-control") }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.source_uri.label }}</td>
-      <td>{{ form.source_uri(class="form-control") }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.audiofile.label }}</td>
-      <td>{{ form.audiofile() }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.book_tags.label }}</td>
-      <td>{{ form.book_tags(class="form-control") }}</td>
-    </tr>
-
-  </tbody>
-  </table>
-
-  <button id="save" type="submit" class="btn btn-primary">Save</button>
-</form>
-
-<button onclick="window.location = '/'">Cancel</button>
-
-<script type="text/javascript">
+    {% for field_name, field_errors in form.errors.items() %}
+        {% for error in field_errors %}<div class="flash-notice-narrow">{{ error }}</div>{% endfor %}
+    {% endfor %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <table id="book">
+            <tbody>
+                <tr id="languageSel"
+                    {% if not show_language_selector %}style="display:none;"{% endif %}>
+                    <td>Language</td>
+                    <td>{{ form.language_id(class="form-control") }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.title.label }}</td>
+                    <td>{{ form.title(class="form-control") }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.text.label }}</td>
+                    <td>{{ form.text(class="form-largetextarea") }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ form.textfile.label }} <i>(.txt, .epub, .pdf)</i>
+                    </td>
+                    <td>{{ form.textfile() }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.max_page_tokens.label }}</td>
+                    <td>{{ form.max_page_tokens(class="form-control") }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.source_uri.label }}</td>
+                    <td>{{ form.source_uri(class="form-control") }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.audiofile.label }}</td>
+                    <td>{{ form.audiofile() }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.book_tags.label }}</td>
+                    <td>{{ form.book_tags(class="form-control") }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="save" type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <button onclick="window.location = '/'">Cancel</button>
+    <script type="text/javascript">
   var TAGS = {{ tags | safe }};
 
   let setup_book_tags_tagify = function(input) {
@@ -83,6 +67,5 @@
     var tagslist = document.getElementById('book_tags');
     var tags_tagify = setup_book_tags_tagify(tagslist);
   });
-</script>
-
+    </script>
 {% endblock %}

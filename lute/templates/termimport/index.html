@@ -1,39 +1,32 @@
 {% extends 'base.html' %}
-
 {% block title %}Import Terms{% endblock %}
 {% block header %}Import Terms{% endblock %}
-
 {% block body %}
-
-<p>See <a href="https://jzohrab.github.io/lute-manual/usage/bulk-term-import.html" target="_blank">"Bulk Term Import"</a> in the Lute manual for notes about the CSV file format and data.</p>
-<br />
-
-{% for field_name, field_errors in form.errors.items() %}
-{% for error in field_errors %}
-<div class="flash-notice">{{ error }}</div>
-{% endfor %}
-<br />
-{% endfor %}
-
-<form method="post" enctype="multipart/form-data">
-  {{ form.hidden_tag() }}
-
-  <table id="termimport">
-    <tr>
-      <td>CSV file</td>
-      <td>{{ form.text_file }}</td>
-    </tr>
-    <tr>
-      <td>Create new terms</td>
-      <td>{{ form.create_terms }}</td>
-    </tr>
-    <tr>
-      <td>Update existing terms</td>
-      <td>{{ form.update_terms }}</td>
-    </tr>
-  </table>
-
-  <button id="btnSubmit" class="btn">Import</button>
-</form>
-
+    <p>
+        See <a href="https://jzohrab.github.io/lute-manual/usage/bulk-term-import.html"
+    target="_blank">"Bulk Term Import"</a> in the Lute manual for notes about the CSV file format and data.
+    </p>
+    <br />
+    {% for field_name, field_errors in form.errors.items() %}
+        {% for error in field_errors %}<div class="flash-notice">{{ error }}</div>{% endfor %}
+        <br />
+    {% endfor %}
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <table id="termimport">
+            <tr>
+                <td>CSV file</td>
+                <td>{{ form.text_file }}</td>
+            </tr>
+            <tr>
+                <td>Create new terms</td>
+                <td>{{ form.create_terms }}</td>
+            </tr>
+            <tr>
+                <td>Update existing terms</td>
+                <td>{{ form.update_terms }}</td>
+            </tr>
+        </table>
+        <button id="btnSubmit" class="btn">Import</button>
+    </form>
 {% endblock %}

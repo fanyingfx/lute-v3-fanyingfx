@@ -1,18 +1,20 @@
 {% extends 'base.html' %}
-
 {% block title %}Reading &quot;{{ html_title }}&quot;{% endblock %}
-
 {% block body %}
-
-    <script type="text/javascript" src="{{ url_for('static', filename='js/player.js') }}" charset="utf-8"
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/player.js') }}"
+            charset="utf-8"
             defer></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/resize.js') }}" charset="utf-8"
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/resize.js') }}"
+            charset="utf-8"
             defer></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/text-options.js') }}" charset="utf-8"
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/text-options.js') }}"
+            charset="utf-8"
             defer></script>
-
     <div id="rendering_controls" style="display: none">
-  <pre>
+        <pre>
     book_id: <input id="book_id" value="{{ book.id }}">
     book_audio: <input id="book_audio_file" value="{{ book.audio_filename or '' }}">
     book_audio_current_pos: <input id="book_audio_current_pos" value="{{ book.audio_current_pos or 0 }}">
@@ -23,17 +25,10 @@
     sentence translation url: <span id="translateURL" style="display: none">{{ dictionary_url }}</span>
   </pre>
     </div>
-
     <div id="read_pane_container">
-
         <div id="read_pane_left">
-
-            <div id="reading_menu">
-                {% include "read/reading_menu.html" %}
-            </div>
-
+            <div id="reading_menu">{% include "read/reading_menu.html" %}</div>
             <div id="reading-header">
-
                 <div class="reading_header_container">
                     <div class="reading_header_left">
                         <div class="hamburger-btn" onclick="toggleMenu()">
@@ -41,12 +36,11 @@
                             <span class="hamburger"></span>
                             <span class="hamburger"></span>
                         </div>
-                        <img
-                                src="{{ url_for('static', filename='img/lute.png') }}"
-                                class="lutelogo_small"
-                                style="cursor: pointer"
-                                title="Home"
-                                onclick="window.location='/'"/>
+                        <img src="{{ url_for('static', filename='img/lute.png') }}"
+                             class="lutelogo_small"
+                             style="cursor: pointer"
+                             title="Home"
+                             onclick="window.location='/'" />
                     </div>
                     <div class="reading_header_mid">
                         <div class="reading_header_mid_top">
@@ -68,130 +62,100 @@
                         <div class="read-slide-container">
                             <div class="read_page_nav read_page_disabled"
                                  id="navPrev"
-                                 onclick="goto_relative_page(-1)">◀
-                            </div>
-                            <input type="range" id="read-slider" class="read_page_disabled" max="{{ page_count - 1 }}"
-                                   value="{{ page_num }}" step="1">
+                                 onclick="goto_relative_page(-1)">◀</div>
+                            <input type="range"
+                                   id="read-slider"
+                                   class="read_page_disabled"
+                                   max="{{ page_count - 1 }}"
+                                   value="{{ page_num }}"
+                                   step="1">
                             <div class="read_page_nav read_page_disabled"
                                  id="navNext"
-                                 onclick="goto_relative_page(1)">▶
-                            </div>
+                                 onclick="goto_relative_page(1)">▶</div>
                         </div>
                     </div>
                 </div>
-
                 <!-- <div class="definition-container"></div> -->
-
             </div>
-
             {% include "read/audio_player.html" %}
-
             <h1 id="thetexttitle" class="hide">{{ book.title }}</h1>
             {#  <iframe scrolling="auto">#}
             <div id="reading-blank">
                 <p id="translation-para"></p>
             </div>
             <div id="reading" class="scrollable-div">
-
-
-                <div id="thetext" {% if is_rtl %}dir="rtl" {% endif %}>
-                    ...
-                </div>
+                <div id="thetext" {% if is_rtl %}dir="rtl"{% endif %}>...</div>
                 {#  </iframe>#}
-
                 <div id="reading-footer" style="text-align: center">
                     <p>
-      <span
-              id="footerMarkRestAsKnownNextPage"
-              style="cursor: pointer; color: #4CBB17;"
-              onclick="handle_page_done(true, 1)"
-              title="Mark rest as known, mark page as read, then go to next page">
-        &#x2714;
-      </span>
-
-                        <span
-                                id="footerNextPage"
-                                style="cursor: pointer; font-size: 1.5em; font-weight: bold;"
-                                onclick="handle_page_done(false, 1)"
-                                title="Mark page as read, then go to next page">
-        &#8250;
-      </span>
+                        <span id="footerMarkRestAsKnownNextPage"
+                              style="cursor: pointer;
+                                     color: #4CBB17"
+                              onclick="handle_page_done(true, 1)"
+                              title="Mark rest as known, mark page as read, then go to next page">&#x2714;</span>
+                        <span id="footerNextPage"
+                              style="cursor: pointer;
+                                     font-size: 1.5em;
+                                     font-weight: bold"
+                              onclick="handle_page_done(false, 1)"
+                              title="Mark page as read, then go to next page">&#8250;</span>
                     </p>
-
                     <div id="final_page_controls" class="hide">
                         <p>
-        <span
-                id="footerMarkRestAsKnown"
-                style="cursor: pointer; color: #4CBB17;"
-                onclick="handle_page_done(true, 0)"
-                title="Mark rest as known, mark page as read">
-          &#x2714;
-        </span>
-
-                            <span
-                                    id="footerDone"
-                                    style="cursor: pointer;"
-                                    onclick="handle_page_done(false, 0)"
-                                    title="Mark page as read">
-          &#x2714;
-        </span>
+                            <span id="footerMarkRestAsKnown"
+                                  style="cursor: pointer;
+                                         color: #4CBB17"
+                                  onclick="handle_page_done(true, 0)"
+                                  title="Mark rest as known, mark page as read">&#x2714;</span>
+                            <span id="footerDone"
+                                  style="cursor: pointer"
+                                  onclick="handle_page_done(false, 0)"
+                                  title="Mark page as read">&#x2714;</span>
                         </p>
-
                         <h2>&#127881;</h2>
                         <p>
-                            <a
-                                    href=""
-                                    tabindex="-1"
-                                    onclick="$('#actionposter').submit(); return false;"
-                            >Archive book</a>
+                            <a href=""
+                               tabindex="-1"
+                               onclick="$('#actionposter').submit(); return false;">Archive book</a>
                             |
                             <a href="/" tabindex="-1">Home</a>
                         </p>
-
-                        <form
-                                id="actionposter"
-                                method="post"
-                                action="/book/archive/{{ book.id }}"
-                        ></form>
+                        <form id="actionposter" method="post" action="/book/archive/{{ book.id }}">
+                        </form>
                     </div>
-
                 </div>
                 <div class="btm-margin-container"></div>
             </div>
         </div>
-
         <div id="read_pane_right">
-            <button class="close-btn read-pane-right-close-btn" onclick="closeRightPane()"></button>
+            <button class="close-btn read-pane-right-close-btn"
+                    onclick="closeRightPane()"></button>
             <div class="wordframecontainer">
-                <iframe
-                        name="wordframe"
+                <iframe name="wordframe"
                         id="wordframeid"
                         class="rightreadingframe"
                         src="about:blank"
                         scrolling="auto"
-                        style="height: 35%; width: 100%"
-                        frameborder="0"
-                >
+                        style="height: 35%;
+                               width: 100%"
+                        frameborder="0">
                     Frame support required.
                 </iframe>
             </div>
             <div class="dictframecontainer">
-                <iframe
-                        name="dictframe"
+                <iframe name="dictframe"
                         id="dictframeid"
                         class="rightreadingframe"
                         src="about:blank"
                         scrolling="auto"
-                        style="height: 65%; width: 100%"
-                        frameborder="0"
-                >
+                        style="height: 65%;
+                               width: 100%"
+                        frameborder="0">
                     Frame support required.
                 </iframe>
             </div>
         </div>
-
     </div>
-
     <script>
         let mouseY;
         let scrollY;
@@ -504,5 +468,4 @@
 
 
     </script>
-
 {% endblock %}

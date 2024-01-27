@@ -457,9 +457,10 @@ div#reading-footer span {
     #reading-blank {
         margin: 2rem;
         width: auto;
-        height: 5.5rem;
+        height: 5.8rem;
         padding: 0.6rem;
         border: 1px solid #eee;
+        overflow: auto;
 
     }
     #translation-para{
@@ -479,7 +480,7 @@ div#reading-footer span {
     #reading-blank {
         margin: 2rem;
         width: auto;
-        height: 3.5rem;
+        height: 3.8rem;
         padding: 0.6rem;
         border: 1px solid #eee;
 

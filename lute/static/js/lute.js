@@ -467,25 +467,29 @@ let new_translation = function (e){
 
   )
 }
-let analysis = function (e){
-  tis = get_textitems_spans(e);
-  if (tis == null)
-    return;
-  const sentence = tis.map(s => $(s).data('text')).join('');
-  const url = `${window.location.origin}/trans/ana`
-  data={text: sentence}
-  $.ajax(
-      {
-        type: "Post",
-        url: url,
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function(data){ pp=document.getElementById('translation-para'); pp.innerText=data.ana}
-      }
+function prepare_analysis(url){
+  return function (e){
+    tis = get_textitems_spans(e);
+    if (tis == null)
+      return;
+    const sentence = tis.map(s => $(s).data('text')).join('');
+    const fullurl = `${window.location.origin}${url}`
+    data={text: sentence}
+    $.ajax(
+        {
+          type: "Post",
+          url: fullurl,
+          data: JSON.stringify(data),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function(data){ pp=document.getElementById('translation-para'); pp.innerText=data.ana}
+        }
 
-  )
+    )
+  }
 }
+let analysis = prepare_analysis('/trans/ana')
+let fugashi_analysis = prepare_analysis('/trans/fugashi')
 let show_translation = function(e) {
   tis = get_textitems_spans(e);
   if (tis == null)
@@ -634,6 +638,7 @@ function handle_keydown (e) {
   const kR = 82; // R)ead aloud
   const kA = 65; // A)nalysis
   const kE = 69; //E)dit
+  const kF = 70; //Fugashi
   const k1 = 49;
   const k2 = 50;
   const k3 = 51;
@@ -665,6 +670,7 @@ function handle_keydown (e) {
   map[kW] = () => update_status_for_marked_elements(99);
   map[kR] = () => gen_audio_and_play(e);
   map[kE] = () => edit_current_sentence(e);
+  map[kF] = () => fugashi_analysis(e);
 
   if (e.which in map) {
     let a = map[e.which];

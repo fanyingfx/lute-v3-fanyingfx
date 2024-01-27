@@ -1,21 +1,15 @@
 {% extends 'base.html' %}
-
 {% block header %}Backing up ...{% endblock %}
-
 {% block body %}
-
-<p>
-  Creating {{ backuptype }} backup at {{ backup_folder }}.
-</p>
-<p>
-  <b>Don't refresh this page, or another backup process will be kicked off!</b>
-</p>
-
-<p id="backupResult" />
-
-<p id="returnHome" style="visibility:hidden;"><a href="/">Back to home.</a></p>
-
-<script>
+    <p>Creating {{ backuptype }} backup at {{ backup_folder }}.</p>
+    <p>
+        <b>Don't refresh this page, or another backup process will be kicked off!</b>
+    </p>
+    <p id="backupResult" />
+    <p id="returnHome" style="visibility:hidden;">
+        <a href="/">Back to home.</a>
+    </p>
+    <script>
   $(document).ready(function() {
     $.post('/backup/do_backup', { type: '{{ backuptype }}' })
       .done( function(msg) {
@@ -29,6 +23,5 @@
         $('#returnHome').css({ visibility: 'visible' })
       });
   });
-</script>
-
+    </script>
 {% endblock %}

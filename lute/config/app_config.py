@@ -54,11 +54,13 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.bookimagespath = os.path.join(self.datapath, "bookimages")
         self.userchinesedict = os.path.join(self.datapath, "userchinesedict.txt")
         self.userunidic = {
-            "s": os.path.join(self.datapath, "unidic-csj"),
-            "w": os.path.join(self.datapath, "unidic-cwj"),
+            "s": self.datapath+"/unidic-csj",
+            "w": self.datapath+"/unidic-cwj"
         }
         self.temppath = os.path.join(self.datapath, "temp")
         self.dbfilename = os.path.join(self.datapath, self.dbname)
+        self.dictpath = os.path.join(self.datapath,"dict_conf.yaml")
+        self.fanyikeypath = os.path.join(self.datapath,"fanyikey.yaml")
 
         # Path to db backup.
         # When Lute starts up, it backs up the db

@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
-
 {% block title %}Reading &quot;{{ html_title }}&quot;{% endblock %}
-
 {% block body %}
-
-<script type="text/javascript" src="{{ url_for('static', filename='js/player.js') }}" charset="utf-8" defer></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/resize.js') }}" charset="utf-8" defer></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/text-options.js') }}" charset="utf-8" defer></script>
-
-<div id="rendering_controls" style="display: none">
-  <pre>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/player.js') }}"
+            charset="utf-8"
+            defer></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/resize.js') }}"
+            charset="utf-8"
+            defer></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/text-options.js') }}"
+            charset="utf-8"
+            defer></script>
+    <div id="rendering_controls" style="display: none">
+        <pre>
     book_id: <input id="book_id" value="{{ book.id }}">
     book_audio: <input id="book_audio_file" value="{{ book.audio_filename or '' }}">
     book_audio_current_pos: <input id="book_audio_current_pos" value="{{ book.audio_current_pos or 0 }}">
@@ -19,478 +24,448 @@
     highlights: <span id="show_highlights">{{ show_highlights|lower }}</span>
     sentence translation url: <span id="translateURL" style="display: none">{{ dictionary_url }}</span>
   </pre>
-</div>
-
-<div id="read_pane_container">
-
-<div id="read_pane_left">
-
-  <div id="reading_menu">
-    {% include "read/reading_menu.html" %}
-  </div>
-
-  <div id="reading-header">
-
-    <div class="reading_header_container">
-        <div class="reading_header_left">
-          <div class="hamburger-btn" onclick="toggleMenu()">
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-          </div>
-          <img
-          src="{{ url_for('static', filename='img/lute.png') }}"
-          class="lutelogo_small"
-          style="cursor: pointer"
-          title="Home"
-          onclick="window.location='/'" />
-        </div>
-        <div class="reading_header_mid">
-        <div class="reading_header_mid_top">
-          <div class="texttitlecontainer">
-            <h1 id="headertexttitle" class="hide">{{ book.title }}</h1>
-          </div>
-          <div class="reading_header_page">
-            <!-- <a id="reading_home_link" class="home-link" href="/">Home</a> -->
-            <div class="read-bookmark-buttons-container">
-              <button id="read-bkm-save-btn" class="read-bkm-btn"></button>
-              <!-- <div class="read-bookmark-jump-container"> -->
-                <!-- <button id="read-bkm-prev-btn" class="read-bkm-btn"></button> -->
-                <!-- <button id="read-bkm-next-btn" class="read-bkm-btn"></button> -->
-              <!-- </div> -->
+    </div>
+    <div id="read_pane_container">
+        <div id="read_pane_left">
+            <div id="reading_menu">{% include "read/reading_menu.html" %}</div>
+            <div id="reading-header">
+                <div class="reading_header_container">
+                    <div class="reading_header_left">
+                        <div class="hamburger-btn" onclick="toggleMenu()">
+                            <span class="hamburger"></span>
+                            <span class="hamburger"></span>
+                            <span class="hamburger"></span>
+                        </div>
+                        <img src="{{ url_for('static', filename='img/lute.png') }}"
+                             class="lutelogo_small"
+                             style="cursor: pointer"
+                             title="Home"
+                             onclick="window.location='/'" />
+                    </div>
+                    <div class="reading_header_mid">
+                        <div class="reading_header_mid_top">
+                            <div class="texttitlecontainer">
+                                <h1 id="headertexttitle" class="hide">{{ book.title }}</h1>
+                            </div>
+                            <div class="reading_header_page">
+                                <!-- <a id="reading_home_link" class="home-link" href="/">Home</a> -->
+                                <div class="read-bookmark-buttons-container">
+                                    <button id="read-bkm-save-btn" class="read-bkm-btn"></button>
+                                    <!-- <div class="read-bookmark-jump-container"> -->
+                                    <!-- <button id="read-bkm-prev-btn" class="read-bkm-btn"></button> -->
+                                    <!-- <button id="read-bkm-next-btn" class="read-bkm-btn"></button> -->
+                                    <!-- </div> -->
+                                </div>
+                                <div id="page_indicator">{{ page_num }}/{{ page_count }}</div>
+                            </div>
+                        </div>
+                        <div class="read-slide-container">
+                            <div class="read_page_nav read_page_disabled"
+                                 id="navPrev"
+                                 onclick="goto_relative_page(-1)">◀</div>
+                            <input type="range"
+                                   id="read-slider"
+                                   class="read_page_disabled"
+                                   max="{{ page_count - 1 }}"
+                                   value="{{ page_num }}"
+                                   step="1">
+                            <div class="read_page_nav read_page_disabled"
+                                 id="navNext"
+                                 onclick="goto_relative_page(1)">▶</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="definition-container"></div> -->
             </div>
-            <div id="page_indicator">{{ page_num }}/{{ page_count }}</div>
-          </div>
-          </div>
-          <div class="read-slide-container">
-            <div class="read_page_nav read_page_disabled"
-              id="navPrev"
-              onclick="goto_relative_page(-1)">◀</div>
-            <input type="range" id="read-slider" class="read_page_disabled" max="{{ page_count - 1 }}" value="{{ page_num }}" step="1">
-            <div class="read_page_nav read_page_disabled"
-              id="navNext"
-              onclick="goto_relative_page(1)">▶</div>
-          </div>
+            {% include "read/audio_player.html" %}
+            <h1 id="thetexttitle" class="hide">{{ book.title }}</h1>
+            {#  <iframe scrolling="auto">#}
+            <div id="reading-blank">
+                <p id="translation-para"></p>
+            </div>
+            <div id="reading" class="scrollable-div">
+                <div id="thetext" {% if is_rtl %}dir="rtl"{% endif %}>...</div>
+                {#  </iframe>#}
+                <div id="reading-footer" style="text-align: center">
+                    <p>
+                        <span id="footerMarkRestAsKnownNextPage"
+                              style="cursor: pointer;
+                                     color: #4CBB17"
+                              onclick="handle_page_done(true, 1)"
+                              title="Mark rest as known, mark page as read, then go to next page">&#x2714;</span>
+                        <span id="footerNextPage"
+                              style="cursor: pointer;
+                                     font-size: 1.5em;
+                                     font-weight: bold"
+                              onclick="handle_page_done(false, 1)"
+                              title="Mark page as read, then go to next page">&#8250;</span>
+                    </p>
+                    <div id="final_page_controls" class="hide">
+                        <p>
+                            <span id="footerMarkRestAsKnown"
+                                  style="cursor: pointer;
+                                         color: #4CBB17"
+                                  onclick="handle_page_done(true, 0)"
+                                  title="Mark rest as known, mark page as read">&#x2714;</span>
+                            <span id="footerDone"
+                                  style="cursor: pointer"
+                                  onclick="handle_page_done(false, 0)"
+                                  title="Mark page as read">&#x2714;</span>
+                        </p>
+                        <h2>&#127881;</h2>
+                        <p>
+                            <a href=""
+                               tabindex="-1"
+                               onclick="$('#actionposter').submit(); return false;">Archive book</a>
+                            |
+                            <a href="/" tabindex="-1">Home</a>
+                        </p>
+                        <form id="actionposter" method="post" action="/book/archive/{{ book.id }}">
+                        </form>
+                    </div>
+                </div>
+                <div class="btm-margin-container"></div>
+            </div>
+        </div>
+        <div id="read_pane_right">
+            <button class="close-btn read-pane-right-close-btn"
+                    onclick="closeRightPane()"></button>
+            <div class="wordframecontainer">
+                <iframe name="wordframe"
+                        id="wordframeid"
+                        class="rightreadingframe"
+                        src="about:blank"
+                        scrolling="auto"
+                        style="height: 35%;
+                               width: 100%"
+                        frameborder="0">
+                    Frame support required.
+                </iframe>
+            </div>
+            <div class="dictframecontainer">
+                <iframe name="dictframe"
+                        id="dictframeid"
+                        class="rightreadingframe"
+                        src="about:blank"
+                        scrolling="auto"
+                        style="height: 65%;
+                               width: 100%"
+                        frameborder="0">
+                    Frame support required.
+                </iframe>
+            </div>
         </div>
     </div>
+    <script>
+        let mouseY;
+        let scrollY;
+        let scrollYBeforeReload;
+        let tooltipPos = {my: 'left top+10', at: 'left bottom', collision: 'flipfit flip'};
+        const mediaTablet = window.matchMedia("(max-width: 980px)");
+        const readPaneRight = document.getElementById("read_pane_right");
+        const btmMarginCont = document.querySelector(".btm-margin-container");
+        const theText = document.getElementById("thetext");
 
-    <!-- <div class="definition-container"></div> -->
+        // fixes the "bug" where if right pane is opened in mobile view and after the screen is resized up,
+        // right pane doesn't translate up to 0 because of inline transform property
+        // this one is not super important
+        // because the mobile size won't be resized to a desktop size in a real use case
+        mediaTablet.addEventListener("change", function () {
+            if (!mediaTablet.matches) {
+                readPaneRight.style.removeProperty("transform");
+            }
+        })
 
-  </div>
+        document.addEventListener("click", (event) => {
+            mouseY = event.clientY;
+            scrollY = window.scrollY;
+        });
 
-  {% include "read/audio_player.html" %}
+        window.addEventListener("scrollend", function (e) {
+            scrollYBeforeReload = window.scrollY;
+        });
 
-  <h1 id="thetexttitle" class="hide">{{ book.title }}</h1>
-  <div id="thetext" {% if is_rtl %}dir="rtl" {% endif %}>
-    ...
-  </div>
+        $(document).ready(function () {
+            const theTextReloadObs = new MutationObserver((mutationList, observer) => {
+                if (scrollYBeforeReload) window.scrollTo(0, scrollYBeforeReload);
+            });
 
-  <div id="reading-footer" style="text-align: center">
-    <p>
-      <span
-        id="footerMarkRestAsKnownNextPage"
-        style="cursor: pointer; color: #4CBB17;"
-        onclick="handle_page_done(true, 1)"
-        title="Mark rest as known, mark page as read, then go to next page">
-        &#x2714;
-      </span>
+            theTextReloadObs.observe(theText, {childList: true, subtree: true});
 
-      <span
-        id="footerNextPage"
-        style="cursor: pointer; font-size: 1.5em; font-weight: bold;"
-        onclick="handle_page_done(false, 1)"
-        title="Mark page as read, then go to next page">
-        &#8250;
-      </span>
-    </p>
+            if (mediaTablet.matches) {
+                tooltipPos = {my: 'center bottom', at: 'center top-10', collision: 'flipfit flip'};
+            }
 
-    <div id="final_page_controls" class="hide">
-      <p>
-        <span
-          id="footerMarkRestAsKnown"
-          style="cursor: pointer; color: #4CBB17;"
-          onclick="handle_page_done(true, 0)"
-          title="Mark rest as known, mark page as read">
-          &#x2714;
-        </span>
+            if (have_audio_file()) {
+                // Don't actually load the source -- for some reason,
+                // the ajax page load was causing the audio src to
+                // only load occasionally!  Not sure why.  Source loading
+                // is handled in load_player_source().
+                $('div.audio-player-container').show();
+            }
+            goto_relative_page(0, true);
 
-        <span
-          id="footerDone"
-          style="cursor: pointer;"
-          onclick="handle_page_done(false, 0)"
-          title="Mark page as read">
-          &#x2714;
-        </span>
-      </p>
+            // If the css slide-in menu is open, clicking away from it closes the menu.
+            $(document).click(function (event) {
+                const menu = document.getElementById("reading_menu");
+                // const menuBtn = document.querySelector(".hamburger-btn");
+                const menu_clicked = event.target.closest("#reading_menu");
+                const menuBtn_clicked = event.target.closest(".hamburger-btn");
+                const rightPaneClicked = event.target.closest("#read_pane_right");
+                // const rightPaneClicked = event.target.closest(".dictframecontainer");
+                //console.log(rightPaneClicked);
+                //console.log(event.target);
+                //console.log(event.target.parentNode);
+                // if (event.target != menuBtn || event.target.parentNode != menuBtn)
+                if (!menu_clicked && !menuBtn_clicked)
+                    menu.classList.remove("open-menu");
 
-      <h2>&#127881;</h2>
-      <p>
-        <a
-          href=""
-          tabindex="-1"
-          onclick="$('#actionposter').submit(); return false;"
-          >Archive book</a>
-        |
-        <a href="/" tabindex="-1">Home</a>
-      </p>
+                // close rightPane if it's not click, it's children not clicked or a word is not clicked
+                if (!rightPaneClicked && event.target.parentNode != readPaneRight && !event.target.classList.contains("textitem")) {
+                    closeRightPane();
+                }
+            });
+        });
 
-      <form
-        id="actionposter"
-        method="post"
-        action="/book/archive/{{ book.id }}"
-        ></form>
-    </div>
+        // mobile view
+        window.addEventListener("message", function (event) {
+            if (event.data.event === "LuteTermFormOpened" && mediaTablet.matches) {
+                const viewportHeight = document.documentElement.clientHeight;
+                const mousePosPercent = mouseY / viewportHeight * 100;
+                // move the rightPane to the mouse position + some offset
+                readPaneRight.classList.add("open-dict");
+                btmMarginCont.classList.add("open-dict");
+                document.querySelector("#read_pane_right.open-dict").style.transform = `translateY(${Math.round(mousePosPercent) + 10}%)`;
+                readPaneRight.style.opacity = "1";
+                // add margin to the bottom of readLeft so it's fully scrollable to the bottom when the dict is over text
+                document.querySelector(".open-dict.btm-margin-container").style.marginTop = `calc(${viewportHeight - mouseY + 70}px - var(--player-height))`;
+                // sometimes there's an unnecessary text scroll when clicking on a word. return to the previous scroll position
+                window.scrollTo(0, scrollY);
+            }
+        });
 
-  </div>
-  <div class="btm-margin-container"></div>
-</div>
-
-<div id="read_pane_right">
-  <button class="close-btn read-pane-right-close-btn" onclick="closeRightPane()"></button>
-  <div class="wordframecontainer">
-  <iframe
-    name="wordframe"
-    id="wordframeid"
-    class="rightreadingframe"
-    src="about:blank"
-    scrolling="auto"
-    style="height: 35%; width: 100%"
-    frameborder="0"
-  >
-    Frame support required.
-  </iframe>
-  </div>
-  <div class="dictframecontainer">
-  <iframe
-    name="dictframe"
-    id="dictframeid"
-    class="rightreadingframe"
-    src="about:blank"
-    scrolling="auto"
-    style="height: 65%; width: 100%"
-    frameborder="0"
-  >
-    Frame support required.
-  </iframe>
-  </div>
-</div>
-
-</div>
-
-<script>
-  let mouseY;
-  let scrollY;
-  let scrollYBeforeReload;
-  let tooltipPos = {my: 'left top+10', at: 'left bottom', collision: 'flipfit flip'};
-  const mediaTablet = window.matchMedia("(max-width: 980px)");
-  const readPaneRight = document.getElementById("read_pane_right");
-  const btmMarginCont = document.querySelector(".btm-margin-container");
-  const theText = document.getElementById("thetext");
-
-  // fixes the "bug" where if right pane is opened in mobile view and after the screen is resized up,
-  // right pane doesn't translate up to 0 because of inline transform property
-  // this one is not super important
-  // because the mobile size won't be resized to a desktop size in a real use case
-  mediaTablet.addEventListener("change", function() {
-    if (!mediaTablet.matches) {
-      readPaneRight.style.removeProperty("transform");
-    }
-  })
-
-  document.addEventListener("click", (event) => {
-      mouseY = event.clientY;
-      scrollY = window.scrollY;
-  });
-
-  window.addEventListener("scrollend", function(e) {
-    scrollYBeforeReload = window.scrollY;
-  });
-
-  $(document).ready(function () {
-    const theTextReloadObs = new MutationObserver((mutationList, observer) => {
-      if (scrollYBeforeReload) window.scrollTo(0, scrollYBeforeReload);
-    });
-    
-    theTextReloadObs.observe(theText, {childList: true, subtree: true});
-
-    if (mediaTablet.matches) {
-      tooltipPos = {my: 'center bottom', at: 'center top-10', collision: 'flipfit flip'};
-    }
-    
-    if (have_audio_file()) {
-      // Don't actually load the source -- for some reason,
-      // the ajax page load was causing the audio src to
-      // only load occasionally!  Not sure why.  Source loading
-      // is handled in load_player_source().
-      $('div.audio-player-container').show();
-    }
-    goto_relative_page(0, true);
-
-    // If the css slide-in menu is open, clicking away from it closes the menu.
-    $(document).click(function(event) {
-      const menu = document.getElementById("reading_menu");
-      // const menuBtn = document.querySelector(".hamburger-btn");
-      const menu_clicked = event.target.closest("#reading_menu");
-      const menuBtn_clicked = event.target.closest(".hamburger-btn");
-      const rightPaneClicked = event.target.closest("#read_pane_right");
-      // const rightPaneClicked = event.target.closest(".dictframecontainer");
-      //console.log(rightPaneClicked);
-      //console.log(event.target);
-      //console.log(event.target.parentNode);
-      // if (event.target != menuBtn || event.target.parentNode != menuBtn) 
-      if(!menu_clicked && !menuBtn_clicked)
-        menu.classList.remove("open-menu");
-
-      // close rightPane if it's not click, it's children not clicked or a word is not clicked
-      if(!rightPaneClicked && event.target.parentNode != readPaneRight && !event.target.classList.contains("textitem")) {
-          closeRightPane();
-        }
-    });
-  });
-
-  // mobile view
-  window.addEventListener("message", function(event) {
-    if (event.data.event === "LuteTermFormOpened" && mediaTablet.matches) {
-        const viewportHeight = document.documentElement.clientHeight;
-        const mousePosPercent = mouseY / viewportHeight * 100;
-        // move the rightPane to the mouse position + some offset
-        readPaneRight.classList.add("open-dict");
-        btmMarginCont.classList.add("open-dict");
-        document.querySelector("#read_pane_right.open-dict").style.transform = `translateY(${Math.round(mousePosPercent) + 10}%)`;
-        readPaneRight.style.opacity = "1";
-        // add margin to the bottom of readLeft so it's fully scrollable to the bottom when the dict is over text
-        document.querySelector(".open-dict.btm-margin-container").style.marginTop = `calc(${viewportHeight - mouseY + 70}px - var(--player-height))`;
-        // sometimes there's an unnecessary text scroll when clicking on a word. return to the previous scroll position
-        window.scrollTo(0, scrollY);
-    }
-  });
-
-  let have_audio_file = function() {
-    return ($('#book_audio_file').val() != '');
-  }
-
-  /**
-   * Actually set the player source, loading the file,
-   * and load all bookmarks etc.
-   */
-  let load_player_source = function() {
-    const book_id = $('#book_id').val();
-    // console.log('setting source to ' + `/useraudio/stream/${book_id}`);
-    player.src = `/useraudio/stream/${book_id}`;
-
-    t = parseFloat($('#book_audio_current_pos').val());
-    player.currentTime = t;
-    timeline.value = t;
-
-    bookmarksArray = [];
-    bkstring = $('#book_audio_bookmarks').val();
-    bks = [];
-    if (bkstring != "")
-      bks = bkstring.split(';').map((b) => parseFloat(b));
-    for (b of bks) {
-      bookmarksArray.push(b);
-    }
-
-    start_player_post_loop();
-  };
-
-  // Set "page X/Y" in page nav.
-  let set_page_fraction = function() {
-    const pagenum = parseInt($('#page_num').val());
-    const maxpage = parseInt($('#page_count').val());
-    $('#page_indicator').text(`${pagenum}/${maxpage}`);
-  };
-
-  // Enable page nav links, depending on page num.
-  let enable_page_nav_links = function() {
-    const pagenum = parseInt($('#page_num').val());
-    const maxpage = parseInt($('#page_count').val());
-    if (pagenum > 1) {
-      $('#navPrev').removeClass('read_page_disabled');
-    }
-    else {
-      $('#navPrev').addClass('read_page_disabled');
-    }
-    if (pagenum < maxpage) {
-      $('#navNext').removeClass('read_page_disabled');
-    }
-    else {
-      $('#navNext').addClass('read_page_disabled');
-    }
-    //toggleSliderStatus();
-  };
-
-
-  // Show/hide footer controls.
-  let set_footer_control_visibility = function() {
-    const pagenum = parseInt($('#page_num').val());
-    const maxpage = parseInt($('#page_count').val());
-    if (pagenum == maxpage) {
-      $('#final_page_controls').removeClass("hide");
-      $('#footerMarkRestAsKnownNextPage').addClass("hide");
-      $('#footerNextPage').addClass("hide");
-    }
-    else {
-      $('#final_page_controls').addClass("hide");
-      $('#footerMarkRestAsKnownNextPage').removeClass("hide");
-      $('#footerNextPage').removeClass("hide");
-    }
-  };
-
-
-  let show_hide_title = function(p) {
-    const t = $('#thetexttitle');
-    const h = $('#headertexttitle');
-    if (p == 1) {
-      t.removeClass('hide');
-      h.addClass('hide');
-    }
-    else {
-      t.addClass('hide');
-      h.removeClass('hide');
-    }
-  };
-
-  // for the reading page return the main container to full width
-  document.querySelector(".container").style.cssText = `width: 100%; margin: 0;`;
-  
-  const readSlider = document.getElementById("read-slider");
-  const maxpage = parseInt($('#page_count').val());
-  // disable read slider if there's only 1 page
-  if (maxpage > 1) document.getElementById("read-slider").classList.remove("read_page_disabled");
-
-  readSlider.addEventListener("input", function() {
-    const pagenum = parseInt($('#page_num').val());
-    const p = Number(readSlider.value) + 1 - pagenum;
-    const actualPage = getActualPage(p);
-    updateReadSlider(actualPage);
-    document.getElementById("page_indicator").textContent = `${actualPage}/${maxpage}`;
-  })
-  
-  readSlider.addEventListener("change", function() { 
-    const pagenum = parseInt($('#page_num').val());
-    const p = Number(readSlider.value) + 1 - pagenum;
-    goto_relative_page(p);
-  })
-
-  function updateReadSlider(p) {
-    readSlider.value = p - 1;
-    readSlider.style.backgroundSize = `${100 / (maxpage - 1) * readSlider.value}% 100%`;
-  }
-  
-  function getActualPage(p) {
-    const pagenum = parseInt($('#page_num').val());
-    let actualPage = pagenum + p;
-    if (actualPage < 1)
-      actualPage = 1;
-    if (actualPage > maxpage)
-      actualPage = maxpage;
-
-    return actualPage;
-}
-/**
- * Go to page relative to that stored in page_num input.
- *
- * On first load of page, initial_page_load is set to true.
- *
- * It appears that for Firefox the player source can't be set
- * while the page content is being ajax'd in.  This makes
- * _NO SENSE AT ALL_ but moving the player source loading
- * to the ajax "success" function worked.  ???
- */
-  function goto_relative_page(p, initial_page_load = false) {
-    const bookid = $('#book_id').val();
-    const actualPage = getActualPage(p);
-
-    updateReadSlider(actualPage);
-
-    const url = `/read/renderpage/${bookid}/${actualPage}`;
-    $.get(
-      url,
-      function(data, status) {
-        $('#thetext').html(data);
-        add_status_classes();
-        reset_cursor();
-        start_hover_mode(false);
-        $('#page_num').val(actualPage);
-        enable_page_nav_links();
-        set_page_fraction();
-        set_footer_control_visibility();
-        show_hide_title(actualPage);
-
-        if (initial_page_load) {
-          prepareTextInteractions(tooltipPos);
+        let have_audio_file = function () {
+            return ($('#book_audio_file').val() != '');
         }
 
-        // Magic hack for player source to load consistently
-        // in Firefox.
-        if (initial_page_load && have_audio_file()) {
-          load_player_source();
+        /**
+         * Actually set the player source, loading the file,
+         * and load all bookmarks etc.
+         */
+        let load_player_source = function () {
+            const book_id = $('#book_id').val();
+            // console.log('setting source to ' + `/useraudio/stream/${book_id}`);
+            player.src = `/useraudio/stream/${book_id}`;
+
+            t = parseFloat($('#book_audio_current_pos').val());
+            player.currentTime = t;
+            timeline.value = t;
+
+            bookmarksArray = [];
+            bkstring = $('#book_audio_bookmarks').val();
+            bks = [];
+            if (bkstring != "")
+                bks = bkstring.split(';').map((b) => parseFloat(b));
+            for (b of bks) {
+                bookmarksArray.push(b);
+            }
+
+            start_player_post_loop();
+        };
+
+        // Set "page X/Y" in page nav.
+        let set_page_fraction = function () {
+            const pagenum = parseInt($('#page_num').val());
+            const maxpage = parseInt($('#page_count').val());
+            $('#page_indicator').text(`${pagenum}/${maxpage}`);
+        };
+
+        // Enable page nav links, depending on page num.
+        let enable_page_nav_links = function () {
+            const pagenum = parseInt($('#page_num').val());
+            const maxpage = parseInt($('#page_count').val());
+            if (pagenum > 1) {
+                $('#navPrev').removeClass('read_page_disabled');
+            } else {
+                $('#navPrev').addClass('read_page_disabled');
+            }
+            if (pagenum < maxpage) {
+                $('#navNext').removeClass('read_page_disabled');
+            } else {
+                $('#navNext').addClass('read_page_disabled');
+            }
+            //toggleSliderStatus();
+        };
+
+
+        // Show/hide footer controls.
+        let set_footer_control_visibility = function () {
+            const pagenum = parseInt($('#page_num').val());
+            const maxpage = parseInt($('#page_count').val());
+            if (pagenum == maxpage) {
+                $('#final_page_controls').removeClass("hide");
+                $('#footerMarkRestAsKnownNextPage').addClass("hide");
+                $('#footerNextPage').addClass("hide");
+            } else {
+                $('#final_page_controls').addClass("hide");
+                $('#footerMarkRestAsKnownNextPage').removeClass("hide");
+                $('#footerNextPage').removeClass("hide");
+            }
+        };
+
+
+        let show_hide_title = function (p) {
+            const t = $('#thetexttitle');
+            const h = $('#headertexttitle');
+            if (p == 1) {
+                t.removeClass('hide');
+                h.addClass('hide');
+            } else {
+                t.addClass('hide');
+                h.removeClass('hide');
+            }
+        };
+
+        // for the reading page return the main container to full width
+        document.querySelector(".container").style.cssText = `width: 100%; margin: 0;`;
+
+        const readSlider = document.getElementById("read-slider");
+        const maxpage = parseInt($('#page_count').val());
+        // disable read slider if there's only 1 page
+        if (maxpage > 1) document.getElementById("read-slider").classList.remove("read_page_disabled");
+
+        readSlider.addEventListener("input", function () {
+            const pagenum = parseInt($('#page_num').val());
+            const p = Number(readSlider.value) + 1 - pagenum;
+            const actualPage = getActualPage(p);
+            updateReadSlider(actualPage);
+            document.getElementById("page_indicator").textContent = `${actualPage}/${maxpage}`;
+        })
+
+        readSlider.addEventListener("change", function () {
+            const pagenum = parseInt($('#page_num').val());
+            const p = Number(readSlider.value) + 1 - pagenum;
+            goto_relative_page(p);
+        })
+
+        function updateReadSlider(p) {
+            readSlider.value = p - 1;
+            readSlider.style.backgroundSize = `${100 / (maxpage - 1) * readSlider.value}% 100%`;
         }
-      }
-    );
-  }
 
-  function closeMenu() {
-    const menu = document.getElementById("reading_menu");
-    menu.classList.remove("open-menu");
+        function getActualPage(p) {
+            const pagenum = parseInt($('#page_num').val());
+            let actualPage = pagenum + p;
+            if (actualPage < 1)
+                actualPage = 1;
+            if (actualPage > maxpage)
+                actualPage = maxpage;
 
-    // disableScroll(false);
-  }
+            return actualPage;
+        }
 
-  function toggleMenu() {
-    const menu = document.getElementById("reading_menu");
-    menu.classList.add("open-menu");
+        /**
+         * Go to page relative to that stored in page_num input.
+         *
+         * On first load of page, initial_page_load is set to true.
+         *
+         * It appears that for Firefox the player source can't be set
+         * while the page content is being ajax'd in.  This makes
+         * _NO SENSE AT ALL_ but moving the player source loading
+         * to the ajax "success" function worked.  ???
+         */
+        function goto_relative_page(p, initial_page_load = false) {
+            const bookid = $('#book_id').val();
+            const actualPage = getActualPage(p);
 
-    // disableScroll(true);
-  }
+            updateReadSlider(actualPage);
 
-  function closeRightPane() {
-      readPaneRight.classList.remove("open-dict");
-      btmMarginCont.classList.remove("open-dict");
-      btmMarginCont.style.removeProperty("margin-top");
-      readPaneRight.style.removeProperty("transform");
-      readPaneRight.style.removeProperty("opacity");
-  }
+            const url = `/read/renderpage/${bookid}/${actualPage}`;
+            $.get(
+                url,
+                function (data, status) {
+                    $('#thetext').html(data);
+                    add_status_classes();
+                    reset_cursor();
+                    start_hover_mode(false);
+                    $('#page_num').val(actualPage);
+                    enable_page_nav_links();
+                    set_page_fraction();
+                    set_footer_control_visibility();
+                    show_hide_title(actualPage);
 
-  // function disableScroll(disable) {
-  //   if (disable) {
-  //     document.body.style.margin = 0;
-  //     document.body.style.height = "100%";
-  //     document.body.style.overflow = "hidden";
-  //   } else {
-  //     document.body.style.margin = "unset";
-  //     document.body.style.height = "unset";
-  //     document.body.style.overflow = "unset";
-  //   }
-  // }
+                    if (initial_page_load) {
+                        prepareTextInteractions(tooltipPos);
+                    }
 
-  function edit_current_page() {
-    const bookid = $('#book_id').val();
-    const pagenum = parseInt($('#page_num').val());
-    location.href = `/read/editpage/${bookid}/${pagenum}`;
-  }
+                    // Magic hack for player source to load consistently
+                    // in Firefox.
+                    if (initial_page_load && have_audio_file()) {
+                        load_player_source();
+                    }
+                }
+            );
+        }
 
-  // Handle green checkmark in footer.
-  function handle_page_done(mark_rest_known = false, next_relative_page = 0) {
-    const bookid = $('#book_id').val();
-    const pagenum = parseInt($('#page_num').val());
-    data = {
-      bookid: bookid,
-      pagenum: pagenum,
-      restknown: mark_rest_known
-    };
-    $.ajax({
-      type: 'post',
-      url: '/read/page_done',
-      data: JSON.stringify(data),
-      contentType: "application/json; charset=utf-8"
-    }).done(function(d) {
-      goto_relative_page(next_relative_page);
-    });
-  }
+        function closeMenu() {
+            const menu = document.getElementById("reading_menu");
+            menu.classList.remove("open-menu");
+
+            // disableScroll(false);
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById("reading_menu");
+            menu.classList.add("open-menu");
+
+            // disableScroll(true);
+        }
+
+        function closeRightPane() {
+            readPaneRight.classList.remove("open-dict");
+            btmMarginCont.classList.remove("open-dict");
+            btmMarginCont.style.removeProperty("margin-top");
+            readPaneRight.style.removeProperty("transform");
+            readPaneRight.style.removeProperty("opacity");
+        }
+
+        // function disableScroll(disable) {
+        //   if (disable) {
+        //     document.body.style.margin = 0;
+        //     document.body.style.height = "100%";
+        //     document.body.style.overflow = "hidden";
+        //   } else {
+        //     document.body.style.margin = "unset";
+        //     document.body.style.height = "unset";
+        //     document.body.style.overflow = "unset";
+        //   }
+        // }
+
+        function edit_current_page() {
+            const bookid = $('#book_id').val();
+            const pagenum = parseInt($('#page_num').val());
+            location.href = `/read/editpage/${bookid}/${pagenum}`;
+        }
+
+        // Handle green checkmark in footer.
+        function handle_page_done(mark_rest_known = false, next_relative_page = 0) {
+            const bookid = $('#book_id').val();
+            const pagenum = parseInt($('#page_num').val());
+            data = {
+                bookid: bookid,
+                pagenum: pagenum,
+                restknown: mark_rest_known
+            };
+            $.ajax({
+                type: 'post',
+                url: '/read/page_done',
+                data: JSON.stringify(data),
+                contentType: "application/json; charset=utf-8"
+            }).done(function (d) {
+                goto_relative_page(next_relative_page);
+            });
+        }
 
 
-</script>
-
+    </script>
 {% endblock %}

@@ -1,26 +1,25 @@
 <html>
-  <head>
-    <script type="text/javascript" src="{{ url_for('static', filename='/js/jquery.js') }}" charset="utf-8"></script>
-    <style>
+    <head>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='/js/jquery.js') }}"
+                charset="utf-8"></script>
+        <style>
       .flash {
           margin-top: 20px;
           padding: 20px;
           background-color: #fff3cd;
           border-color: #ffeeba;
       }
-    </style>
-  </head>
-
-  <body>
-    <div id="flash" class="flash">
-      <p>Copied to clipboard.</p>
-    </div>
-
-    <script>
+        </style>
+    </head>
+    <body>
+        <div id="flash" class="flash">
+            <p>Copied to clipboard.</p>
+        </div>
+        <script>
       $(document).ready(function() {
         $('#flash').delay(500).fadeOut();
       });
-    </script>
-  </body>
-
+        </script>
+    </body>
 </html>

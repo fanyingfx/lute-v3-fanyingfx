@@ -22,11 +22,7 @@ def get_images(book):
     try:
         for img in book.get_items_of_type(ebooklib.ITEM_IMAGE):
             file_base_name = clean_filename(os.path.basename(img.file_name))
-            print("filebasename", file_base_name)
             res.append((file_base_name, img.content))
-            # img_path = os.path.join(img_dir, file_base_name)
-            # # with open(img_path, "wb") as f:
-            #     f.write(img.content)
         is_success = True
     except Exception as e:
         print(str(e))
@@ -44,7 +40,6 @@ def parse_document(soup):
             elif child.name == "img":
                 # display(Image(img_dict[get_img_name(child)]))
                 img_name = get_img_name(child)
-                print("img_name", img_name)
                 docs.append(f"<img={img_name}")
     return docs
 

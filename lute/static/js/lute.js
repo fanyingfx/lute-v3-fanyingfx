@@ -35,6 +35,9 @@ function start_hover_mode(should_clear_frames = true) {
   // console.log('CALLING RESET');
   load_reading_pane_globals();
   LUTE_HOVERING = true;
+  pp = document.getElementById("translation-para")
+  pp.innerText=""
+
 
   $('span.kwordmarked').removeClass('kwordmarked');
 
@@ -120,7 +123,7 @@ let tooltip_textitem_hover_content = function (el, setContent) {
 
 function showEditFrame(el, extra_args = {}) {
   const lid = parseInt(el.data('lang-id'));
-  console.log({editFrame:extra_args})
+  // console.log({editFrame:extra_args})
 
   let text = extra_args.textparts ?? [ el.data('text') ];
   let lemma = extra_args.lemmaparts ?? [el.data('lemma')];
@@ -445,7 +448,44 @@ let move_cursor = function(shiftby, e) {
   }
 }
 
+let new_translation = function (e){
+  tis = get_textitems_spans(e);
+  if (tis == null)
+    return;
+  const sentence = tis.map(s => $(s).data('text')).join('');
+  const url = `${window.location.origin}/trans/baidu`
+  data={text: sentence}
+  $.ajax(
+      {
+        type: "Post",
+        url: url,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data){ pp=document.getElementById('translation-para'); pp.innerText=data.translation}
+      }
 
+  )
+}
+let analysis = function (e){
+  tis = get_textitems_spans(e);
+  if (tis == null)
+    return;
+  const sentence = tis.map(s => $(s).data('text')).join('');
+  const url = `${window.location.origin}/trans/ana`
+  data={text: sentence}
+  $.ajax(
+      {
+        type: "Post",
+        url: url,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function(data){ pp=document.getElementById('translation-para'); pp.innerText=data.ana}
+      }
+
+  )
+}
 let show_translation = function(e) {
   tis = get_textitems_spans(e);
   if (tis == null)
@@ -512,6 +552,14 @@ function toggle_highlight() {
     }
   });
 }
+function edit_current_sentence(e) {
+            const bookid = $('#book_id').val();
+            const pagenum = parseInt($('#page_num').val());
+            const tis= get_textitems_spans(e);
+            const curr_sentence = tis.map(s => $(s).data('text').replace(/\u200B/g, '')).join('');
+
+            location.href = `/read/editsentence/${bookid}/${pagenum}?sentence=${curr_sentence}`;
+        }
 function toggle_reading() {
   $.ajax({
     url: '/theme/toggle_reading',
@@ -530,6 +578,34 @@ function toggle_reading() {
       console.log(`failed: ${JSON.stringify(msg, null, 2)}`);
     }
   });
+}
+function playsound(data){
+    url='/tts'
+    bookid = data.bookid
+    filename= data.filename
+    resource=  `${url}/${bookid}/${filename}`
+    audio = new Audio(resource)
+    audio.play()
+}
+function gen_audio_and_play(e){
+  tis = get_textitems_spans(e);
+  if (tis == null)
+    return;
+  const text = tis.map(s => $(s).data('text')).join('');
+  // console.log(text)
+  pathname=window.location.pathname
+  bookid=pathname.replace('/read/','')
+  url=`/tts/genaudio/${bookid}`
+  fetch(url,
+      {method: "POST",
+      body: JSON.stringify({text: text}),
+         headers: {
+    "Content-type": "application/json; charset=UTF-8"
+  }
+})
+.then(data => {return data.json()})
+.then(res=> playsound(res))
+
 }
 
 
@@ -555,6 +631,9 @@ function handle_keydown (e) {
   const kM = 77; // The(M)e
   const kH = 72; // Toggle H)ighlight
   const kP = 80; // Toggle P)ronunciation
+  const kR = 82; // R)ead aloud
+  const kA = 65; // A)nalysis
+  const kE = 69; //E)dit
   const k1 = 49;
   const k2 = 50;
   const k3 = 51;
@@ -572,7 +651,8 @@ function handle_keydown (e) {
   map[kUP] = () => increment_status_for_selected_elements(e, +1);
   map[kDOWN] = () => increment_status_for_selected_elements(e, -1);
   map[kC] = () => handle_copy(e);
-  map[kT] = () => show_translation(e);
+  map[kT] = () => new_translation(e);
+  map[kA] = () => analysis(e);
   map[kM] = () => next_theme();
   map[kH] = () => toggle_highlight();
   map[kP] = () => toggle_reading();
@@ -583,6 +663,8 @@ function handle_keydown (e) {
   map[k5] = () => update_status_for_marked_elements(5);
   map[kI] = () => update_status_for_marked_elements(98);
   map[kW] = () => update_status_for_marked_elements(99);
+  map[kR] = () => gen_audio_and_play(e);
+  map[kE] = () => edit_current_sentence(e);
 
   if (e.which in map) {
     let a = map[e.which];
@@ -594,27 +676,16 @@ function handle_keydown (e) {
 }
 
 
-/**
- * post update ajax call, fix the UI.
- */
-function update_selected_statuses(newStatus, elements) {
-  if (!elements) {
-    console.error('Expecting argument `elements` to exist');
-    return;
-  }
-  const newClass = `status${newStatus}`;
-  let update_data_status_class = function (e) {
-    const curr = $(this);
-    ltext = curr.text().toLowerCase();
-    matches = $('span.word').toArray().filter(el => $(el).text().toLowerCase() == ltext);
-    matches.forEach(function (m) {
-      $(m).removeClass('status98 status99 status0 status1 status2 status3 status4 status5 shiftClicked')
-        .addClass(newClass)
-        .attr('data-status-class',`${newClass}`);
-    });
-  };
-  $(elements).each(update_data_status_class)
-}
+
+/** Reload the current page. */
+let reload_text_div = function() {
+  const bookid = $('#book_id').val();
+  const pagenum = $('#page_num').val();
+  const url = `/read/renderpage/${bookid}/${pagenum}`;
+  const repel = $('#thetext');
+  repel.load(url);
+};
+
 
 /**
  * If the term editing form is visible when reading, and a hotkey is hit,
@@ -662,7 +733,7 @@ function update_status_for_elements(new_status, elements) {
     dataType: 'JSON',
     contentType: 'application/json',
     success: function(response) {
-      update_selected_statuses(new_status, elements);
+      reload_text_div();
       if (texts.length == 1) {
         update_term_form(firstel, new_status);
       }

@@ -8,7 +8,8 @@ from pytest_bdd import given, then, scenarios, parsers
 from lute.db import db
 from lute.models.language import Language
 from lute.term.model import Repository
-from lute.read.service import get_paragraphs, set_unknowns_to_known, bulk_status_update
+from lute.read.render.service import get_paragraphs
+from lute.read.service import set_unknowns_to_known, bulk_status_update
 
 from tests.utils import add_terms, make_text
 from tests.dbasserts import assert_sql_result
@@ -83,7 +84,7 @@ def _assert_stringized_equals(stringizer, joiner, expected):
     Get paragraphs and stringize all textitems,
     join and assert equals expected.
     """
-    paras = get_paragraphs(text)
+    paras = get_paragraphs(text.text, text.book.language)
     ret = []
     for p in paras:
         tis = [t for s in p for t in s.textitems]

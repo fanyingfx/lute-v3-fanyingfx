@@ -1,97 +1,97 @@
 {% extends 'base.html' %}
-
 {% block title %}Terms{% endblock %}
 {% block header %}Terms{% endblock %}
-
 {% block body %}
-
-<p>
-  <img id="showHideFilters" src="{{ url_for('static', filename='icn/plus-button.png') }}" />
-  Filters
-</p>
-<div id="filterControls" style="display: none; margin-left: 20px;">
-  <table>
-    <tr>
-      <td>Language</td>
-      <td>
-        <select id="filtLanguage">
-          {% for langopt in language_options %}
-          <option value={{ langopt[0] }}>{{ langopt[1] }}</option>
-          {% endfor %}
-        </select>
-      </td>
-    <tr>
-      <td>Parent terms only</td>
-      <td>
-        <input id="filtParentsOnly" type="checkbox" />
-      </td>
-    </tr>
-    <tr>
-      <td>Age (days since created)</td>
-      <td>
-        <input id="filtAgeMin" style="width: 50px;" type="text" placeholder="min" />
-        to
-        <input id="filtAgeMax" style="width: 50px;" type="text" placeholder="max" />
-      </td>
-    </tr>
-    <tr>
-      <td>Status range</td>
-      <td>
-        <select id="filtStatusMin">
-          <option value=0></option>
-          <option value=1>New (1)</option>
-          <option value=2>New (2)</option>
-          <option value=3>Learn (3)</option>
-          <option value=4>Learn (4)</option>
-          <option value=5>Learned</option>
-          <option value=99>Well Known</option>
-        </select>
-        to
-        <select id="filtStatusMax">
-          <option value=0></option>
-          <option value=1>New (1)</option>
-          <option value=2>New (2)</option>
-          <option value=3>Learn (3)</option>
-          <option value=4>Learn (4)</option>
-          <option value=5>Learned</option>
-          <option value=99>Well Known</option>
-        </select>
-      </td>
-    </tr>
-    <tr>
-      <td>Include Ignored</td>
-      <td>
-        <input id="filtIncludeIgnored" type="checkbox" />
-      </td>
-    </tr>
-  </table>
-  <button id="clearFilters">Clear all</button>
-  <br />
-</div>
-
-<div style="margin-top: 10px; margin-bottom: 10px;">
-  <a href="/term/new">Create new</a>
-  &nbsp;|&nbsp;
-  Set parent: <input id="txtSetParent" disabled /><button id="btnSetParent" disabled >go</button>
-</div>
-
-<table id="termtable" class="table dataTable stripe">
-  <thead>
-    <tr>
-      <th style="width: 20px;"><input type="checkbox" id="chkAll" onclick="handleChkAll()"></th>
-      <th>Term</th>
-      <th>Parent</th>
-      <th>Translation</th>
-      <th>Language</th>
-      <th>Tags</th>
-      <th>Status</th>
-      <th>TermID</th>
-      <th>LanguageID</th>
-    </tr>
-  </thead>
-</table>
-
-<script>
+    <p>
+        <img id="showHideFilters"
+             src="{{ url_for('static', filename='icn/plus-button.png') }}" />
+        Filters
+    </p>
+    <div id="filterControls" style="display: none; margin-left: 20px;">
+        <table>
+            <tr>
+                <td>Language</td>
+                <td>
+                    <select id="filtLanguage">
+                        {% for langopt in language_options %}
+                            <option value={{ langopt[0] }}>{{ langopt[1] }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <tr>
+                    <td>Parent terms only</td>
+                    <td>
+                        <input id="filtParentsOnly" type="checkbox" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Age (days since created)</td>
+                    <td>
+                        <input id="filtAgeMin" style="width: 50px;" type="text" placeholder="min" />
+                        to
+                        <input id="filtAgeMax" style="width: 50px;" type="text" placeholder="max" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>Status range</td>
+                    <td>
+                        <select id="filtStatusMin">
+                            <option value=0></option>
+                            <option value=1>New (1)</option>
+                            <option value=2>New (2)</option>
+                            <option value=3>Learn (3)</option>
+                            <option value=4>Learn (4)</option>
+                            <option value=5>Learned</option>
+                            <option value=99>Well Known</option>
+                        </select>
+                        to
+                        <select id="filtStatusMax">
+                            <option value=0></option>
+                            <option value=1>New (1)</option>
+                            <option value=2>New (2)</option>
+                            <option value=3>Learn (3)</option>
+                            <option value=4>Learn (4)</option>
+                            <option value=5>Learned</option>
+                            <option value=99>Well Known</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Include Ignored</td>
+                    <td>
+                        <input id="filtIncludeIgnored" type="checkbox" />
+                    </td>
+                </tr>
+            </table>
+            <button id="clearFilters">Clear all</button>
+            <br />
+        </div>
+        <div style="margin-top: 10px; margin-bottom: 10px;">
+            <a href="/term/new">Create new</a>
+            &nbsp;|&nbsp;
+            Set parent:
+            <input id="txtSetParent" disabled />
+            <button id="btnSetParent" disabled>go</button>
+        </div>
+        <table id="termtable" class="table dataTable stripe">
+            <thead>
+                <tr>
+                    <th style="width: 20px;">
+                        <input type="checkbox" id="chkAll" onclick="handleChkAll()">
+                    </th>
+                    <th>Term</th>
+                    <th>Parent</th>
+                    <th>Translation</th>
+                    <th>Language</th>
+                    <th>Tags</th>
+                    <th>Status</th>
+                    <th>TermID</th>
+                    <th>LanguageID</th>
+                </tr>
+            </thead>
+        </table>
+        <script>
 
   let setup_term_datatable = function(initial_search) {
     var table = $('#termtable').DataTable({
@@ -101,21 +101,10 @@
       lengthMenu: [ 25, 50, 100, 500, 1000 ],
       buttons: [
          {
-           extend: 'csvHtml5',
+           extend: 'download',
+           url: '/term/export_terms',
            text: 'Export CSV',
-           exportOptions: {
-             columns: [
-               'WoText:name',
-               'ParentText:name',
-               'WoTranslation:name',
-               'LgName:name',
-               'TagList:name',
-               'StText:name',
-               'WoID:name',
-               'LgID:name',
-             ], visible: false
-           },
-         }
+         },
       ],
       paging: true,
       info: true,
@@ -160,6 +149,8 @@
         { "name": "WoID", "targets": 7, "visible": false },
         { "name": "LgID", "targets": 8, "visible": false },
         { "name": "WiSource", "targets": 9, "visible": false },
+        { "name": "StAbbreviation", "targets": 10, "visible": false },
+        { "name": "SyncStatus", "targets": 11, "visible": false },
       ],
 
       // Ajax call
@@ -311,7 +302,7 @@
 
   let load_filters_from_storage = function() {
     fs = sessionStorage.getItem('termtable_filters');
-    console.log(fs);
+    // console.log(fs);
     if (fs == null)
       return;
     store = JSON.parse(fs);
@@ -376,6 +367,5 @@
   });
 
 
-</script>
-
-{% endblock %}
+        </script>
+    {% endblock %}

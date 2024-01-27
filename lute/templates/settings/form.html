@@ -1,158 +1,134 @@
 {% extends 'base.html' %}
-
 {% block title %}Settings{% endblock %}
 {% block header %}Settings{% endblock %}
-
 {% block body %}
-
-{% for field_name, field_errors in form.errors.items() %}
-{% for error in field_errors %}
-<div class="flash-notice">{{ error }}</div>
-{% endfor %}
-{% endfor %}
-
-<form method="POST">
-  {{ form.hidden_tag() }}
-  {{ form.csrf_token }}
-
-  <table class="settingstable">
-
-    <tr>
-      <td>
-        <h2>Backup</h2>
-      </td>
-    </tr>
-
-    {% for f in [
-    form.backup_enabled,
-    form.backup_dir,
-    form.backup_auto,
-    form.backup_warn,
-    form.backup_count
-    ]%}
-    <tr>
-      <td>{{ f.label }}</td>
-      <td>{{ f(class="form-control") }}</td>
-    </tr>
+    {% for field_name, field_errors in form.errors.items() %}
+        {% for error in field_errors %}<div class="flash-notice">{{ error }}</div>{% endfor %}
     {% endfor %}
-
-    <tr>
-      <td>
-        <h2>Appearance</h2>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        {{ form.current_theme.label }}
-      </td>
-      <td>
-        {{ form.current_theme }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        {{ form.custom_styles.label }}
-        <img
-          id="about_custom_styles" style="margin-right:10px;"
-          src="{{ url_for('static', filename='icn/question-balloon.png') }}"
-          title="Click for details"
-          onclick="$('#custom_styles_help').toggle();"
-          />
-        <blockquote id="custom_styles_help" style="width:60%; display: none;">
-          <p>Use this field to define custom styles to be applied to
-          Lute.</p>
-          <p>See examples
-          in <a href="https://jzohrab.github.io/lute-manual/usage/themes/custom-styles.html"
-          target="_blank">the manual</a>.</p>
-        </blockquote>
-      </td>
-      </td>
-      <td>
-        {{ form.custom_styles(class="form-largetextarea") }}
-      </td>
-    </tr>
-    <tr>
-      <td>
-        {{ form.show_highlights.label }}
-      </td>
-      <td>
-        {{ form.show_highlights }}
-      </td>
-    </tr>
-  <tr>
-      <td>
-          {{ form.show_reading.label }}
-      </td>
-      <td>
-          {{ form.show_reading }}
-      </td>
-  </tr>
-
-    <tr>
-      <td>
-        <h2>Japanese</h2>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        {{ form.mecab_path.label }}
-        <img
-          id="about_mecab_path" style="margin-right:10px;"
-          src="{{ url_for('static', filename='icn/question-balloon.png') }}"
-          title="Click for details"
-          onclick="$('#mecab_path_help').toggle();"
-          />
-        <blockquote id="mecab_path_help" style="width:60%; display: none;">
-          <p>Lute uses MeCab to parse Japanese, so MeCab needs to be
-            installed on your machine (see notes
-            in <a href="https://jzohrab.github.io/lute-manual/mecab.html"
-            target="_blank">the manual</a>).</p>
-          <p>Lute includes the Python
-            library <a href="https://github.com/buruzaemon/natto-py">natto-py</a>
-            to interact with MeCab.  natto-py can usually find MeCab
-            automatically, but you <i>may</i> need to set the MECAB_PATH, per
-            <a href="https://jzohrab.github.io/lute-manual/mecab.html#lute-configuration"
-            target="_blank">the manual</a>.</p>
-          <p>Try different values for MECAB_PATH, including leaving
-            the field blank, until clicking the &quot;test&quot;
-            button returns a &quot;success&quot; message.</p>
-        </blockquote>
-      </td>
-      <td>{{ form.mecab_path(class="form-control") }}</td>
-    </tr>
-    <tr>
-      <td>
-      </td>
-      <td>
-        <button id="test_mecab_btn" onclick="test_mecab_setup(); return false;">
-          Test my MeCab configuration
-        </button>
-        <div style="margin-top: 5px" id="parse_result"></div>
-      </td>
-    </tr>
-    <tr>
-      <td>{{ form.japanese_reading.label }}</td>
-      <td>{{ form.japanese_reading }}</td>
-    </tr>
-  <tr>
-      <td>{{ form.unidic_types.label }}</td>
-      <td>{{ form.unidic_types }}</td>
-  </tr>
-  <tr>
-      <td><button onclick="switch_unidic();return false;"> Switch unidic</button></td>
-  </tr>
-
-  </table>
-
-  <div style="margin-top:40px;">
-    <button type="submit" class="btn btn-primary">Save</button>
-    <button class="btn" onclick="window.location = '/'">Cancel</button>
-  </div>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ form.csrf_token }}
+        <table class="settingstable">
+            <tr>
+                <td>
+                    <h2>Backup</h2>
+                </td>
+            </tr>
+            {% for f in [
+                form.backup_enabled,
+                form.backup_dir,
+                form.backup_auto,
+                form.backup_warn,
+                form.backup_count
+                ]%}
+                <tr>
+                    <td>{{ f.label }}</td>
+                    <td>{{ f(class="form-control") }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    <h2>Appearance</h2>
+                </td>
+            </tr>
+            <tr>
+                <td>{{ form.current_theme.label }}</td>
+                <td>{{ form.current_theme }}</td>
+            </tr>
+            <tr>
+                <td>
+                    {{ form.custom_styles.label }}
+                    <img id="about_custom_styles"
+                         style="margin-right:10px"
+                         src="{{ url_for('static', filename='icn/question-balloon.png') }}"
+                         title="Click for details"
+                         onclick="$('#custom_styles_help').toggle();" />
+                    <blockquote id="custom_styles_help" style="width:60%; display: none;">
+                        <p>
+                            Use this field to define custom styles to be applied to
+                            Lute.
+                        </p>
+                        <p>
+                            See examples
+                            in <a href="https://jzohrab.github.io/lute-manual/usage/themes/custom-styles.html"
+    target="_blank">the manual</a>.
+                        </p>
+                    </blockquote>
+                </td>
+            </td>
+            <td>{{ form.custom_styles(class="form-largetextarea") }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.show_highlights.label }}</td>
+            <td>{{ form.show_highlights }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.show_reading.label }}</td>
+            <td>{{ form.show_reading }}</td>
+        </tr>
+        <tr>
+            <td>
+                <h2>Japanese</h2>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.mecab_path.label }}
+                <img id="about_mecab_path"
+                     style="margin-right:10px"
+                     src="{{ url_for('static', filename='icn/question-balloon.png') }}"
+                     title="Click for details"
+                     onclick="$('#mecab_path_help').toggle();" />
+                <blockquote id="mecab_path_help" style="width:60%; display: none;">
+                    <p>
+                        Lute uses MeCab to parse Japanese, so MeCab needs to be
+                        installed on your machine (see notes
+                        in <a href="https://jzohrab.github.io/lute-manual/mecab.html"
+    target="_blank">the manual</a>).
+                    </p>
+                    <p>
+                        Lute includes the Python
+                        library <a href="https://github.com/buruzaemon/natto-py">natto-py</a>
+                        to interact with MeCab.  natto-py can usually find MeCab
+                        automatically, but you <i>may</i> need to set the MECAB_PATH, per
+                        <a href="https://jzohrab.github.io/lute-manual/mecab.html#lute-configuration"
+                           target="_blank">the manual</a>.
+                    </p>
+                    <p>
+                        Try different values for MECAB_PATH, including leaving
+                        the field blank, until clicking the &quot;test&quot;
+                        button returns a &quot;success&quot; message.
+                    </p>
+                </blockquote>
+            </td>
+            <td>{{ form.mecab_path(class="form-control") }}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <button id="test_mecab_btn" onclick="test_mecab_setup(); return false;">Test my MeCab configuration</button>
+                <div style="margin-top: 5px" id="parse_result"></div>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ form.japanese_reading.label }}</td>
+            <td>{{ form.japanese_reading }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.unidic_types.label }}</td>
+            <td>{{ form.unidic_types }}</td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="switch_unidic();return false;">Switch unidic</button>
+            </td>
+        </tr>
+    </table>
+    <div style="margin-top:40px;">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn" onclick="window.location = '/'">Cancel</button>
+    </div>
 </form>
-
-
 <script>
   function test_mecab_setup() {
     let mecab_path = $('#mecab_path').val()
@@ -170,7 +146,7 @@
           color = 'green';
         }
         else {
-          msg += "<br/><br/>Also, ensure you have MeCab installed and on your PATH.";
+          msg += "<br /><br />Also, ensure you have MeCab installed and on your PATH.";
         }
 
         el = $('#parse_result');
@@ -189,5 +165,4 @@
 
 
 </script>
-
 {% endblock %}

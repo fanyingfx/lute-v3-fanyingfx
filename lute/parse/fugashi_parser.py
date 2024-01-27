@@ -8,7 +8,11 @@ from lute.models.setting import UserSetting
 from fugashi import Tagger
 from flask import current_app
 
+kana_pattern = re.compile("[\u3040-\u309F\u30A0-\u30FFー]+")
 
+
+# TODO using https://github.com/KoichiYasuoka/UniDic2UD to parse Japanese
+#
 class FugashiParser(AbstractParser):
     """
     Another Japanese Parser, Fugashi which provide wheels for
@@ -26,6 +30,9 @@ class FugashiParser(AbstractParser):
     # _tagger = Tagger("-d .unidics/unidic-csj-202302")
     _tagger = Tagger()
     _tagger_type = "spoken"
+    _ana_tagger = Tagger("-d /home/fan/.local/share/unidic-cwj-202302_full")
+    _w_tagger = Tagger("-d /home/fan/.local/share/unidic-cwj-202302_full")
+    _s_tagger = Tagger("-d /home/fan/.local/share/unidic-csj-202302_full")
 
     @classmethod
     def is_supported(cls):
@@ -35,20 +42,19 @@ class FugashiParser(AbstractParser):
     def name(cls):
         return "Japanese"
 
-    @classmethod
-    # @lru_cache()
-    def parse_para(cls, text: str, language):
-        # get word character regex
-        # word_characters = bytes(language.word_characters, "utf-8").decode(
-        #     "unicode_escape"
-        # )
-        #
-        # if text.strip() != "" and not re.match(f"[{word_characters}]+", text):
-        #     return [[text, "x", "", "", "", False], ["EOP", "3", "7", "8", "", False]]
-        lines = []
 
-        for tok in FugashiParser._tagger(text.strip()):
-            reading_is_kana = FugashiParser._string_is_hiragana(tok.surface)
+    @classmethod
+    @lru_cache()
+    def parse_para(cls, text: str, language):
+        """
+        https://clrd.ninjal.ac.jp/unidic/faq.html
+        """
+        lines = []
+        tagger =cls._tagger
+        if text.startswith('「'):
+            tagger=cls._s_tagger
+        for tok in tagger(text.strip()):
+            reading_is_kana = FugashiParser._string_is_kana(tok.surface)
             reading = tok.feature.kana
             is_forein = tok.feature.goshu == "外"
             if is_forein:
@@ -57,12 +63,20 @@ class FugashiParser(AbstractParser):
                 reading = ""
             else:
                 reading = jaconv.kata2hira(reading)
+            lemma = tok.feature.orthBase
+            if reading_is_kana:
+                lemma = tok.surface
+            # if tok.feature.cForm !='*':
+            # TODO add gramma attrs
+            gramma_attrs = tok.feature.cForm + "," + tok.feature.cType
+
             lines.append(
                 [
                     tok.surface,
                     str(tok.char_type),
                     "-1" if tok.is_unk else "0",
-                    tok.feature.orthBase,
+                    # tok.feature.orthBase,
+                    lemma,
                     reading,
                     False,
                 ]
@@ -76,7 +90,6 @@ class FugashiParser(AbstractParser):
     # @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
         """
-        Parse the string using Sudachi
         """
         text = re.sub(r"[ \t]+", " ", text).strip()
         lines = []
@@ -97,7 +110,7 @@ class FugashiParser(AbstractParser):
             if term == "EOP" and third == "7":
                 term = "¶"
             is_word = (
-                node_type in "2678" and third is not None
+                    node_type in "2678" and third is not None
             )  # or node_type in "2678"
             if not is_word:
                 reading = ""
@@ -109,16 +122,16 @@ class FugashiParser(AbstractParser):
     # Hiragana is Unicode code block U+3040 - U+309F
     # ref https://stackoverflow.com/questions/72016049/
     #   how-to-check-if-text-is-japanese-hiragana-in-python
-    @staticmethod
-    def _char_is_hiragana(c) -> bool:
-        return ("\u3040" <= c <= "\u309F") or c in ("ー",)
+    # @staticmethod
+    # def _char_is_kana(c) -> bool:
+    #     return
 
     @staticmethod
-    def _string_is_hiragana(s: str) -> bool:
-        return all(FugashiParser._char_is_hiragana(c) for c in s)
+    def _string_is_kana(s: str) -> bool:
+        return bool(kana_pattern.fullmatch(s))
 
     @classmethod
-    def switch_tagger(cls, type="writing"):
+    def switch_tagger(cls, type="spoken"):
         dict_config = current_app.env_config
         if type == "spoken":
             cls._tagger = Tagger(f"-d {dict_config.userunidic['s']}")
@@ -126,7 +139,6 @@ class FugashiParser(AbstractParser):
         else:
             cls._tagger = Tagger(f"-d {dict_config.userunidic['w']}")
             cls._tagger_type = "writing"
-        cls._cache = {}
 
     def get_reading(self, text: str):
         """
@@ -136,7 +148,7 @@ class FugashiParser(AbstractParser):
         doesn't add value (same as text).
         """
 
-        if self._string_is_hiragana(text):
+        if self._string_is_kana(text):
             return None
 
         readings = []
@@ -160,3 +172,67 @@ class FugashiParser(AbstractParser):
         if jp_reading_setting == "alphabet":
             return jaconv.kata2alphabet(ret)
         raise RuntimeError(f"Bad reading type {jp_reading_setting}")
+
+    @classmethod
+    def analyse(cls, text):
+        print('analysis text',text)
+        tagger =cls._tagger
+        if text.startswith('「'):
+            tagger=cls._s_tagger
+        tokens = tagger(text.strip())
+        l = []
+
+        def halfwidth_to_fullwidth(text):
+            # Define a translation table for half-width to full-width conversion
+            halfwidth_chars = ''.join(chr(i) for i in range(0x0021, 0x007F))  # ASCII characters
+            fullwidth_chars = ''.join(chr(i) for i in range(0xFF01, 0xFF5F))  # Full-width ASCII characters
+            translation_table = str.maketrans(halfwidth_chars, fullwidth_chars)
+
+            # Use translate to convert half-width to full-width
+            fullwidth_text = text.translate(translation_table)
+            return fullwidth_text
+
+        for tok in tokens:
+            lemma = tok.feature.lemma
+            # orthbase = tok.feature.orthBase
+            fws = '\uff0a' # full-width space
+            if tok.feature.goshu == "外":
+                lemma = lemma.split('-')[-1]
+                lemma = halfwidth_to_fullwidth(lemma)
+            pos1 = tok.feature.pos1
+            repalce_names = [('補助記号', '記'), ('代名詞', '代'), ('名詞', '名'), ('助詞', '助'), ('助動詞', '助動'),('詞','')]
+            for o, r in repalce_names:
+                pos1 = pos1.replace(o, r)
+            c_type = tok.feature.cType
+            c_form = tok.feature.cForm
+            c_type = c_type.replace('*', fws)
+            c_form = c_form.replace('*', fws)
+            # if c_form=='*' and c_type=='*':
+            #     c_form='\u3000'
+            #     c_type='\u3000'
+            rec = (tok.surface, lemma, pos1, c_type, c_form)
+            if all(rec):
+                l.append(rec)
+        res = []
+
+        def align(text, width):
+            full_width_space = '\u3000'
+            text_width = len(text)
+            text = text.replace('-', '－')
+            padding_size = width - text_width
+            return text + full_width_space * padding_size
+
+        for rec in l:
+            max_len = max([len(c) for c in rec if c is not None])
+            new_rec = [align(text, max_len) for text in rec]
+            res.append(new_rec)
+        transposed_array = list(map(list, zip(*res)))
+        new_res = []
+        for arr in transposed_array:
+            new_res.append('\u3000'.join(arr))
+        return new_res
+
+
+if __name__ == '__main__':
+    t1 = 'と幽かな叫び声をお挙げになった。'
+    print(FugashiParser.analyse(t1))

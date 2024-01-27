@@ -53,7 +53,9 @@ class RenderableCalculator:
                 raise RuntimeError(msg)
             prevtok = tok
 
-    def _get_renderable(self, tokenlocator, terms, texttokens):
+    def _get_renderable(
+            self, tokenlocator, terms, texttokens
+    ):  # pylint: disable=too-many-locals
         """
         Return RenderableCandidates that will **actually be rendered**.
 
@@ -147,7 +149,8 @@ class RenderableCalculator:
         # 3.  Create candidates for all the terms.
         termcandidates = []
 
-        for term in terms:
+        foundterms = [t for t in terms if t.text_lc in tokenlocator.subjLC]
+        for term in foundterms:
             for loc in tokenlocator.locate_string(term.text_lc):
                 rc = RenderableCandidate()
                 rc.term = term
@@ -253,14 +256,15 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
 
         self.id: int = RenderableCandidate.class_id
         self.term: Term = None
-        self.display_text: str  # Text to show, if there is any overlap
-        self.text: str  # Actual text of the term
-        self.pos: int
+        self.display_text: str = None  # Text to show, if there is any overlap
+        self.text: str = None  # Actual text of the term
+        self.text_lc: str = None
+        self.pos: int = None
         self.length: int = 1
-        self.is_word: int
+        self.is_word: int = None
         self.render: bool = True
         self.lemma = None
-        self.reading = None
+        self.reading = ""
         self.is_img = False
         self.img_src = ""
 
@@ -278,37 +282,34 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         return self.pos + self.length - 1
 
     def make_text_item(
-        self,
-        p_num: int,
-        se_id: int,
-        text_id: int,
-        lang: Language,
-        show_reading=False,
-        bookid=0,
+            self,
+            p_num: int,
+            se_id: int,
+            lang: Language,
+            show_reading=False,
+            bookid=0,
     ):
         """
         Create a TextItem for final rendering.
         """
-        t = TextItem()
+        t = TextItem(self.term)
         t.order = self.pos
-        t.text_id = text_id
         t.lang_id = lang.id
         t.display_text = self.display_text
         t.text = self.text
-        t.token_count = self.length
         t.text_lc = lang.get_lowercase(self.text)
+        t.token_count = self.length
         t.para_id = p_num
         t.se_id = se_id
         t.is_word = self.is_word
         t.text_length = len(self.text)
         t.lemma = self.lemma
-        t.reading = self.reading
+        if t.reading.strip()=="" and self.reading and self.reading.strip()!="":
+            t.reading=self.reading
         t.show_reading = show_reading
         t.is_img = self.is_img
         if t.is_img:
-            t.img_src = f"/bookimages/{bookid}/{self.text.replace('<img=','').strip()}"
-
-        t.load_term_data(self.term)
+            t.img_src = f"/bookimages/{bookid}/{self.text.replace('<img=', '').strip()}"
 
         return t
 
@@ -341,6 +342,7 @@ class TokenLocator:
     def __init__(self, language, subject):
         self.language = language
         self.subject = subject
+        self.subjLC = self.language.get_lowercase(self.subject)
 
     def locate_string(self, s):
         """
@@ -349,9 +351,7 @@ class TokenLocator:
         find_lc = self.language.get_lowercase(s)
         find_lc = TokenLocator.make_string(find_lc)
 
-        subjLC = self.language.get_lowercase(self.subject)
-
-        matches = self.preg_match_capture(find_lc, subjLC)
+        matches = self.preg_match_capture(find_lc, self.subjLC)
 
         # The matches were performed with the lowercased subject,
         # because some languages (Turkish!) have funny cases.
@@ -365,7 +365,7 @@ class TokenLocator:
             matchpos = match[1]
 
             # print(f"found match \"{matchtext}\" len={matchlen} pos={matchpos}")
-            original_subject_text = subj[matchpos : matchpos + matchlen]
+            original_subject_text = subj[matchpos: matchpos + matchlen]
             zws = "\u200B"
             t = original_subject_text.lstrip(zws).rstrip(zws)
             index = self.get_count_before(subj, matchpos)
@@ -413,7 +413,7 @@ class TokenLocator:
         zws = "\u200B"
         if isinstance(t, list):
             t = zws.join(t)
-        return zws + t + zws
+        return f"{zws}{t}{zws}"
 
 
 class TextItem:  # pylint: disable=too-many-instance-attributes
@@ -421,10 +421,12 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
     Unit to be rendered.
 
     Data structure for template read/textitem.html
+
+    Some elements are lazy loaded, because they're only needed in
+    certain situations.
     """
 
-    def __init__(self):
-        self.text_id: int
+    def __init__(self, term: Term = None):
         self.lang_id: int
         self.order: int
         self.text: str  # The original, un-overlapped text.
@@ -437,30 +439,38 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.se_id: int
         self.is_word: int
         self.text_length: int
+
+        self.term = term
+        self.wo_id = term.id if term is not None else None
+        self.wo_status = term.status if term is not None else None
+
         # The tooltip should be shown for well-known/ignored TextItems
         # that merit a tooltip. e.g., if there isn't any actual Term
         # entity associated with this TextItem, nothing more is needed.
         # Also, if there is a Term entity but it's mostly empty, a
         # tooltip isn't useful.
-        self.show_tooltip: bool = False
-        self.wo_id: int = None
-        self.wo_status: int = None
-        self.flash_message: str = None
+        self._show_tooltip: bool = None
         self.lemma: str = None
-        self.reading: str = None
+
+        self.reading: str = term.romanization if term is not None and term.romanization is not None else ""
         self.show_reading = True
         self.is_img = False
 
-    def load_term_data(self, term):
-        """
-        Load extra term data, if any.
-        """
-        if term is None:
-            return
+        # The flash message can be None, so we need an extra flag
+        # to determine if it has been loaded or not.
+        self._flash_message_loaded: bool = False
+        self._flash_message: str = None
 
-        self.wo_id = term.id
-        self.wo_status = term.status
-        self.flash_message = term.get_flash_message()
+    @property
+    def show_tooltip(self):
+        """
+        Show the tooltip if there is anything to show.
+        Lazy loaded as needed.
+        """
+        if self._show_tooltip is not None:
+            return self._show_tooltip
+        if self.term is None:
+            return False
 
         def has_extra(cterm):
             if cterm is None:
@@ -475,10 +485,25 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
             )
             return not no_extra
 
-        show_tooltip = has_extra(term)
-        for p in term.parents:
-            show_tooltip = show_tooltip or has_extra(p)
-        self.show_tooltip = show_tooltip
+        self._show_tooltip = has_extra(self.term)
+        for p in self.term.parents:
+            self._show_tooltip = self._show_tooltip or has_extra(p)
+        return self._show_tooltip
+
+    @property
+    def flash_message(self):
+        """
+        Return flash message if anything present.
+        Lazy loaded as needed.
+        """
+        if self._flash_message_loaded:
+            return self._flash_message
+        if self.term is None:
+            return None
+
+        self._flash_message = self.term.get_flash_message()
+        self._flash_message_loaded = True
+        return self._flash_message
 
     @property
     def html_display_text(self):
@@ -527,9 +552,9 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         ]
 
         tooltip = (
-            st not in (Status.WELLKNOWN, Status.IGNORED)
-            or self.show_tooltip
-            or self.flash_message is not None
+                st not in (Status.WELLKNOWN, Status.IGNORED)
+                or self.show_tooltip
+                or self.flash_message is not None
         )
         if tooltip:
             classes.append("showtooltip")

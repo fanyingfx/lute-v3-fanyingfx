@@ -2,7 +2,17 @@
 /term routes.
 """
 
-from flask import Blueprint, request, jsonify, render_template, redirect
+import os
+import csv
+from flask import (
+    Blueprint,
+    request,
+    jsonify,
+    render_template,
+    redirect,
+    current_app,
+    send_file,
+)
 from lute.models.language import Language
 from lute.models.term import Term as DBTerm
 from lute.utils.data_tables import DataTablesFlaskParamParser
@@ -29,13 +39,8 @@ def index(search):
     )
 
 
-@bp.route("/datatables", methods=["POST"])
-def datatables_active_source():
-    "Datatables data for terms."
-    parameters = DataTablesFlaskParamParser.parse_params(request.form)
-
-    # The DataTablesFlaskParamParser doesn't know about term-specific filters,
-    # add those manually.
+def _load_term_custom_filters(request_form, parameters):
+    "Manually add filters that the DataTablesFlaskParamParser doesn't know about."
     filter_param_names = [
         "filtLanguage",
         "filtParentsOnly",
@@ -45,21 +50,69 @@ def datatables_active_source():
         "filtStatusMax",
         "filtIncludeIgnored",
     ]
-    request_params = request.form.to_dict(flat=True)
+    request_params = request_form.to_dict(flat=True)
     for p in filter_param_names:
         parameters[p] = request_params.get(p)
 
+
+@bp.route("/datatables", methods=["POST"])
+def datatables_active_source():
+    "Datatables data for terms."
+    parameters = DataTablesFlaskParamParser.parse_params(request.form)
+    _load_term_custom_filters(request.form, parameters)
     data = get_data_tables_list(parameters)
     return jsonify(data)
 
 
+@bp.route("/export_terms", methods=["POST"])
+def export_terms():
+    "Generate export file of terms."
+    parameters = DataTablesFlaskParamParser.parse_params(request.form)
+    _load_term_custom_filters(request.form, parameters)
+    parameters["length"] = 1000000
+    outfile = os.path.join(current_app.env_config.temppath, "export_terms.csv")
+    data = get_data_tables_list(parameters)
+    render_data = data["data"]
+
+    # Fields as returned from the datatables query.
+    headings = [
+        "OMIT_Checkbox",
+        "term",
+        "parent",
+        "translation",
+        "language",
+        "tags",
+        "OMIT_status_text",
+        "OMIT_WoID",
+        "OMIT_LgID",
+        "OMIT_ImageSource",
+        "status",
+        "link_status",
+    ]
+    columns_to_exclude = []
+    for i, h in enumerate(headings):
+        if h.startswith("OMIT_"):
+            columns_to_exclude.append(i)
+
+    output_data = [headings] + render_data
+    with open(outfile, "w", encoding="utf-8", newline="") as f:
+        csv_writer = csv.writer(f)
+        for row in output_data:
+            filtered_row = [
+                value for i, value in enumerate(row) if i not in columns_to_exclude
+            ]
+            csv_writer.writerow(filtered_row)
+
+    return send_file(outfile, as_attachment=True, download_name="Terms.csv")
+
+
 def handle_term_form(
-    term,
-    repo,
-    form_template_name,
-    return_on_success,
-    embedded_in_reading_frame=False,
-    tokens_raw=None,
+        term,
+        repo,
+        form_template_name,
+        return_on_success,
+        embedded_in_reading_frame=False,
+        tokens_raw=None,
 ):
     """
     Handle a form post.
@@ -69,6 +122,8 @@ def handle_term_form(
     template on success.
     """
     form = TermForm(obj=term)
+    # parents = [{"value": p} for p in term.parents]
+    # form.parentslist.data = json.dumps(parents)
 
     # Flash messages get added on things like term imports.
     # The user opening the form is treated as an acknowledgement.
@@ -78,16 +133,22 @@ def handle_term_form(
 
     if form.validate_on_submit():
         if tokens_raw:
-            multi_term = tokens_raw.replace(",", "")
+            multi_term = tokens_raw.replace(",", "\u200b")
             tokens = tokens_raw.split(",")
             d = {multi_term: tokens}
             # lang = find_lang(langid)
             lang = term.language
             update_user_dict(lang, d)
-            term_old = repo.find(lang.id, multi_term)
+            term_old = repo.find(lang.id, multi_term, tokens)
             if term_old is not None:
                 repo.delete_by_termid(term_old.id)
         form.populate_obj(term)
+
+        # parents_list_data = request.form.get("parentslist", "")
+        # parents_list = json.loads(parents_list_data) if parents_list_data else []
+        # parents = [h["value"] for h in parents_list]
+        # term.parents = parents
+
         repo.add(term)
         repo.commit()
         return return_on_success
@@ -155,9 +216,16 @@ def search_by_text_in_language(text, langid):
         return []
     repo = Repository(db)
     matches = repo.find_matches(langid, text)
-    result = []
-    for t in matches:
-        result.append({"id": t.id, "text": t.text, "translation": t.translation})
+
+    def _make_entry(t):
+        return {
+            "id": t.id,
+            "text": t.text,
+            "translation": t.translation,
+            "status": t.status,
+        }
+
+    result = [_make_entry(t) for t in matches]
     return jsonify(result)
 
 
@@ -196,7 +264,7 @@ def bulk_update_status():
     readings = data.get('reading')
 
     repo = Repository(db)
-    for t,reading in zip(terms,readings):
+    for t, reading in zip(terms, readings):
         term = repo.find_or_new(language_id, t)
         term.status = new_status
         term.romanization = reading
@@ -211,10 +279,16 @@ def bulk_set_parent():
     data = request.get_json()
     termids = data.get("wordids")
     parenttext = data.get("parenttext")
+    parent = None
     repo = Repository(db)
     for tid in termids:
         term = repo.load(int(tid))
-        term.parents = [parenttext]
+        if parent is None:
+            parent = repo.find(term.language_id, parenttext)
+        if term.parents != [parenttext]:
+            term.parents = [parenttext]
+            term.status = parent.status
+            term.sync_status = True
         repo.add(term)
     repo.commit()
     return jsonify("ok")

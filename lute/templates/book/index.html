@@ -1,11 +1,6 @@
 {% extends 'base.html' %}
-
 {% block title %}{{ status }} books{% endblock %}
-
 {% block header %}{{ status }} books{% endblock %}
-
 {% block body %}
-
-{% include '/book/tablelisting.html' %}
-
+    {% include '/book/tablelisting.html' %}
 {% endblock %}

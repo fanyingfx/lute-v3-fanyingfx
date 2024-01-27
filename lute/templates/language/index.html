@@ -1,41 +1,31 @@
 {% extends 'base.html' %}
-
 {% block title %}Languages{% endblock %}
-
 {% block header %}Languages{% endblock %}
-
 {% block body %}
-
-{% if language_data|length == 0 %}
-  <p>No languages defined.</p>
-{% else %}
-
-<table class="table dataTable no-footer" style="width: 50%; margin: 0;">
-  <thead>
-    <tr>
-      <th>Language</th>
-      <th>Books</th>
-      <th>Terms</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for language, book_count, term_count in language_data %}
-    <tr>
-      <td>
-        <a href="/language/edit/{{ language.id }}">
-          {{ language.name }}
-        </a>
-      </td>
-      <td>{{ book_count or '-' }}</td>
-      <td>{{ term_count or '-' }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-{% endif %}
-
-<br />
-<a href="{{ url_for('language.new') }}">Create new</a>
-
+    {% if language_data|length == 0 %}
+        <p>No languages defined.</p>
+    {% else %}
+        <table class="table dataTable no-footer" style="width: 50%; margin: 0;">
+            <thead>
+                <tr>
+                    <th>Language</th>
+                    <th>Books</th>
+                    <th>Terms</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for language, book_count, term_count in language_data %}
+                    <tr>
+                        <td>
+                            <a href="/language/edit/{{ language.id }}">{{ language.name }}</a>
+                        </td>
+                        <td>{{ book_count or '-' }}</td>
+                        <td>{{ term_count or '-' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+    <br />
+    <a href="{{ url_for("language.new") }}">Create new</a>
 {% endblock %}

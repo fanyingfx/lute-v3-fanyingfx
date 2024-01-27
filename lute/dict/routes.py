@@ -3,50 +3,9 @@ from flask import (
     make_response,
     request,
 )
-from lute.mdx_server.mdx_server import (
-    MDXDict,
-    IndexBuilder,
-    get_local_resource,
-    Path,
-    content_type_map,
-)
+from lute.dict.services import en_bds, jp_bds, jp_pronun_bd, dict_local, content_type_map
 
 bp = Blueprint("dict", __name__, url_prefix="/dict")
-en_dir1 = "/home/fan/dicts/Eng/olad10"
-en_filename1 = "Oxford Advanced Learner's Dictionary 10th.mdx"
-en_dir2 = "/home/fan/dicts/Eng/mwal"
-en_filename2 = "Merrian Webster Advanced Learners_new.mdx"
-en_dir3 = "/home/fan/dicts/Eng/MWnow"
-en_filename3 = "mw_now.mdx"
-jp_filedir = "/home/fan/dicts/ja/Shogakukanjcv3"
-jp_filename1 = "Shogakukanjcv3.mdx"
-jp_filename2 = "xsjrihanshuangjie.mdx"
-jp_dir2 = "/home/fan/dicts/ja/xsjrihanshuangjie"
-jp_filename3 = "NHK日本語発音アクセント辞書.mdx"
-jp_dir3 = "/home/fan/dicts/ja/nhk"
-en_res1 = Path(en_dir1)
-en_res2 = Path(en_dir2)
-en_res3 = Path(en_dir3)
-jp_res1 = Path(jp_filedir)
-jp_res2 = Path(jp_dir2)
-jp_res3 = Path(jp_dir3)
-
-dict_local = get_local_resource([en_res1, en_res2, en_res3, jp_res1, jp_res2, jp_res3])
-
-en_builder1 = IndexBuilder(f"{en_dir1}/{en_filename1}")
-en_builder2 = IndexBuilder(f"{en_dir2}/{en_filename2}")
-en_builder3 = IndexBuilder(f"{en_dir3}/{en_filename3}")
-jp_builder = IndexBuilder(f"{jp_filedir}/{jp_filename1}")
-jp_builder2 = IndexBuilder(f"{jp_dir2}/{jp_filename2}")
-jp_builder3 = IndexBuilder(f"{jp_dir3}/{jp_filename3}")
-
-en_bd1 = MDXDict(en_builder1, dict_local)
-en_bd2 = MDXDict(en_builder2, dict_local)
-en_bd3 = MDXDict(en_builder3, dict_local)
-jp_bd1 = MDXDict(jp_builder, dict_local)
-jp_bd2 = MDXDict(jp_builder2, dict_local)
-jp_bd3 = MDXDict(jp_builder3, dict_local, "jp3")
-
 
 def handle_req(filename, loc):
     ext = filename.split(".")[-1]
@@ -54,7 +13,7 @@ def handle_req(filename, loc):
     if filename in loc:
         content = loc[filename]
     else:
-        for abd in [en_bd1, en_bd2, en_bd3, jp_bd1, jp_bd2, jp_bd3]:
+        for abd in en_bds + jp_bds:
             content = abd.lookup(f"/{filename}")
             if content != b"":
                 break
@@ -71,7 +30,6 @@ def handle_req(filename, loc):
 @bp.route("/", defaults={"path": ""})
 @bp.route("/<path:path>")
 def index(path):
-    # print("path", path)
     return handle_req(path, dict_local)
 
 
@@ -81,7 +39,7 @@ def query_en():
     ext = word.split(".")[-1]
     if ext in content_type_map:
         return handle_req(word, dict_local)
-    for ebd in [en_bd1, en_bd2, en_bd3]:
+    for ebd in en_bds:
         res = ebd.lookup(word)
         if res != b"":
             break
@@ -98,9 +56,9 @@ def query_jp():
     ext = word.split(".")[-1]
     if ext in content_type_map:
         return handle_req(word, dict_local)
-    pronunciation = jp_bd3.lookup(word)
-
-    for jbd in [jp_bd1, jp_bd2]:
+    pronunciation = jp_pronun_bd.lookup(word)
+    res = b""
+    for jbd in jp_bds:
         res = jbd.lookup(word)
         if res != b"":
             break

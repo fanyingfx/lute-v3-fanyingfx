@@ -18,10 +18,13 @@ from flask import (
     send_from_directory,
     jsonify,
 )
+from sqlalchemy.event import listens_for
+from sqlalchemy.pool import Pool
 
 from lute.config.app_config import AppConfig
 from lute.db import db
 from lute.db.setup.main import setup_db
+from lute.db.data_cleanup import clean_data
 import lute.backup.service as backupservice
 import lute.db.demo
 
@@ -48,6 +51,8 @@ from lute.themes.routes import bp as themes_bp
 from lute.stats.routes import bp as stats_bp
 from lute.cli.commands import bp as cli_bp
 from lute.dict.routes import bp as dict_bp
+from lute.translation.routes import bp as trans_bp
+from lute.tts.routes import bp as tts_bp
 
 
 def _setup_app_dirs(app_config):
@@ -257,6 +262,7 @@ def _create_app(app_config, extra_config):
 
     config = {
         "SECRET_KEY": "some_secret",
+        "WTF_CSRF_ENABLED": False,
         "DATABASE": app_config.dbfilename,
         "ENV": app_config.env,
         "SQLALCHEMY_DATABASE_URI": f"sqlite:///{app_config.dbfilename}",
@@ -268,14 +274,22 @@ def _create_app(app_config, extra_config):
 
     final_config = {**config, **extra_config}
     app.config.from_mapping(final_config)
+    # https://stackoverflow.com/questions/14853694/python-jsonify-dictionary-in-utf-8
+    app.json.ensure_ascii = False
 
     # Attach the app_config to app so it's available at runtime.
     app.env_config = app_config
 
     db.init_app(app)
+
+    @listens_for(Pool, "connect")
+    def _pragmas_on_connect(dbapi_con, con_record):  # pylint: disable=unused-argument
+        dbapi_con.execute("pragma recursive_triggers = on;")
+
     with app.app_context():
         db.create_all()
         UserSetting.load()
+        clean_data()
     app.db = db
 
     _add_base_routes(app, app_config)
@@ -296,6 +310,8 @@ def _create_app(app_config, extra_config):
     app.register_blueprint(stats_bp)
     app.register_blueprint(cli_bp)
     app.register_blueprint(dict_bp)
+    app.register_blueprint(trans_bp)
+    app.register_blueprint(tts_bp)
     if app_config.is_test_db:
         app.register_blueprint(dev_api_bp)
 

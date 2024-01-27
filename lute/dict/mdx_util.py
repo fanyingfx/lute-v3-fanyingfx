@@ -3,8 +3,32 @@
 
 import sys
 import re
+from pathlib import Path
+from typing import List
+
 from mdict_query.mdict_query import IndexBuilder
 from bs4 import BeautifulSoup
+
+
+content_type_map = {
+    "html": "text/html; charset=utf-8",
+    "js": "application/x-javascript",
+    "ico": "image/x-icon",
+    "css": "text/css",
+    "jpg": "image/jpeg",
+    "png": "image/png",
+    "bmp": "image/bmp",
+    "gif": "image/gif",
+    "mp3": "audio/mpeg",
+    "mp4": "audio/mp4",
+    "wav": "audio/wav",
+    "ogg": "audio/ogg",
+    "eot": "font/opentype",
+    "svg": "text/xml",
+    "ttf": "application/x-font-ttf",
+    "woff": "application/x-font-woff",
+    "woff2": "application/font-woff2",
+}
 
 # from file_util import *
 
@@ -62,3 +86,47 @@ def get_definition_mdd(word, builder: IndexBuilder):
     if len(content) > 0:
         return content[0]
     return b""
+def get_local_resource(resource_paths: List[Path]):
+    local_map = {}
+    for resource_path in resource_paths:
+        for item in resource_path.iterdir():
+            if item.suffix[1:] in content_type_map:
+                with open(item, "rb") as f:
+                    content = f.read()
+                    local_map[item.name] = content
+
+    return local_map
+
+
+# get_local_resource(resource_path)
+# print(local_map.keys())
+
+
+# print("resouce path : " + resource_path)
+builder = None
+
+
+class MDXDict:
+    def __init__(self, builder: IndexBuilder, local_map=None, name=None) -> None:
+        self.builder = builder
+        if local_map is None:
+            self.local_map = {}
+        else:
+            self.local_map = local_map
+        self.name = name
+
+    def lookup(self, resource_path):
+        file_extension = resource_path.split(".")[-1]
+        res = b""
+        if resource_path.lstrip("/") in self.local_map:
+            res = self.local_map[resource_path.lstrip("/")]
+        elif file_extension in content_type_map:
+            res = get_definition_mdd(resource_path, self.builder)
+        else:
+            res = get_definition_mdx(resource_path.lstrip("/"), self.builder)
+        if res is None:
+            res = b""
+            print("none", resource_path)
+        return res
+
+

@@ -163,11 +163,19 @@ def term_form(langid, text):
     if reading.replace("None", "").replace("・", "").strip() == "":
         reading = ""
     tokens_raw = request.args.get("textparts", None)
+    # if '\u200b' in text:
+    #     raw_tokens_in_text = text.split('\u200b')
+    if tokens_raw:
+        raw_tokens = tokens_raw.split(',')
+    elif '\u200b' in text:
+        raw_tokens = text.split('\u200b')
+    else:
+        raw_tokens = None
 
-    raw_tokens = tokens_raw.split(",") if tokens_raw else None
+    # raw_tokens = tokens_raw.split(",") if tokens_raw else None
 
     repo = Repository(db)
-    term = repo.find_or_new(langid, text, lemma, reading,raw_tokens)
+    term = repo.find_or_new(langid, text, lemma, reading, raw_tokens)
 
     return handle_term_form(
         term,
@@ -270,11 +278,11 @@ def edit_sentence(bookid, pagenum):
     text = book.text_at_page(pagenum)
     raw_text = text.text
     # raw_sentence = sentence.replace('\u200b', '')
-    raw_sentence=sentence
+    raw_sentence = sentence
     text.text = sentence
     form = TextForm(obj=text)
     if form.validate_on_submit():
-        new_senetence = form.data['text']
+        new_senetence = form.text.data
         new_text = raw_text.replace(raw_sentence, new_senetence)
         form.populate_obj(text)
         text.text = new_text

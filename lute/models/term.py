@@ -338,7 +338,12 @@ class Term(
         terms = query.all()
         if not terms:
             return None
-        return terms[0]
+        term = terms[0]
+        if '\u200b' in text_lc:
+            term.raw_tokens = text_lc.split('\u200b')
+        else:
+            term.raw_tokens = [text_lc]
+        return term
 
 
 class Status:

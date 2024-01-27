@@ -152,7 +152,7 @@ class Repository:
         If it's new, don't add to the identity map ... it's not saved yet,
         and so if we search for it again we should hit the db again.
         """
-        t = self.find(langid, text)
+        t = self.find(langid, text,raw_tokens=raw_tokens)
         if t is not None:
             if t.lemma is None:
                 t.lemma = lemma

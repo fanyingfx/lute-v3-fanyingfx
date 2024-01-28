@@ -402,6 +402,14 @@ function update_note() {
   let noteEle = document.getElementById("sentencenote");
   let messagefloatWindow = document.getElementById("sentence-note-message");
   let text = noteEle.value;
+  if (text.trim() === "") {
+    messagefloatWindow.style.display = "block";
+    messagefloatWindow.innerText = "Note is empty!";
+    setTimeout(function () {
+      messagefloatWindow.style.display = "none";
+    }, 1500);
+    return;
+  }
   const options = {
     method: "POST",
     headers: {

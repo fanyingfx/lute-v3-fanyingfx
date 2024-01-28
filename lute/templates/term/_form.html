@@ -48,7 +48,7 @@
                 <a href="" onclick="show_term_sentences(); return false;">Sentences</a>
                 <div class="term-element-box">
                     {% if term.id %}<button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>{% endif %}
-                    <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                    <button id="submit" type="submit" class="btn btn-primary" onclick="update_note()">Save</button>
                 </div>
             </div>
         </div>

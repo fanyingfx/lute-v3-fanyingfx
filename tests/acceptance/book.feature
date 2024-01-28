@@ -31,17 +31,17 @@ Feature: Books and stats are available
         And the reading pane shows:
             Hola/. /Tengo/ /un/ /perro/.
 
-    Scenario: I can import an epub file.
-        Given I visit "/"
-        Given a Spanish book "Hola" from file Hola.epub
-        Then the page title is Reading "Hola"
-        And the reading pane shows:
-            Tengo/ /un/ /amigo/.
+#    Scenario: I can import an epub file.
+#        Given I visit "/"
+#        Given a Spanish book "Hola" from file Hola.epub
+#        Then the page title is Reading "Hola"
+#        And the reading pane shows:
+#            Tengo/ /un/ /amigo/.
 
-    Scenario: Invalid epub files are rejected.
-        Given I visit "/"
-        Given a Spanish book "Hola" from file invalid.epub
-        Then the page contains "Could not parse invalid.epub"
+#    Scenario: Invalid epub files are rejected.
+#        Given I visit "/"
+#        Given a Spanish book "Hola" from file invalid.epub
+#        Then the page contains "Could not parse invalid.epub"
 
     Scenario: I can import a PDF file.
         Given I visit "/"

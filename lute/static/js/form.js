@@ -402,14 +402,14 @@ function update_note() {
   let noteEle = document.getElementById("sentencenote");
   let messagefloatWindow = document.getElementById("sentence-note-message");
   let text = noteEle.value;
-  if (text.trim() === "") {
-    messagefloatWindow.style.display = "block";
-    messagefloatWindow.innerText = "Note is empty!";
-    setTimeout(function () {
-      messagefloatWindow.style.display = "none";
-    }, 1500);
-    return;
-  }
+  // if (text.trim() === "") {
+  //   messagefloatWindow.style.display = "block";
+  //   messagefloatWindow.innerText = "Note is empty!";
+  //   setTimeout(function () {
+  //     messagefloatWindow.style.display = "none";
+  //   }, 1500);
+  //   return;
+  // }
   const options = {
     method: "POST",
     headers: {
@@ -427,11 +427,7 @@ function update_note() {
     })
     .then((data) => {
       messagefloatWindow.style.display = "block";
-      if (data.status === "1") {
-        messagefloatWindow.innerText = "Update note successful!";
-      } else {
-        messagefloatWindow.innerText = "Update note failed!";
-      }
+      messagefloatWindow.innerText = data.message;
       setTimeout(function () {
         messagefloatWindow.style.display = "none";
       }, 1500);

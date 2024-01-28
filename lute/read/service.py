@@ -118,3 +118,16 @@ def create_or_update_sentence_note(
         note.add_snote_tag(st)
     db_session.add(note)
     db_session.commit()
+
+
+def delete_sentence_note(bookid, pagenum, sentence, db_session: Session):
+    note = (
+        db_session.query(SentenceNote)
+        .filter_by(book_id=bookid, page_id=pagenum, sentence=sentence)
+        .first()
+    )
+    if note:
+        db_session.delete(note)
+        db_session.commit()
+        return True
+    return False

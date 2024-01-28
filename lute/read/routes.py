@@ -12,6 +12,7 @@ from lute.read.service import (
     start_reading,
     get_sentencenote,
     create_or_update_sentence_note,
+    delete_sentence_note,
 )
 from lute.read.forms import TextForm
 from lute.term.model import Repository
@@ -316,13 +317,19 @@ def update_sentencenote(bookid, pagenum, sentence):
     new_note = request.json.get("new_note", "")
     raw_tags = request.json.get("tags", [])
     tags = [tag["value"] for tag in raw_tags]
-    try:
-        if new_note.strip() != "":
-            create_or_update_sentence_note(
-                bookid, pagenum, sentence, new_note, tags, db.session
-            )
-        res = {"status": "1"}
-    except:
-        res = {"status": "0"}
+    # try:
+    if new_note.strip() != "":
+        create_or_update_sentence_note(
+            bookid, pagenum, sentence, new_note, tags, db.session
+        )
+        res = {"status": "1", "message": "Update note successful"}
+    else:
+        if delete_sentence_note(bookid, pagenum, sentence, db.session):
+            res = {"status": "1", "message": "Note deleted!"}
+        else:
+            res = {"status": "1", "message": "Note is empty!"}
+
+    # except:
+    #     res = {"status": "0", "message": "Update note failed"}
 
     return jsonify(res)

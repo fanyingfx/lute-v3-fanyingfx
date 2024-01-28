@@ -88,6 +88,7 @@ def export_terms():
         "OMIT_ImageSource",
         "status",
         "link_status",
+        "OMIT_status_text",
     ]
     columns_to_exclude = []
     for i, h in enumerate(headings):

@@ -124,16 +124,24 @@
 
 
   let render_book_stats_graph = function(data, type, row, meta) {
+    const empty_stats = `<div title="Please open the book to calculate stats">&nbsp;</div>`;
     let statuscounts = row[10];
     if ((statuscounts ?? '')== '') {
-      return "";
+      return empty_stats;
     }
-    statuscounts = JSON.parse(statuscounts);
+    try {
+      statuscounts = JSON.parse(statuscounts);
+    }
+    catch(err) {
+      console.log(`Invalid json: ${statuscounts}`);
+      return empty_stats;
+    }
+
     statuscounts["99"] = statuscounts["98"] + statuscounts["99"];
     delete statuscounts['98'];
     const totalcount = Object.values(statuscounts).reduce((acc, val) => acc + val, 0);
     if (totalcount == 0) {
-      return "";
+      return empty_stats;
     }
     const statuspct = {};
     Object.entries(statuscounts).forEach(([key, value]) => {
@@ -144,8 +152,9 @@
 
     let make_bar = function(stid, title) {
       const p = statuspct[stid];
+      const smallestP = window.matchMedia("(max-width: 980px)").matches ? 2 : 1;
       let display = "inline-flex"
-      if (p < 1)
+      if (p < smallestP)
         display = "none";
       return `<div class="status-bar${stid} status-bar" title="${title}: ${p}%" style="flex: ${p}; display: ${display}"></div>`;
     };

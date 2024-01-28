@@ -999,6 +999,7 @@ div.code pre {
 #mecab_path, 
 #custom_styles,
 #language input,
+#sentencenote,
 #importurl {
     /* width: 100%; */
     font-size: 0.9rem;

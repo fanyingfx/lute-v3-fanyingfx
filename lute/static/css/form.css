@@ -1,0 +1,15 @@
+.bottom-element {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    padding-left: 2px;
+}
+#sentence-note-message {
+    display: none;
+    position: fixed;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 999;
+  }
+

@@ -127,7 +127,7 @@ class Repository:
         self._add_to_identity_map(term)
         return term
 
-    def find(self, langid, text,raw_tokens=None):
+    def find(self, langid, text, raw_tokens=None):
         """
         Return a Term business object for the DBTerm with the langid and text.
         If no match, return None.
@@ -136,7 +136,7 @@ class Repository:
         if term is not None:
             return term
 
-        spec = self._search_spec_term(langid, text,raw_tokens)
+        spec = self._search_spec_term(langid, text, raw_tokens)
         dbt = DBTerm.find_by_spec(spec)
         if dbt is None:
             return None
@@ -144,7 +144,7 @@ class Repository:
         self._add_to_identity_map(term)
         return term
 
-    def find_or_new(self, langid, text, lemma=None, reading="",raw_tokens=None):
+    def find_or_new(self, langid, text, lemma=None, reading="", raw_tokens=None):
         """
         Return a Term business object for the DBTerm with the langid and text.
         If no match, return a new term with the text and language.
@@ -152,13 +152,13 @@ class Repository:
         If it's new, don't add to the identity map ... it's not saved yet,
         and so if we search for it again we should hit the db again.
         """
-        t = self.find(langid, text,raw_tokens=raw_tokens)
+        t = self.find(langid, text, raw_tokens=raw_tokens)
         if t is not None:
             if t.lemma is None:
                 t.lemma = lemma
             return t
 
-        spec = self._search_spec_term(langid, text,raw_tokens)
+        spec = self._search_spec_term(langid, text, raw_tokens)
         t = Term()
         t.language = spec.language
         t.language_id = langid
@@ -289,15 +289,19 @@ class Repository:
         db would contain.
         """
         lang = Language.find(langid)
-        return DBTerm(lang, text,raw_tokens=raw_tokens)
+        return DBTerm(lang, text, raw_tokens=raw_tokens)
 
     def _build_db_term(self, term):
         "Convert a term business object to a DBTerm."
         if term.text is None:
             raise ValueError("Text not set for term")
-        raw_tokens = term.text_lc.split('\u200b') if '\u200b' in term.text_lc else None
+        raw_tokens = (
+            term.text_lc.split("\u200b")
+            if term.text_lc and "\u200b" in term.text_lc
+            else None
+        )
 
-        spec = self._search_spec_term(term.language_id, term.text,raw_tokens)
+        spec = self._search_spec_term(term.language_id, term.text, raw_tokens)
         t = DBTerm.find_by_spec(spec)
         if t is None:
             t = DBTerm(raw_tokens=raw_tokens)

@@ -1,8 +1,10 @@
 """
 Reading helpers.
 """
+from sqlalchemy.orm import Session
 
-from lute.models.term import Term, Status
+from lute.models.sentence_note import SentenceNote
+from lute.models.term import Term, Status, TermTag
 from lute.models.book import Text
 from lute.book.stats import mark_stale
 from lute.read.render.service import get_paragraphs
@@ -86,3 +88,33 @@ def start_reading(dbbook, pagenum, db_session):
     paragraphs = get_paragraphs(text.text, text.book.language, text.bk_id)
 
     return paragraphs
+
+
+def get_sentencenote(bookid, pagenum, sentence, db_session: Session):
+    return (
+        db_session.query(SentenceNote)
+        .filter_by(book_id=bookid, page_id=pagenum, sentence=sentence)
+        .first()
+    )
+
+
+def create_or_update_sentence_note(
+        bookid, pagenum, sentence, text_note, tags, db_session: Session
+):
+    note = (
+        db_session.query(SentenceNote)
+        .filter_by(book_id=bookid, page_id=pagenum, sentence=sentence)
+        .first()
+    )
+    sentence_tags = []
+    if note is None:
+        note = SentenceNote(bookid, pagenum, sentence, text_note)
+    else:
+        note.sentence_note = text_note
+    for s in tags:
+        sentence_tags.append(TermTag.find_or_create_by_text(s))
+    note.remove_all_snote_tags()
+    for st in sentence_tags:
+        note.add_snote_tag(st)
+    db_session.add(note)
+    db_session.commit()

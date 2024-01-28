@@ -149,3 +149,5 @@ cython_debug/
 config.dev.yml
 node_modules/
 /lute/translation/fanyikey.yaml
+/package.json
+/package-lock.json

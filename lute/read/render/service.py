@@ -98,7 +98,7 @@ class RenderableSentence:
 
 
 # @lru_cache()
-def get_paragraphs(s, language,bookid=0):
+def get_paragraphs(s, language, bookid=0):
     """
     Get array of arrays of RenderableSentences for the given string s.
     """
@@ -124,8 +124,10 @@ def get_paragraphs(s, language,bookid=0):
             t.order = n
             n += 1
     terms = find_all_Terms_in_string(s, language)
-    show_reading = bool(int(UserSetting.get_value("show_reading")))
-
+    if UserSetting.key_exists("show_reading") and language.show_romanization:
+        show_reading = bool(int(UserSetting.get_value("show_reading")))
+    else:
+        show_reading = False
 
     def make_RenderableSentence(pnum, sentence_num, tokens, terms):
         """
@@ -137,7 +139,10 @@ def get_paragraphs(s, language,bookid=0):
         renderable = RenderableCalculator.get_renderable(
             language, terms, sentence_tokens
         )
-        textitems = [i.make_text_item(pnum, sentence_num, language,show_reading,bookid) for i in renderable]
+        textitems = [
+            i.make_text_item(pnum, sentence_num, language, show_reading, bookid)
+            for i in renderable
+        ]
         ret = RenderableSentence(sentence_num, textitems)
         return ret
 

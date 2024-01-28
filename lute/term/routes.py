@@ -22,6 +22,7 @@ from lute.db import db
 from lute.term.forms import TermForm
 import lute.utils.formutils
 from lute.parse.user_dicts import delete_from_user_dict, update_user_dict
+import json
 
 bp = Blueprint("term", __name__, url_prefix="/term")
 
@@ -108,8 +109,8 @@ def export_terms():
 
 
 def handle_term_form(
-        term,
-        repo,
+        term: Term,
+        repo: Repository,
         form_template_name,
         return_on_success,
         embedded_in_reading_frame=False,
@@ -163,9 +164,9 @@ def handle_term_form(
         form_template_name,
         form=form,
         term=term,
-        language_dicts=Language.all_dictionaries(),
+        language_dicts=json.dumps(Language.all_dictionaries()),
         hide_pronunciation=hide_pronunciation,
-        tags=repo.get_term_tags(),
+        tags=json.dumps(repo.get_term_tags()),
         embedded_in_reading_frame=embedded_in_reading_frame,
     )
 
@@ -262,7 +263,7 @@ def bulk_update_status():
     terms = data.get("terms")
     language_id = int(data.get("langid"))
     new_status = int(data.get("new_status"))
-    readings = data.get('reading')
+    readings = data.get("reading")
 
     repo = Repository(db)
     for t, reading in zip(terms, readings):

@@ -4,19 +4,20 @@
 
 from datetime import datetime
 from flask import Blueprint, flash, request, render_template, redirect, jsonify
+
+from lute.models.sentence_note import SentenceNote
 from lute.read.service import (
-    get_paragraphs,
     set_unknowns_to_known,
     # parse_paragraphs,
-    start_reading
+    start_reading,
+    get_sentencenote,
+    create_or_update_sentence_note,
 )
-from lute.parse.user_dicts import update_user_dict
 from lute.read.forms import TextForm
-from lute.term.model import Repository, find_lang
+from lute.term.model import Repository
 from lute.term.routes import handle_term_form
 from lute.models.book import Book, Text
-from lute.models.term import Term as DBTerm
-from lute.models.language import Language
+from lute.models.term import Term as DBTerm, TermTag
 from lute.models.setting import UserSetting
 from lute.db import db
 
@@ -128,6 +129,7 @@ def save_player_data():
 #     return ""
 #
 
+
 @bp.route("/renderpage/<int:bookid>/<int:pagenum>", methods=["GET"])
 def render_page(bookid, pagenum):
     "Method called by ajax, render the given page."
@@ -166,9 +168,9 @@ def term_form(langid, text):
     # if '\u200b' in text:
     #     raw_tokens_in_text = text.split('\u200b')
     if tokens_raw:
-        raw_tokens = tokens_raw.split(',')
-    elif '\u200b' in text:
-        raw_tokens = text.split('\u200b')
+        raw_tokens = tokens_raw.split(",")
+    elif "\u200b" in text:
+        raw_tokens = text.split("\u200b")
     else:
         raw_tokens = None
 
@@ -272,8 +274,8 @@ def edit_page(bookid, pagenum):
 @bp.route("/editsentence/<int:bookid>/<int:pagenum>", methods=["GET", "POST"])
 def edit_sentence(bookid, pagenum):
     book = Book.find(bookid)
-    sentence = request.args.get('sentence')
-    if sentence is None or sentence.strip() == '':
+    sentence = request.args.get("sentence")
+    if sentence is None or sentence.strip() == "":
         return redirect("/", 302)
     text = book.text_at_page(pagenum)
     raw_text = text.text
@@ -286,8 +288,41 @@ def edit_sentence(bookid, pagenum):
         new_text = raw_text.replace(raw_sentence, new_senetence)
         form.populate_obj(text)
         text.text = new_text
+        note: SentenceNote = get_sentencenote(bookid, pagenum, sentence, db.session)
         db.session.add(text)
+        if note is not None:
+            note.sentence = new_senetence
+            db.session.add(note)
         db.session.commit()
         return redirect(f"/read/{book.id}", 302)
 
     return render_template("read/page_edit_form.html", hide_top_menu=True, form=form)
+
+
+@bp.get("/sentencenote/<bookid>/<pagenum>/<sentence>")
+def sentencenote(bookid, pagenum, sentence):
+    note: SentenceNote = get_sentencenote(bookid, pagenum, sentence, db.session)
+    if note is None:
+        return jsonify(dict(sentence_note=""))
+
+    data = dict(
+        sentence_note=note.sentence_note, tags=[t.text for t in note.sentence_tags]
+    )
+    return jsonify(data)
+
+
+@bp.post("/sentencenote/<bookid>/<pagenum>/<sentence>")
+def update_sentencenote(bookid, pagenum, sentence):
+    new_note = request.json.get("new_note", "")
+    raw_tags = request.json.get("tags", [])
+    tags = [tag["value"] for tag in raw_tags]
+    try:
+        if new_note.strip() != "":
+            create_or_update_sentence_note(
+                bookid, pagenum, sentence, new_note, tags, db.session
+            )
+        res = {"status": "1"}
+    except:
+        res = {"status": "0"}
+
+    return jsonify(res)

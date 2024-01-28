@@ -1096,7 +1096,7 @@ div.help-text {
 
 
 /* TERM FORM STYLES */
-#term-form-container {
+#term-form-container,#sentencenote-container {
     padding: 1.5rem;
     padding-bottom: 1rem;
 }
@@ -1111,9 +1111,14 @@ div.help-text {
     width: 100%;
 }
 
-#translation {
+#translation{
     height: 50px;
     min-height: 50px;
+    vertical-align: top /* removes annoying extra space below */
+}
+#sentencenote {
+    height: 6rem;
+    min-height: 3rem;
     vertical-align: top /* removes annoying extra space below */
 }
 

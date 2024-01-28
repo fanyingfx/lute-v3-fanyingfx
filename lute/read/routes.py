@@ -307,7 +307,8 @@ def sentencenote(bookid, pagenum, sentence):
         return jsonify(dict(sentence_note=""))
 
     data = dict(
-        sentence_note=note.sentence_note, tags=[t.text for t in note.sentence_tags]
+        sentence_note=note.sentence_note,
+        tags=[{"value": t.text} for t in note.sentence_tags],
     )
     return jsonify(data)
 
@@ -325,7 +326,7 @@ def update_sentencenote(bookid, pagenum, sentence):
         res = {"status": "1", "message": "Update note successful"}
     else:
         if delete_sentence_note(bookid, pagenum, sentence, db.session):
-            res = {"status": "1", "message": "Note deleted!"}
+            res = {"status": "2", "message": "Note deleted!"}
         else:
             res = {"status": "1", "message": "Note is empty!"}
 

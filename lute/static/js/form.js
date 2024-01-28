@@ -198,6 +198,7 @@ $(document).ready(function () {
   var termtags_tagify = setup_tags_tagify(termtagslist);
   var sentencetagslist = document.getElementById("snotetags");
   var sentencetags_tagify = setup_tags_tagify(sentencetagslist);
+  get_note(sentencetags_tagify);
 
   if (($("#text").val() ?? "") != "") {
     do_term_lookup(false);
@@ -373,7 +374,7 @@ function searchword() {
   const url = get_lookup_url(dicturl, word);
   top.frames.dictframe.location.href = url;
 }
-(function get_note() {
+function get_note(sentencetags_tagify) {
   const queryParams = new URLSearchParams(window.location.search);
   const bookid = queryParams.get("bookid");
   const pagenum = queryParams.get("pagenum");
@@ -388,9 +389,10 @@ function searchword() {
     })
     .then((res) => {
       noteEle.innerText = res.sentence_note;
+      console.log({ tags: res });
       stagfy.addTags(res.tags);
     });
-})();
+}
 function update_note() {
   const queryParams = new URLSearchParams(window.location.search);
   const bookid = queryParams.get("bookid");
@@ -428,6 +430,9 @@ function update_note() {
     .then((data) => {
       messagefloatWindow.style.display = "block";
       messagefloatWindow.innerText = data.message;
+      if (data.status === "2") {
+        stagfy.removeAllTags();
+      }
       setTimeout(function () {
         messagefloatWindow.style.display = "none";
       }, 1500);

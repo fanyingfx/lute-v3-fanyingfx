@@ -456,8 +456,21 @@ div#reading-footer span {
     text-decoration-color: #2b75b854;
     text-underline-offset: 0.4rem;
 }
+.has_note  ruby>rt{
+    text-decoration-line: underline;
+    text-decoration-color: #2b75b854;
+    text-underline-offset: 1.4rem;
+    text-decoration-thickness: 0.1rem;
+}
 .has_note>span:last-child>ruby{
     text-decoration:none;
+}
+.has_note>span:last-child>ruby>rt{
+    text-decoration:none;
+}
+rt{
+    /*display: block;*/
+    font-size: 0.9rem;
 }
 /* Styles for 4K screens */
 /*@media screen and (min-width: 2160px) {*/

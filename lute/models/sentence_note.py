@@ -17,7 +17,7 @@ class SentenceNote(db.Model):
 
     sentence = db.Column("SeText", db.String(500))
 
-    sentence_note = db.Column("SeNtText", db.String(500))
+    sentence_note = db.Column("SeNtText", db.Text())
     sentence_tags = db.relationship("TermTag", secondary="sentencenotetags")
 
     def __init__(self, bookid, pagenum, sentence, sentence_note):

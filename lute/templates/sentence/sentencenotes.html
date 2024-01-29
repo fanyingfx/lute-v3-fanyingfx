@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Terms{% endblock %}
+{% block header %}Terms{% endblock %}
+{% block body %}
+    <table id="snotetable" class="table dataTable stripe">
+        <thead>
+            <tr>
+{#                    <input type="checkbox" id="chkAll" onclick="handleChkAll()">#}
+                <th>Sentence</th>
+                <th>SentenceNote</th>
+                <th>Tags</th>
+                <th>BookName</th>
+                <th>SentenceNoteID</th>
+            </tr>
+        </thead>
+    </table>
+    <script>
+                $('#snotetable').DataTable({
+                    ajax: "/sentence/sentencenotes/data"
+                })
+                ;
+
+    {#fetch('/sentence/sentencenotes/data').#}
+    {#then(res=>res.json())#}
+    {#    .then(data=>{#}
+            {#console.log(data)#}
+    {#        $('#snotetable').DataTable( {#}
+    {#            data: data,#}
+    {#            colunms: [#}
+    {#                {"name": "sentence"},#}
+    {#                {"name":"sentencenote"},#}
+    {#                {"name":"tags"},#}
+    {#                {"name":"bookname"},#}
+    {#                {"name":"sentencenoteid"}#}
+
+            {#    ]#}
+            {# );#}
+
+        {#)#}
+    </script>
+{% endblock %}

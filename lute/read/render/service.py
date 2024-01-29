@@ -3,11 +3,8 @@ Reading rendering helpers.
 """
 
 import re
-from functools import lru_cache
-
 from sqlalchemy import text as sqltext
 
-import tasks
 from lute.models.sentence_note import SentenceNote
 from lute.models.setting import UserSetting
 from lute.models.term import Term

@@ -273,6 +273,9 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         parts = " ".join(parts)
         return f'<RenderableCandidate "{self.text}", {parts}>'
 
+    def __str__(self):
+        return self.text
+
     @property
     def term_id(self) -> int:
         return self.term.id if self.term else None
@@ -304,8 +307,8 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.is_word = self.is_word
         t.text_length = len(self.text)
         t.lemma = self.lemma
-        if t.reading.strip()=="" and self.reading and self.reading.strip()!="":
-            t.reading=self.reading
+        if t.reading.strip() == "" and self.reading and self.reading.strip() != "":
+            t.reading = self.reading
         t.show_reading = show_reading
         t.is_img = self.is_img
         if t.is_img:
@@ -452,7 +455,11 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self._show_tooltip: bool = None
         self.lemma: str = None
 
-        self.reading: str = term.romanization if term is not None and term.romanization is not None else ""
+        self.reading: str = (
+            term.romanization
+            if term is not None and term.romanization is not None
+            else ""
+        )
         self.show_reading = True
         self.is_img = False
 

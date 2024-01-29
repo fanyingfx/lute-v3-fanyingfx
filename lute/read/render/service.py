@@ -7,11 +7,22 @@ from functools import lru_cache
 
 from sqlalchemy import text as sqltext
 
+import tasks
+from lute.models.sentence_note import SentenceNote
 from lute.models.setting import UserSetting
 from lute.models.term import Term
 from lute.parse.base import ParsedToken
 from lute.read.render.renderable_calculator import RenderableCalculator
 from lute.db import db
+
+
+def clean_text(text):
+    zws = "\u200b"
+    text = text.strip()
+    chars_should_be_cleaned = [zws, "「", "」"]
+    for c in chars_should_be_cleaned:
+        text = text.replace(c, "")
+    return text
 
 
 def find_all_Terms_in_string(s, language):  # pylint: disable=too-many-locals
@@ -83,6 +94,15 @@ def find_all_Terms_in_string(s, language):  # pylint: disable=too-many-locals
     return terms_matching_tokens + contained_terms
 
 
+def find_all_sentences_with_note(bookid, page_num):
+    sentences_with_note = (
+        db.session.query(SentenceNote)
+        .filter(SentenceNote.book_id == bookid, SentenceNote.page_id == page_num)
+        .all()
+    )
+    return frozenset([sn.sentence for sn in sentences_with_note])
+
+
 class RenderableSentence:
     """
     A collection of TextItems to be rendered.
@@ -91,14 +111,18 @@ class RenderableSentence:
     def __init__(self, sentence_id, textitems):
         self.sentence_id = sentence_id
         self.textitems = textitems
+        self.sentence_with_note = False
 
     def __repr__(self):
         s = "".join([t.display_text for t in self.textitems])
         return f'<RendSent {self.sentence_id}, {len(self.textitems)} items, "{s}">'
 
+    def __str__(self):
+        return "".join([clean_text(t.display_text) for t in self.textitems])
+
 
 # @lru_cache()
-def get_paragraphs(s, language, bookid=0):
+def get_paragraphs(s, language, bookid=0, page_num=1):
     """
     Get array of arrays of RenderableSentences for the given string s.
     """
@@ -128,6 +152,7 @@ def get_paragraphs(s, language, bookid=0):
         show_reading = bool(int(UserSetting.get_value("show_reading")))
     else:
         show_reading = False
+    sentences_with_note = find_all_sentences_with_note(bookid, page_num)
 
     def make_RenderableSentence(pnum, sentence_num, tokens, terms):
         """
@@ -135,6 +160,7 @@ def get_paragraphs(s, language, bookid=0):
         that sentence.  The current text and language are pulled
         into the function from the closure.
         """
+        nonlocal sentences_with_note
         sentence_tokens = [t for t in tokens if t.sentence_number == sentence_num]
         renderable = RenderableCalculator.get_renderable(
             language, terms, sentence_tokens
@@ -144,6 +170,8 @@ def get_paragraphs(s, language, bookid=0):
             for i in renderable
         ]
         ret = RenderableSentence(sentence_num, textitems)
+        if str(ret) in sentences_with_note:
+            ret.sentence_with_note = True
         return ret
 
     def unique(arr):

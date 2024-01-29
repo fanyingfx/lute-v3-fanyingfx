@@ -29,9 +29,9 @@ def set_unknowns_to_known(text: Text):
 
     def is_unknown(ti):
         return (
-            ti.is_word == 1
-            and (ti.wo_id == 0 or ti.wo_id is None)
-            and ti.token_count == 1
+                ti.is_word == 1
+                and (ti.wo_id == 0 or ti.wo_id is None)
+                and ti.token_count == 1
         )
 
     unknowns = list(filter(is_unknown, tis))
@@ -85,7 +85,7 @@ def start_reading(dbbook, pagenum, db_session):
     db_session.add(text)
     db_session.commit()
 
-    paragraphs = get_paragraphs(text.text, text.book.language, text.bk_id)
+    paragraphs = get_paragraphs(text.text, text.book.language, text.bk_id, pagenum)
 
     return paragraphs
 
@@ -99,7 +99,7 @@ def get_sentencenote(bookid, pagenum, sentence, db_session: Session):
 
 
 def create_or_update_sentence_note(
-    bookid, pagenum, sentence, text_note, tags, db_session: Session
+        bookid, pagenum, sentence, text_note, tags, db_session: Session
 ):
     note = (
         db_session.query(SentenceNote)

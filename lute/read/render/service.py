@@ -117,7 +117,7 @@ class RenderableSentence:
         s = "".join([t.display_text for t in self.textitems])
         return f'<RendSent {self.sentence_id}, {len(self.textitems)} items, "{s}">'
 
-    def __str__(self):
+    def get_sentence(self):
         return "".join([clean_text(t.display_text) for t in self.textitems])
 
 
@@ -170,7 +170,7 @@ def get_paragraphs(s, language, bookid=0, page_num=1):
             for i in renderable
         ]
         ret = RenderableSentence(sentence_num, textitems)
-        if str(ret) in sentences_with_note:
+        if ret.get_sentence() in sentences_with_note:
             ret.sentence_with_note = True
         return ret
 

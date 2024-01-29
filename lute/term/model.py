@@ -79,7 +79,7 @@ class TermReference:
     "Where a Term has been used in books."
 
     def __init__(
-        self, bookid, txid, pgnum, title, sentence=None
+            self, bookid, txid, pgnum, title, sentence=None
     ):  # pylint: disable=too-many-arguments
         self.book_id = bookid
         self.text_id = txid
@@ -334,8 +334,8 @@ class Repository:
             p
             for p in term.parents
             if p is not None
-            and p != ""
-            and lang.get_lowercase(term.text) != lang.get_lowercase(p)
+               and p != ""
+               and lang.get_lowercase(term.text) != lang.get_lowercase(p)
         ]
         # print('creating parents: ' + ', '.join(create_parents))
         for p in create_parents:
@@ -361,8 +361,15 @@ class Repository:
             return p
         zws = "\u200B"
         pt_lemma = pt.strip().replace(zws, "")
+        if language.name not in ("Chinese", "Japanese"):
+            tokens = language.get_parsed_tokens(pt)
+            tokens = [tok for tok in tokens if tok.token != "¶"]
+            tok_strings = [tok.token for tok in tokens]
+            raw_tokens = tok_strings
+        else:
+            raw_tokens = [pt_lemma]
 
-        p = DBTerm(language, pt, lemma=pt_lemma, raw_tokens=[pt_lemma])
+        p = DBTerm(language, pt, lemma=pt_lemma, raw_tokens=raw_tokens)
         p.status = term.status
         p.translation = term.translation
         p.set_current_image(term.current_image)

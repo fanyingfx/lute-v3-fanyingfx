@@ -453,8 +453,8 @@ div#reading-footer span {
 
 .has_note  ruby{
     text-decoration-line: underline;
-    text-decoration-color: #ff7ca8;
-    text-underline-offset: 0.3rem;
+    text-decoration-color: #2b75b854;
+    text-underline-offset: 0.4rem;
 }
 .has_note>span:last-child>ruby{
     text-decoration:none;

@@ -3,8 +3,6 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>Form</title>
-        <div id="form_all_tags" data-tags='{{ tags }}'></div>
-        <div id="languagedicts" data-languagedicts='{{ language_dicts }}'></div>
         <link rel="stylesheet"
               type="text/css"
               href="{{ url_for('static', filename='css/jquery-ui.css') }}" />
@@ -37,12 +35,6 @@
         <script type="text/javascript"
                 src="{{ url_for('static', filename='js/tagify.polyfills.min.js') }}"
                 charset="utf-8"></script>
-        <script type="text/javascript">
-            const form_all_tags=$('#form_all_tags')
-            let TAGS = form_all_tags.data('tags')
-            let LANGUAGES = $('#languagedicts').data('languagedicts')
-
-        </script>
     </head>
     <body>
         {% if term.flash_message %}<p class='small-flash-notice'>{{ term.flash_message }}</p>{% endif %}

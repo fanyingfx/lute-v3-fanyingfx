@@ -49,7 +49,8 @@ let setup_parent_tagify = function (input) {
     }
 
     let url = "";
-    if ("{{ embedded_in_reading_frame }}" == "True") {
+    let eir = $("#embedded-in-frame").data("embed");
+    if (eir == "True") {
       url = `/read/termform/${langid}/${clickedTagText}`;
     } else {
       url = `/term/editbytext/${langid}/${clickedTagText}`;
@@ -198,7 +199,7 @@ $(document).ready(function () {
   var termtags_tagify = setup_tags_tagify(termtagslist);
   var sentencetagslist = document.getElementById("snotetags");
   var sentencetags_tagify = setup_tags_tagify(sentencetagslist);
-  get_note(sentencetags_tagify);
+  get_note();
 
   if (($("#text").val() ?? "") != "") {
     do_term_lookup(false);
@@ -348,9 +349,12 @@ function deleteTerm() {
     "Are you sure you want to delete this term?\n\n" +
     "This action cannot be undone, and if this term has children, they will be orphaned.";
   if (!confirm(msg)) return;
+  term = $("#curr_term");
+  termid = term.data("termid");
+  embed_in_reading_frame = $("#embedded-in-frame").data("embed");
 
-  $.post("/term/delete/{{ term.id }}", function (data) {
-    if ("{{ embedded_in_reading_frame }}" == "True") {
+  $.post(`/term/delete/${termid}`, function (data) {
+    if (embed_in_reading_frame === "True") {
       // If on reading page, reload page
       parent.location.reload();
     } else {
@@ -374,7 +378,7 @@ function searchword() {
   const url = get_lookup_url(dicturl, word);
   top.frames.dictframe.location.href = url;
 }
-function get_note(sentencetags_tagify) {
+function get_note() {
   const queryParams = new URLSearchParams(window.location.search);
   const bookid = queryParams.get("bookid");
   const pagenum = queryParams.get("pagenum");
@@ -404,14 +408,6 @@ function update_note() {
   let noteEle = document.getElementById("sentencenote");
   let messagefloatWindow = document.getElementById("sentence-note-message");
   let text = noteEle.value;
-  // if (text.trim() === "") {
-  //   messagefloatWindow.style.display = "block";
-  //   messagefloatWindow.innerText = "Note is empty!";
-  //   setTimeout(function () {
-  //     messagefloatWindow.style.display = "none";
-  //   }, 1500);
-  //   return;
-  // }
   const options = {
     method: "POST",
     headers: {
@@ -433,6 +429,7 @@ function update_note() {
       if (data.status === "2") {
         stagfy.removeAllTags();
       }
+      reload_text_div();
       setTimeout(function () {
         messagefloatWindow.style.display = "none";
       }, 1500);

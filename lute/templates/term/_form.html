@@ -4,6 +4,17 @@
         <div class="flash-notice-narrow">{{ error }}</div>
     {% endfor %}
 {% endfor %}
+<div id="form_all_tags" data-tags='{{ tags }}' style="display: none"></div>
+<div id="languagedicts" data-languagedicts='{{ language_dicts }}' style="display: none"></div>
+<div id="curr_term" data-termid='{{ term.id }}' style="display: none"></div>
+<div id="embedded-in-frame" data-embed='{{ embedded_in_reading_frame }}' style="display: none"></div>
+
+<script type="text/javascript">
+        const form_all_tags=$('#form_all_tags')
+        let TAGS = form_all_tags.data('tags')
+        let LANGUAGES = $('#languagedicts').data('languagedicts')
+
+</script>
 <link rel="stylesheet"
       href="{{ url_for('static', filename='css/form.css') }}">
 <div id="term-form-container">
@@ -72,4 +83,5 @@
         <button type="button" onclick="searchword(); return false;">Search</button>
     </div>
 </div>
+<script src="{{ url_for('static',filename='js/reading.js') }}"></script>
 <script src="{{ url_for('static',filename='js/form.js') }}"></script>

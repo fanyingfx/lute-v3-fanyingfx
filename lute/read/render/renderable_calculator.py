@@ -273,9 +273,6 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         parts = " ".join(parts)
         return f'<RenderableCandidate "{self.text}", {parts}>'
 
-    def __str__(self):
-        return self.text
-
     @property
     def term_id(self) -> int:
         return self.term.id if self.term else None

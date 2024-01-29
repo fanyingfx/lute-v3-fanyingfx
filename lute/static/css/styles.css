@@ -451,37 +451,25 @@ div#reading-footer span {
     margin-bottom: 1rem;
 }
 
+/* underline for sentence with note */
 .has_note>span{
-     border-bottom: 2px solid #2b75b854; /* Adjust thickness and color as needed */
-      display: inline; /* Ensures that the border doesn't affect the layout */
+    position: relative;
+}
+
+.has_note>span::after{
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -3px; /* Adjust as needed */
+  width: 100%;
+  border-bottom: 2px solid #2b75b854;
+}
+.has_note>span:last-child::after{
+    border-bottom: none;
+    display: inline;
     padding-bottom: 0.1rem
 }
-.has_note>span:last-child{
-    border-bottom: none; /* Adjust thickness and color as needed */
-    display: inline; /* Ensures that the border doesn't affect the layout */
-    padding-bottom: 0.1rem
-}
-/*
-.has_note  ruby{
-    text-decoration-line: underline;
-    text-decoration-color: #2b75b854;
-    text-underline-offset: 0.4rem;
-}
-.has_note  ruby>rt{
-    text-decoration-line: underline;
-    text-decoration-color: #2b75b854;
-    text-underline-offset: 1.5rem;
-    text-decoration-thickness: 0.1rem;
-}
-.has_note>span:last-child>ruby{
-    text-decoration:none;
-}
-.has_note>span:last-child>ruby>rt{
-    text-decoration:none;
-}
-*/
 rt{
-    /*display: block;*/
     font-size: 0.9rem;
 }
 /* Styles for 4K screens */

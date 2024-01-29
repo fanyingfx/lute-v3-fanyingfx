@@ -451,6 +451,17 @@ div#reading-footer span {
     margin-bottom: 1rem;
 }
 
+.has_note>span{
+     border-bottom: 2px solid #2b75b854; /* Adjust thickness and color as needed */
+      display: inline; /* Ensures that the border doesn't affect the layout */
+    padding-bottom: 0.1rem
+}
+.has_note>span:last-child{
+    border-bottom: none; /* Adjust thickness and color as needed */
+    display: inline; /* Ensures that the border doesn't affect the layout */
+    padding-bottom: 0.1rem
+}
+/*
 .has_note  ruby{
     text-decoration-line: underline;
     text-decoration-color: #2b75b854;
@@ -459,7 +470,7 @@ div#reading-footer span {
 .has_note  ruby>rt{
     text-decoration-line: underline;
     text-decoration-color: #2b75b854;
-    text-underline-offset: 1.4rem;
+    text-underline-offset: 1.5rem;
     text-decoration-thickness: 0.1rem;
 }
 .has_note>span:last-child>ruby{
@@ -468,6 +479,7 @@ div#reading-footer span {
 .has_note>span:last-child>ruby>rt{
     text-decoration:none;
 }
+*/
 rt{
     /*display: block;*/
     font-size: 0.9rem;
@@ -633,9 +645,11 @@ span.textitem {
 
     /* Add a transparent border so that when the .wordhover or .kwordmarked
    style is added, things don't get pushed around. */
+}
+span.textitem>ruby{
+
     border-bottom: 1px solid transparent;
 }
-
 /* .click */
 /* { */
     /* cursor: pointer; */

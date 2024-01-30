@@ -1,3 +1,4 @@
+<div id="rawdata" data-status="{{ status or 'active' }}" data-intial_search="{{ initial_search or '' }}" style="display: none"></div>
 <table id="booktable" class="table dataTable stripe">
     <thead>
         <tr>
@@ -19,6 +20,7 @@
   var book_listing_table;
 
   let setup_text_datatable = function(initial_search) {
+    let rawdata = document.getElementById('rawdata')
     book_listing_table = $('#booktable').DataTable({
       {% if status != 'Archived' %}
       "language": {
@@ -55,7 +57,7 @@
 
       // Ajax call
       ajax: {
-        url: "/book/datatables/{{ status or 'active' }}",
+        url: `/book/datatables/${rawdata.dataset.status}`,
         type: "POST",
         dataType: "json"
       },
@@ -66,7 +68,8 @@
 
 
   $(document).ready(function () {
-    setup_text_datatable("{{ initial_search or '' }}");
+      let rawdata = document.getElementById('rawdata')
+    setup_text_datatable(rawdata.dataset.initial_search);
   });
 
   function do_action_post(action, bookid) {

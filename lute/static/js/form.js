@@ -378,36 +378,31 @@ function searchword() {
   const url = get_lookup_url(dicturl, word);
   top.frames.dictframe.location.href = url;
 }
-function get_note() {
-  const queryParams = new URLSearchParams(window.location.search);
-  const bookid = queryParams.get("bookid");
-  const pagenum = queryParams.get("pagenum");
-  const sentence = queryParams.get("sentence");
-  url = `/read/sentencenote/${bookid}/${pagenum}/${sentence}`;
-  noteEle = document.getElementById("sentencenote");
-  stagsEle = document.getElementById("snotetags");
-  stagfy = new Tagify(stagsEle);
-  fetch(url)
-    .then((data) => {
-      return data.json();
-    })
-    .then((res) => {
-      noteEle.innerText = res.sentence_note;
-      console.log({ tags: res });
-      stagfy.addTags(res.tags);
-    });
-}
-function update_note() {
+async function get_note() {
   const queryParams = new URLSearchParams(window.location.search);
   const bookid = queryParams.get("bookid");
   const pagenum = queryParams.get("pagenum");
   const sentence = queryParams.get("sentence");
   let url = `/read/sentencenote/${bookid}/${pagenum}/${sentence}`;
+  let noteEle = document.getElementById("sentencenote");
   let stagsEle = document.getElementById("snotetags");
   let stagfy = new Tagify(stagsEle);
-  let noteEle = document.getElementById("sentencenote");
-  let messagefloatWindow = document.getElementById("sentence-note-message");
-  let text = noteEle.value;
+  let res = await fetch(url);
+  let data = await res.json();
+  noteEle.value = data.sentence_note;
+  stagfy.addTags(data.tags);
+}
+async function update_note() {
+  const queryParams = new URLSearchParams(window.location.search);
+  const bookid = queryParams.get("bookid");
+  const pagenum = queryParams.get("pagenum");
+  const sentence = queryParams.get("sentence");
+  const url = `/read/sentencenote/${bookid}/${pagenum}/${sentence}`;
+  const stagsEle = document.getElementById("snotetags");
+  const stagfy = new Tagify(stagsEle);
+  const noteEle = document.getElementById("sentencenote");
+  const messagefloatWindow = document.getElementById("sentence-note-message");
+  const text = noteEle.value;
   const options = {
     method: "POST",
     headers: {
@@ -415,28 +410,16 @@ function update_note() {
     },
     body: JSON.stringify({ new_note: text, tags: stagfy.value }), // Convert the data to JSON format
   };
-  fetch(url, options)
-    .then((response) => {
-      console.log({ res: response });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json(); // Parse the JSON response
-    })
-    .then((data) => {
-      messagefloatWindow.style.display = "block";
-      messagefloatWindow.innerText = data.message;
-      if (data.status === "2") {
-        stagfy.removeAllTags();
-      }
-      reload_text_div();
-      setTimeout(function () {
-        messagefloatWindow.style.display = "none";
-      }, 1500);
-    })
-    .catch((error) => {
-      console.error("There was a problem with your fetch operation:", error);
-    });
+  const response = await fetch(url, options);
+  const data = await response.json(); // Parse the JSON response
+
+  messagefloatWindow.style.display = "block";
+  messagefloatWindow.innerText = data.message;
+  if (data.status === "2") {
+    stagfy.removeAllTags();
+  }
+  reload_text_div();
+  setTimeout(() => (messagefloatWindow.style.display = "none"), 1500);
 }
 
 const searchwordbox = document.getElementById("_searchword");

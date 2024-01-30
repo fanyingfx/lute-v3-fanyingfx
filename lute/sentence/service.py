@@ -17,7 +17,7 @@ def get_all_sentencenotes(db_session):
         l = [
             snote.sentence,
             snote.sentence_note,
-            ",".join(snote.sentence_tags),
+            "|".join((t.text for t in snote.sentence_tags)),
             Book.find(snote.book_id).title,
             snote.id,
         ]

@@ -24,12 +24,12 @@ import json
 bp = Blueprint("sentence", __name__, url_prefix="/sentence")
 
 
-@bp.get("/sentencenotes")
+@bp.get("/sentencenotes/index")
 def render_sentencenotes():
     return render_template("sentence/sentencenotes.html")
 
 
-@bp.get("/sentencenotes/data")
+@bp.get("/sentencenotes")
 def get_sentencenotes():
     all_sentence_notes = get_all_sentencenotes(db.session)
     return jsonify(all_sentence_notes)

@@ -1,19 +1,15 @@
 from lute import db
 from lute.models.sentence_note import SentenceNote
 from lute.models.book import Book
+from sqlalchemy.orm.session import Session
 
 
-def get_all_sentencenotes(db_session):
-    snotes = db_session.query(SentenceNote).all()
+def get_all_sentencenotes(db_session: Session):
+    snotes = (
+        db_session.query(SentenceNote).order_by(SentenceNote.sn_updated.desc()).all()
+    )
     res = []
     for snote in snotes:
-        # d = dict(
-        #     bookname=Book.find(snote.book_id).title,
-        #     sentence=snote.sentence,
-        #     tags=",".join(snote.sentence_tags),
-        #     sentencenote=snote.sentence_note,
-        #     sentencenoteid=snote.id,
-        # )
         l = [
             snote.sentence,
             snote.sentence_note,

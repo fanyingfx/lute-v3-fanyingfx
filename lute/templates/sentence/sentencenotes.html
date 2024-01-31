@@ -15,27 +15,39 @@
         </thead>
     </table>
     <script>
-                $('#snotetable').DataTable({
-                    ajax: "/sentence/sentencenotes"
-                })
-                ;
 
-    {#fetch('/sentence/sentencenotes/data').#}
+    $(document).ready(function() {
+        render_datables()
+    })
+
+
+        async function render_datables(){
+        res = await fetch('/sentence/sentencenotes');
+        rows = await res.json();
+
+        let table = $('#snotetable').DataTable(
+                { data: rows.data,
+                    columns: [
+                        {"name": "Sentence"},
+                        {"name": "SentenceNote"},
+                        {"name": "Tags"},
+                        {"name": "BookName"},
+                        {"name": "SentenceNoteID"}
+                    ],
+                }
+            )
+
+        {#table.clear().rows.add(rows.data).draw()#}
+
+    };
+
+    {#fetch('/sentence/sentencenotes').#}
     {#then(res=>res.json())#}
     {#    .then(data=>{#}
-            {#console.log(data)#}
+    {#        console.log(data)#}
     {#        $('#snotetable').DataTable( {#}
-    {#            data: data,#}
-    {#            colunms: [#}
-    {#                {"name": "sentence"},#}
-    {#                {"name":"sentencenote"},#}
-    {#                {"name":"tags"},#}
-    {#                {"name":"bookname"},#}
-    {#                {"name":"sentencenoteid"}#}
-
-            {#    ]#}
-            {# );#}
-
-        {#)#}
+    {#            data: data}#}
+    {#         )}#}
+    {#    )#}
     </script>
 {% endblock %}

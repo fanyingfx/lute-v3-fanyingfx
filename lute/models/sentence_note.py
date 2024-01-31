@@ -16,6 +16,9 @@ class SentenceNote(db.Model):
     page_id = db.Column("PageID", db.Integer)
 
     sentence = db.Column("SeText", db.String(500))
+    sn_updated = db.Column(
+        "SnUpdated", db.DateTime, default=db.func.current_timestamp()
+    )
 
     sentence_note = db.Column("SeNtText", db.Text())
     sentence_tags = db.relationship("TermTag", secondary="sentencenotetags")

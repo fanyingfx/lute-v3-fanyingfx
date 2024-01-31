@@ -4,10 +4,10 @@ CREATE TRIGGER  trig_sn_update_SnUpdated
     AFTER UPDATE OF SeNtText
     ON sentencenote
     FOR EACH ROW
-    WHEN (old.SeNtText<> new.SeNtText
-          )
+    WHEN old.SeNtText<> new.SeNtText
+
 BEGIN
     UPDATE sentencenote
     SET SnUpdated= CURRENT_TIMESTAMP
-    WHERE SeNtText = NEW.SeNtID;
+    WHERE SeNtID = NEW.SeNtID;
 END

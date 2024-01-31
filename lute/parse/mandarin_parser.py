@@ -3,23 +3,19 @@ Default using jieba to parse Chinese.
 https://github.com/fxsjy/jieba
 
 """
-import os
-from collections import OrderedDict
-from typing import List
+import importlib
 from functools import lru_cache
 from itertools import chain
+from typing import List
 
-from flask import current_app
+from hanlp.utils import log_util
 from pypinyin import pinyin
+
 from lute.parse.base import AbstractParser
 from lute.parse.base import ParsedToken
-import importlib
-from hanlp.utils import log_util
-
-from lute.parse.user_dicts import load_from_db, load_from_file
+from lute.parse.user_dicts import load_from_db
 
 log_util.enable_debug(False)
-
 
 CHINESE_PUNCTUATIONS = (
     r"！？｡。＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､、〃》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏.\n"
@@ -37,7 +33,7 @@ class MandarinParser(AbstractParser):
         self.dict_loaded = False
         self._cache = {}
 
-    def load_dict_from_file(self,language):
+    def load_dict_from_file(self, language):
         if self.dict_loaded:
             return
         # dict_path = os.path.join(

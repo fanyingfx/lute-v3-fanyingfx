@@ -7,6 +7,8 @@ build-backend = "flit_core.buildapi"
 # code is in the "lute" folder.
 [tool.flit.module]
 name = "lute"
+[tool.autoflake]
+check=true
 
 [project]
 name = "lute3_fy"

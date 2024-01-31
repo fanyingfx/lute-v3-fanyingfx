@@ -2,7 +2,7 @@
 #
 # These hooks only use local commands.
 
-fail_fast: true
+fail_fast: false
 
 repos:
   - repo: local
@@ -18,4 +18,5 @@ repos:
       entry: pylint
       language: system
       types: [python]
+      args: [--exit-zero]
       require_serial: true

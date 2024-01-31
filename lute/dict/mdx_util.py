@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 # version: python 3.5
-
-import sys
+"""
+process mdx file query
+"""
 import re
 from pathlib import Path
 from typing import List
 
-from mdict_query.mdict_query import IndexBuilder
 from bs4 import BeautifulSoup
-
+from mdict_query.mdict_query import IndexBuilder
 
 content_type_map = {
     "html": "text/html; charset=utf-8",
@@ -30,6 +30,7 @@ content_type_map = {
     "woff2": "application/font-woff2",
 }
 
+
 # from file_util import *
 
 
@@ -37,9 +38,10 @@ def process_audio(soup: BeautifulSoup):
     l = soup.find_all("a", {"class": ["sound", "aud-btn"]})
     for a in l:
         a.name = "span"
-        a.attrs[
-            "onclick"
-        ] = "function pl(el){if (el.nodeName=='AUDIO') el.play(); console.log(el)};function playAudio(e){e.childNodes.forEach(pl)};playAudio(this)"
+        a.attrs["onclick"] = (
+            "function pl(el){if (el.nodeName=='AUDIO') el.play(); console.log(el)};function playAudio(e){"
+            "e.childNodes.forEach(pl)};playAudio(this)"
+        )
         href = a.get("href")
         sound_file = href.split("//")[-1]
         sound_type = sound_file.split(".")[-1]
@@ -86,6 +88,8 @@ def get_definition_mdd(word, builder: IndexBuilder):
     if len(content) > 0:
         return content[0]
     return b""
+
+
 def get_local_resource(resource_paths: List[Path]):
     local_map = {}
     for resource_path in resource_paths:
@@ -128,5 +132,3 @@ class MDXDict:
             res = b""
             print("none", resource_path)
         return res
-
-

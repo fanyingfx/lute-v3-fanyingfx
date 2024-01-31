@@ -3,14 +3,15 @@ Reading helpers.
 """
 from sqlalchemy.orm import Session
 
-from lute.models.sentence_note import SentenceNote
-from lute.models.term import Term, Status, TermTag
-from lute.models.book import Text
 from lute.book.stats import mark_stale
+from lute.db import db
+from lute.models.book import Text
+from lute.models.sentence_note import SentenceNote
+from lute.models.term import Status
+from lute.models.term import Term
+from lute.models.term import TermTag
 from lute.read.render.service import get_paragraphs
 from lute.term.model import Repository
-
-from lute.db import db
 
 
 def set_unknowns_to_known(text: Text):
@@ -29,9 +30,9 @@ def set_unknowns_to_known(text: Text):
 
     def is_unknown(ti):
         return (
-                ti.is_word == 1
-                and (ti.wo_id == 0 or ti.wo_id is None)
-                and ti.token_count == 1
+            ti.is_word == 1
+            and (ti.wo_id == 0 or ti.wo_id is None)
+            and ti.token_count == 1
         )
 
     unknowns = list(filter(is_unknown, tis))
@@ -90,7 +91,7 @@ def start_reading(dbbook, pagenum, db_session):
     return paragraphs
 
 
-def get_sentencenote(bookid, pagenum, sentence, db_session: Session):
+def get_sentencenote(bookid, pagenum, sentence, db_session: Session) -> SentenceNote:
     return (
         db_session.query(SentenceNote)
         .filter_by(book_id=bookid, page_id=pagenum, sentence=sentence)
@@ -99,7 +100,7 @@ def get_sentencenote(bookid, pagenum, sentence, db_session: Session):
 
 
 def create_or_update_sentence_note(
-        bookid, pagenum, sentence, text_note, tags, db_session: Session
+    bookid, pagenum, sentence, text_note, tags, db_session: Session
 ):
     note = (
         db_session.query(SentenceNote)

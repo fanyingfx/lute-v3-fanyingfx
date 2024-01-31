@@ -79,7 +79,7 @@ class TermReference:
     "Where a Term has been used in books."
 
     def __init__(
-            self, bookid, txid, pgnum, title, sentence=None
+        self, bookid, txid, pgnum, title, sentence=None
     ):  # pylint: disable=too-many-arguments
         self.book_id = bookid
         self.text_id = txid
@@ -334,8 +334,8 @@ class Repository:
             p
             for p in term.parents
             if p is not None
-               and p != ""
-               and lang.get_lowercase(term.text) != lang.get_lowercase(p)
+            and p != ""
+            and lang.get_lowercase(term.text) != lang.get_lowercase(p)
         ]
         # print('creating parents: ' + ', '.join(create_parents))
         for p in create_parents:

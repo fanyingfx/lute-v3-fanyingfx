@@ -270,7 +270,6 @@ let do_image_lookup = function () {
   );
   const url = `/bing/search/${langid}/${encodeURIComponent(use_text)}/${encodeURIComponent(binghash)}`;
   top.frames.dictframe.location.href = url;
-  return;
 };
 
 /**

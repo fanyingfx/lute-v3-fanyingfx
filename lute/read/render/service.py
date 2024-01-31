@@ -3,6 +3,8 @@ Reading rendering helpers.
 """
 
 import re
+from typing import List, Tuple, Set, FrozenSet, Dict
+
 from sqlalchemy import text as sqltext
 
 from lute.models.sentence_note import SentenceNote
@@ -91,13 +93,13 @@ def find_all_Terms_in_string(s, language):  # pylint: disable=too-many-locals
     return terms_matching_tokens + contained_terms
 
 
-def find_all_sentences_with_note(bookid, page_num):
-    sentences_with_note = (
+def find_all_sentences_with_note(bookid, page_num) -> Dict[str, bool]:
+    sentences_with_note: List[SentenceNote] = (
         db.session.query(SentenceNote)
         .filter(SentenceNote.book_id == bookid, SentenceNote.page_id == page_num)
         .all()
     )
-    return frozenset([sn.sentence for sn in sentences_with_note])
+    return {sn.sentence: "?" in sn.get_sentence_tags() for sn in sentences_with_note}
 
 
 class RenderableSentence:
@@ -109,6 +111,7 @@ class RenderableSentence:
         self.sentence_id = sentence_id
         self.textitems = textitems
         self.sentence_with_note = False
+        self.sentence_note_has_question = False
 
     def __repr__(self):
         s = "".join([t.display_text for t in self.textitems])
@@ -169,6 +172,7 @@ def get_paragraphs(s, language, bookid=0, page_num=1):
         ret = RenderableSentence(sentence_num, textitems)
         if ret.get_sentence() in sentences_with_note:
             ret.sentence_with_note = True
+            ret.sentence_note_has_question = sentences_with_note[ret.get_sentence()]
         return ret
 
     def unique(arr):

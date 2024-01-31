@@ -109,12 +109,12 @@ def export_terms():
 
 
 def handle_term_form(
-        term: Term,
-        repo: Repository,
-        form_template_name,
-        return_on_success,
-        embedded_in_reading_frame=False,
-        tokens_raw=None,
+    term: Term,
+    repo: Repository,
+    form_template_name,
+    return_on_success,
+    embedded_in_reading_frame=False,
+    tokens_raw=None,
 ):
     """
     Handle a form post.

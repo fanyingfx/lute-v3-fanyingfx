@@ -98,13 +98,6 @@ CREATE TABLE IF NOT EXISTS "tags" (
 	"TgComment" VARCHAR(200) NOT NULL DEFAULT '' ,
 	PRIMARY KEY ("TgID")
 );
-INSERT INTO tags VALUES(1,'test','');
-INSERT INTO tags VALUES(2,'外','');
-INSERT INTO tags VALUES(3,'地名','');
-INSERT INTO tags VALUES(4,'he','');
-INSERT INTO tags VALUES(5,'pe','');
-INSERT INTO tags VALUES(6,'N5','');
-INSERT INTO tags VALUES(7,'tes','');
 CREATE TABLE IF NOT EXISTS "tags2" (
 	"T2ID" INTEGER NOT NULL  ,
 	"T2Text" VARCHAR(20) NOT NULL  ,
@@ -125,11 +118,6 @@ CREATE TABLE IF NOT EXISTS "wordtags" (
 	FOREIGN KEY("WtWoID") REFERENCES "words" ("WoID") ON UPDATE NO ACTION ON DELETE CASCADE,
 	FOREIGN KEY("WtTgID") REFERENCES "tags" ("TgID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
-INSERT INTO wordtags VALUES(10,1);
-INSERT INTO wordtags VALUES(11,1);
-INSERT INTO wordtags VALUES(13,5);
-INSERT INTO wordtags VALUES(15,2);
-INSERT INTO wordtags VALUES(15,3);
 CREATE TABLE IF NOT EXISTS "sentences" (
 	"SeID" INTEGER NOT NULL  ,
 	"SeTxID" INTEGER NOT NULL  ,
@@ -138,110 +126,6 @@ CREATE TABLE IF NOT EXISTS "sentences" (
 	PRIMARY KEY ("SeID"),
 	FOREIGN KEY("SeTxID") REFERENCES "texts" ("TxID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
-INSERT INTO sentences VALUES(1468,21,1,'​北風​と​太陽​¶​¶​「​おれ​の​方​が​強い​。​');
-INSERT INTO sentences VALUES(1469,21,2,'​」​「​いい​や​、​ぼく​の​方​が​強い​。​');
-INSERT INTO sentences VALUES(1470,21,3,'​」​¶​北風​と​太陽​の​声​が​聞こえ​ます​。​');
-INSERT INTO sentences VALUES(1471,21,4,'​二人​は​どちら​の​力​が​強い​か​で​ケンカ​を​し​て​いる​よう​です​。​');
-INSERT INTO sentences VALUES(1472,21,5,'​¶​「​太陽​が​毎日​元気​だ​から​、​暑く​て​みんな​困っ​て​いる​よ​。​');
-INSERT INTO sentences VALUES(1473,21,6,'​おれ​が​涼しい​風​を​吹く​と​、​みんな​嬉し​そう​だ​。​');
-INSERT INTO sentences VALUES(1474,21,7,'​」​¶​');
-INSERT INTO sentences VALUES(1645,8,1,'​You​ ​can​ ​also​ ​click​ ​on​ ​the​ ​little​ "​eye​ ​icon​" ​next​ ​to​ ​the​ ​term​, ​and​ ​it​ ​opens​ ​up​ ​a​ ​common​ ​image​ ​search​ ​URL​.​');
-INSERT INTO sentences VALUES(1646,8,2,'​¶​');
-INSERT INTO sentences VALUES(1647,8,3,'​¶​');
-INSERT INTO sentences VALUES(1648,8,4,'​In​ ​either​ ​case​, ​if​ ​you​ ​click​ ​on​ ​one​ ​of​ ​the​ ​images​ ​shown​ ​in​ ​the​ ​list​, ​that​ ​image​ ​is​ ​saved​ ​in​ ​your​ ​data​/​userimages​ ​folder​.​');
-INSERT INTO sentences VALUES(1649,8,5,'​When​ ​you​ ​hover​ ​over​ ​the​ ​word​ ​in​ ​the​ ​reading​ ​pane​, ​that​ ​picture​ ​is​ ​included​ ​in​ ​the​ ​word​ ​hover​.​');
-INSERT INTO sentences VALUES(1650,8,6,'​Try​ ​adding​ ​an​ ​image​ ​for​ ​your​ ​elephant​ ​by​ ​clicking​ ​on​ ​the​ ​term​, ​clicking​ ​the​ ​eye​ ​icon​, ​and​ ​clicking​ ​a​ ​picture​ ​you​ ​like​.​');
-INSERT INTO sentences VALUES(1651,8,7,'​Then​ ​hover​ ​over​ ​your​ ​elephant​.​');
-INSERT INTO sentences VALUES(1652,8,8,'​¶​');
-INSERT INTO sentences VALUES(1653,8,9,'​¶​');
-INSERT INTO sentences VALUES(1654,8,10,'​Note​: ​sometimes​ ​these​ ​images​ ​make​ _​no​ ​sense​_ -- ​it​''​s​ ​using​ ​Bing​ ​image​ ​search​, ​and​ ​it​ ​does​ ​the​ ​best​ ​it​ ​can​ ​with​ ​the​ ​limited​ ​context​ ​it​ ​has​.​');
-INSERT INTO sentences VALUES(1655,8,11,'​¶​');
-INSERT INTO sentences VALUES(1656,8,12,'​¶​');
-INSERT INTO sentences VALUES(1657,8,13,'​2.​');
-INSERT INTO sentences VALUES(1658,8,14,'​Multi​-​word​ ​Terms​¶​');
-INSERT INTO sentences VALUES(1659,8,15,'​¶​');
-INSERT INTO sentences VALUES(1660,8,16,'​You​ ​can​ ​create​ ​multi​-​word​ ​terms​ ​by​ ​clicking​ ​and​ ​dragging​ ​across​ ​multiple​ ​words​, ​then​ ​release​ ​the​ ​mouse​.​');
-INSERT INTO sentences VALUES(1661,8,17,'​Try​ ​creating​ ​a​ ​term​ ​for​ ​the​ ​phrase​ "​the​ ​cat​''​s​ ​pyjamas​", ​and​ ​add​ ​a​ ​translation​ ​and​ ​set​ ​the​ ​status​.​');
-INSERT INTO sentences VALUES(1662,8,18,'​¶​');
-INSERT INTO sentences VALUES(1663,8,19,'​¶​');
-INSERT INTO sentences VALUES(1664,8,20,'​(​A​ ​brief​ ​side​ ​note​: ​Lute​ ​keeps​ ​track​ ​of​ ​where​ ​you​ ​are​ ​in​ ​any​ ​text​.​');
-INSERT INTO sentences VALUES(1665,8,21,'​If​ ​you​ ​click​ ​the​ ​Home​ ​link​ ​above​ ​to​ ​leave​ ​this​ ​tutorial​, ​and​ ​later​ ​click​ ​the​ ​Tutorial​ ​link​ ​from​ ​the​ ​Text​ ​listing​, ​Lute​ ​will​ ​open​ ​the​ ​last​ ​page​ ​you​ ​were​ ​at​.)​');
-INSERT INTO sentences VALUES(1666,8,22,'​¶​');
-INSERT INTO sentences VALUES(1667,8,23,'​¶​');
-INSERT INTO sentences VALUES(1668,8,24,'​3.​');
-INSERT INTO sentences VALUES(1669,8,25,'​Parent​ ​Terms​¶​');
-INSERT INTO sentences VALUES(1670,8,26,'​¶​');
-INSERT INTO sentences VALUES(1671,8,27,'​Sometimes​ ​it​ ​helps​ ​to​ ​associate​ ​terms​ ​with​ ​a​ "​parent​".​');
-INSERT INTO sentences VALUES(1672,8,28,'​For​ ​example​, ​the​ ​verb​ "​to​ ​have​" ​is​ ​conjugated​ ​in​ ​various​ ​forms​ ​as​ "​I​ ​have​ ​a​ ​cold​", "​he​ ​has​ ​a​ ​dog​", "​they​ ​had​ ​dinner​".​');
-INSERT INTO sentences VALUES(1673,8,29,'​First​ ​create​ ​a​ ​Term​ ​for​ "​have​".​');
-INSERT INTO sentences VALUES(2310,3,1,'​北​冥​有​魚​，​其​名​為​鯤​。​');
-INSERT INTO sentences VALUES(2311,3,2,'​鯤​之​大​，​不​知​其​幾​千​里​也​。​');
-INSERT INTO sentences VALUES(2312,3,3,'​化​而​為​鳥​，​其​名​為​鵬​。​');
-INSERT INTO sentences VALUES(2313,3,4,'​鵬​之​背​，​不​知​其​幾​千​里​也​；​怒​而​飛​，​其​翼​若​垂​天​之​雲​。​');
-INSERT INTO sentences VALUES(2314,3,5,'​是​鳥​也​，​海​運​則​將​徙​於​南​冥​。​');
-INSERT INTO sentences VALUES(2315,3,6,'​南​冥​者​，​天​池​也​。​');
-INSERT INTO sentences VALUES(2316,3,7,'​齊​諧​者​，​志​怪​者​也​。​');
-INSERT INTO sentences VALUES(2317,3,8,'​諧​之​言​曰​：​「​鵬​之​徙​於​南​冥​也​，​水​擊​三​千​里​，​摶​扶​搖​而​上​者​九​萬​里​，​去​以​六​月​息​者​也​。​');
-INSERT INTO sentences VALUES(2318,3,9,'​」​野​馬​也​，​塵​埃​也​，​生​物​之​以​息​相​吹​也​。​');
-INSERT INTO sentences VALUES(2319,3,10,'​天​之​蒼​蒼​，​其​正​色​邪​？​');
-INSERT INTO sentences VALUES(2320,3,11,'​其​遠​而​無​所​至​極​邪​？​');
-INSERT INTO sentences VALUES(2321,3,12,'​其​視​下​也​亦​若​是​，​則​已​矣​。​');
-INSERT INTO sentences VALUES(2322,3,13,'​且​夫​水​之​積​也​不​厚​，​則​負​大​舟​也​無​力​。​');
-INSERT INTO sentences VALUES(2323,3,14,'​覆​杯​水​於​坳​堂​之​上​，​則​芥​為​之​舟​，​置​杯​焉​則​膠​，​水​淺​而​舟​大​也​。​');
-INSERT INTO sentences VALUES(2324,3,15,'​風​之​積​也​不​厚​，​則​其​負​大​翼​也​無​力​。​');
-INSERT INTO sentences VALUES(2325,3,16,'​故​九​萬​里​則​風​斯​在​下​矣​，​而​後​乃​今​培​風​；​背​負​青​天​而​莫​之​夭​閼​者​，​而​後​乃​今​將​圖​南​。​');
-INSERT INTO sentences VALUES(2764,7,1,'​Welcome​ ​to​ ​Lute​!​');
-INSERT INTO sentences VALUES(2765,7,2,'​This​ ​short​ ​guide​ ​should​ ​get​ ​you​ ​going​.​');
-INSERT INTO sentences VALUES(2766,7,3,'​¶​');
-INSERT INTO sentences VALUES(2767,7,4,'​¶​');
-INSERT INTO sentences VALUES(2768,7,5,'​Navigation​¶​');
-INSERT INTO sentences VALUES(2769,7,6,'​¶​');
-INSERT INTO sentences VALUES(2770,7,7,'​This​ ​tutorial​ ​has​ ​multiple​ ​pages​.​');
-INSERT INTO sentences VALUES(2771,7,8,'​At​ ​the​ ​top​ ​of​ ​the​ ​page​ ​is​ ​a​ ​slider​ ​to​ ​navigate​ ​forwards​ ​and​ ​backwards​, ​or​ ​you​ ​can​ ​click​ ​the​ ​arrows​ ​at​ ​either​ ​end​ ​of​ ​the​ ​slider​.​');
-INSERT INTO sentences VALUES(2772,7,9,'​¶​');
-INSERT INTO sentences VALUES(2773,7,10,'​¶​');
-INSERT INTO sentences VALUES(2774,7,11,'​1.​');
-INSERT INTO sentences VALUES(2775,7,12,'​The​ ​Basics​¶​');
-INSERT INTO sentences VALUES(2776,7,13,'​¶​');
-INSERT INTO sentences VALUES(2777,7,14,'​All​ ​of​ ​these​ ​words​ ​are​ ​blue​ ​because​ ​they​ ​are​ "​unknown​" - ​according​ ​to​ ​Lute​, ​this​ ​is​ ​the​ ​first​ ​time​ ​you​''​re​ ​seeing​ ​these​ ​words​.​');
-INSERT INTO sentences VALUES(2778,7,15,'​¶​');
-INSERT INTO sentences VALUES(2779,7,16,'​¶​');
-INSERT INTO sentences VALUES(2780,7,17,'​You​ ​can​ ​click​ ​on​ ​a​ ​word​, ​and​ ​create​ ​a​ ​definition​.​');
-INSERT INTO sentences VALUES(2781,7,18,'​For​ ​example​, ​click​ ​on​ ​this​ ​word​: ​elephant​.​');
-INSERT INTO sentences VALUES(2782,7,19,'​¶​');
-INSERT INTO sentences VALUES(2783,7,20,'​¶​');
-INSERT INTO sentences VALUES(2784,7,21,'​When​ ​the​ ​form​ ​pops​ ​up​ ​in​ ​the​ ​right​-​hand​ ​frame​, ​a​ ​dictionary​ ​is​ ​loaded​ ​below​.​');
-INSERT INTO sentences VALUES(2785,7,22,'​Copy​-​paste​ ​something​ ​from​ ​the​ ​dictionary​ ​into​ ​the​ ​translation​, ​or​ ​make​ ​up​ ​your​ ​own​, ​mark​ ​the​ ​status​, ​add​ ​some​ ​tags​ ​if​ ​you​ ​want​ (​eg​, ​type​ "​noun​" ​in​ ​the​ ​tags​ ​field​), ​and​ ​click​ ​save​.​');
-INSERT INTO sentences VALUES(2786,7,23,'​From​ ​now​ ​on​, ​every​ ​English​ ​text​ ​that​ ​you​ ​read​ ​that​ ​contains​ ​the​ ​word​ "​elephant​" ​will​ ​show​ ​the​ ​status​.​');
-INSERT INTO sentences VALUES(2787,7,24,'​If​ ​you​ ​hover​ ​over​ ​any​ "​elephant​", ​you​''​ll​ ​see​ ​some​ ​information​.​');
-INSERT INTO sentences VALUES(2788,7,25,'​¶​');
-INSERT INTO sentences VALUES(2789,7,26,'​¶​');
-INSERT INTO sentences VALUES(2790,7,27,'​1.1​');
-INSERT INTO sentences VALUES(2791,7,28,'​Multiple​ ​dictionaries​.​');
-INSERT INTO sentences VALUES(2792,7,29,'​¶​');
-INSERT INTO sentences VALUES(2793,7,30,'​¶​');
-INSERT INTO sentences VALUES(2794,7,31,'​Next​ ​to​ ​the​ ​term​ ​is​ ​a​ ​small​ ​arrow​, "​Lookup​".​');
-INSERT INTO sentences VALUES(2795,7,32,'​If​ ​you​ ​click​ ​on​ ​this​ ​repeatedly​, ​Lute​ ​cycles​ ​through​ ​the​ ​dictionaries​ ​that​ ​you​ ​configure​ ​for​ ​the​ ​language​ ​in​ ​the​ "​Languages​" ​link​ ​on​ ​the​ ​homepage​.​');
-INSERT INTO sentences VALUES(2796,7,33,'​¶​');
-INSERT INTO sentences VALUES(2797,7,34,'​¶​');
-INSERT INTO sentences VALUES(2798,7,35,'​1.2​');
-INSERT INTO sentences VALUES(2799,7,36,'​Images​¶​');
-INSERT INTO sentences VALUES(2800,7,37,'​¶​');
-INSERT INTO sentences VALUES(2801,7,38,'​For​ ​this​ ​demo​, ​English​ ​has​ ​been​ ​configured​ ​to​ ​do​ ​an​ ​image​ ​search​ ​for​ ​the​ ​second​ ​English​ ​dictionary​, ​so​ ​if​ ​you​ ​click​ ​on​ ​the​ ​arrow​, ​you​''​ll​ ​see​ ​some​ ​happy​ ​elephants​ (​if​ ​you​ ​clicked​ ​on​ ​elephant​!).​');
-INSERT INTO sentences VALUES(3436,25,1,'​Hola​ ​tengo​ ​un​ ​gato​.​');
-INSERT INTO sentences VALUES(4412,24,1,'​魯​さん​は​無錫​の​ひと​です​。​');
-INSERT INTO sentences VALUES(4413,24,2,'​李​さん​は​シャンハイ​の​人​じゃ​ない​。​');
-INSERT INTO sentences VALUES(4414,24,3,'​¶​今日​は​国慶​節​です​。​');
-INSERT INTO sentences VALUES(4415,24,4,'​とても​よい​てんき​です​。​');
-INSERT INTO sentences VALUES(4416,24,5,'​それ​で​李​さん​と​魯​さん​は​ワイタン​へ​行き​ます​。​');
-INSERT INTO sentences VALUES(4417,24,6,'​¶​ワイタン​は​こう​ほこう​の​に​し​に​あり​ます​。​');
-INSERT INTO sentences VALUES(4418,24,7,'​その​えいご​めい​は​バンド​です​。​');
-INSERT INTO sentences VALUES(4419,24,8,'​¶​ワイタン​は​エキゾチック​な​ところ​です​。​');
-INSERT INTO sentences VALUES(4420,24,9,'​そこ​に​は​がいこく​の​ふるい​たてもの​が​たくさん​あり​ます​。​');
-INSERT INTO sentences VALUES(4421,24,10,'​¶​ワイタン​の​むこうがわ​は​ほとう​です​。​');
-INSERT INTO sentences VALUES(4422,24,11,'​こう​ほこう​の​ひがい​こ​あり​ます​。​');
-INSERT INTO sentences VALUES(4423,24,12,'​¶​そこ​に​はげん​だ​い​の​あ​たらい​、​たてもの​が​たくさん​あり​ます​。​');
-INSERT INTO sentences VALUES(4424,24,13,'​¶​ワイタン​の​れきし​ぶん​か​と​ほとう​の​げん​だ​いふ​うけい​の​コントラスト​は​なかなか​よい​です​¶​');
 CREATE TABLE IF NOT EXISTS "wordimages" (
 	"WiID" INTEGER NOT NULL  ,
 	"WiWoID" INTEGER NOT NULL  ,
@@ -265,36 +149,17 @@ CREATE TABLE IF NOT EXISTS "words" (
 	"WoTranslation" VARCHAR(500) NULL  ,
 	"WoRomanization" VARCHAR(100) NULL  ,
 	"WoTokenCount" TINYINT NOT NULL DEFAULT '0' ,
-    "WoLemma" VARCHAR(250) NOT NULL  ,
+    "WoLemma" VARCHAR(250)  NULL  ,
 	"WoCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	"WoStatusChanged" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, WoSyncStatus INTEGER NOT NULL DEFAULT 0,
 	FOREIGN KEY("WoLgID") REFERENCES "languages" ("LgID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
-INSERT INTO words VALUES(1,4,'Welcome','welcome',98,'','',1,'Welcome','2024-01-26 09:01:00','2024-01-26 09:01:04',0);
-INSERT INTO words VALUES(2,4,'This​ ​short','this​ ​short',1,'','',3,'This short','2024-01-26 09:01:08','2024-01-26 09:01:08',0);
-INSERT INTO words VALUES(3,9,'国慶​節','国慶​節',2,'','こっけい・せつ',2,'国慶​節','2024-01-26 11:04:30','2024-01-29 04:21:17',0);
-INSERT INTO words VALUES(6,9,'ワイ​​​タン','ワイ​​​タン',1,'','ワイタン',4,'ワイ​タン','2024-01-26 13:23:47','2024-01-26 13:23:47',0);
-INSERT INTO words VALUES(7,9,'こう​​​ほこう','こう​​​ほこう',1,'','コウホコウ',4,'こう​ほこう','2024-01-26 13:33:24','2024-01-26 13:33:24',0);
-INSERT INTO words VALUES(8,9,'ワイタン','ワイタン',1,'','',1,'ワイタン','2024-01-26 13:35:00','2024-01-26 13:35:00',0);
-INSERT INTO words VALUES(9,9,'こう​ほこう','こう​ほこう',1,'','',2,'こう​ほこう','2024-01-26 13:35:06','2024-01-26 13:35:06',0);
-INSERT INTO words VALUES(10,9,'太陽','太陽',1,'','たいよう',1,'太陽','2024-01-28 03:54:09','2024-01-28 03:54:09',0);
-INSERT INTO words VALUES(11,9,'強い','強い',1,'','つよい',1,'強い','2024-01-28 03:54:25','2024-01-28 03:54:25',0);
-INSERT INTO words VALUES(13,9,'の','の',1,'','',1,'の','2024-01-28 08:53:57','2024-01-28 08:53:57',0);
-INSERT INTO words VALUES(14,9,'は','は',1,'','',1,'は','2024-01-28 10:36:13','2024-01-28 10:36:13',0);
-INSERT INTO words VALUES(15,9,'loc','loc',1,'',NULL,1,'loc','2024-01-28 11:39:28','2024-01-28 11:39:28',0);
-INSERT INTO words VALUES(16,9,'a','a',1,'',NULL,1,'a','2024-01-29 02:18:05','2024-01-29 02:18:05',0);
-INSERT INTO words VALUES(17,9,'b','b',1,'',NULL,1,'b','2024-01-29 02:18:05','2024-01-29 02:18:05',0);
-INSERT INTO words VALUES(22,12,'tengo','tengo',1,'','',1,'tengo','2024-01-29 02:55:13','2024-01-29 02:55:13',1);
-INSERT INTO words VALUES(23,12,'un​ ​gato','un​ ​gato',1,'aaaa','',3,'un​ ​gato','2024-01-29 03:15:41','2024-01-29 03:15:41',0);
-INSERT INTO words VALUES(24,9,'よい','よい',1,'','',1,'よい','2024-01-29 04:21:31','2024-01-29 04:21:31',0);
-INSERT INTO words VALUES(25,9,'無錫','無錫',1,'','むしゃく',1,'無錫','2024-01-29 08:43:00','2024-01-29 08:43:00',0);
 CREATE TABLE IF NOT EXISTS "wordparents" (
 	"WpWoID" INTEGER NOT NULL  ,
 	"WpParentWoID" INTEGER NOT NULL  ,
 	FOREIGN KEY("WpParentWoID") REFERENCES "words" ("WoID") ON UPDATE NO ACTION ON DELETE CASCADE,
 	FOREIGN KEY("WpWoID") REFERENCES "words" ("WoID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
-INSERT INTO wordparents VALUES(22,23);
 CREATE TABLE IF NOT EXISTS "texts" (
 	"TxID" INTEGER NOT NULL  ,
 	"TxBkID" INTEGER NOT NULL  ,
@@ -361,7 +226,7 @@ CREATE TABLE IF NOT EXISTS "books" (
 	FOREIGN KEY("BkLgID") REFERENCES "languages" ("LgID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
 INSERT INTO books VALUES(1,3,'Hrad Cimburk – Jak vzal vítr pasáčkovi čepici',NULL,0,0,NULL,NULL,NULL);
-INSERT INTO books VALUES(2,11,'बुद्धिमान् शिष्यः',NULL,0,0,NULL,NULL,NULL);
+INSERT INTO books VALUES(2,11,'बुद्धिमान् शिष्यः',NULL,0,2,NULL,NULL,NULL);
 INSERT INTO books VALUES(3,2,'逍遙遊',NULL,0,3,NULL,NULL,NULL);
 INSERT INTO books VALUES(4,12,'Aladino y la lámpara maravillosa',NULL,0,0,NULL,NULL,NULL);
 INSERT INTO books VALUES(5,10,'медведь',NULL,0,0,NULL,NULL,NULL);
@@ -385,22 +250,6 @@ CREATE TABLE IF NOT EXISTS "bookstats" (
 	PRIMARY KEY ("BkID"),
 	FOREIGN KEY("BkID") REFERENCES "books" ("BkID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
-INSERT INTO bookstats VALUES(1,57,57,100,'{"0": 57, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(2,33,33,100,'{"0": 33, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(3,170,170,100,'{"0": 170, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(4,63,63,100,'{"0": 63, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(5,40,40,100,'{"0": 40, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(6,359,357,99,'{"0": 357, "1": 1, "2": 0, "3": 0, "4": 0, "5": 0, "98": 1, "99": 0}');
-INSERT INTO bookstats VALUES(7,246,246,100,'{"0": 246, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(8,99,99,100,'{"0": 99, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(9,100,100,100,'{"0": 100, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(10,85,85,100,'{"0": 85, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(11,120,120,100,'{"0": 120, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(12,49,49,100,'{"0": 49, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(13,40,38,95,'{"0": 38, "1": 2, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(14,30,30,100,'{"0": 30, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(15,1,1,100,'{"0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(17,3,1,33,'{"0": 1, "1": 2, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
 CREATE TABLE sentencenotetags
 (
     SeNtTgID INTEGER,
@@ -415,7 +264,6 @@ CREATE TABLE IF NOT EXISTS "sentencenote"
     SeText   VARCHAR(500),
     SeNtText TEXT
 );
-INSERT INTO sentencenote VALUES(12,16,1,'李さんはシャンハイの人じゃない。','dfasafa');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('sentencenote',12);
 CREATE UNIQUE INDEX "LgName" ON "languages" ("LgName");

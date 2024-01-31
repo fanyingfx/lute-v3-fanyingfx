@@ -3,9 +3,16 @@ from flask import (
     make_response,
     request,
 )
-from lute.dict.services import en_bds, jp_bds, jp_pronun_bd, dict_local, content_type_map
+from lute.dict.mdx_util import content_type_map
+from lute.dict.services import (
+    en_bds,
+    jp_bds,
+    jp_pronun_bd,
+    dict_local,
+)
 
 bp = Blueprint("dict", __name__, url_prefix="/dict")
+
 
 def handle_req(filename, loc):
     ext = filename.split(".")[-1]

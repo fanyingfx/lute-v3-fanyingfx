@@ -464,6 +464,9 @@ div#reading-footer span {
   width: 100%;
   border-bottom: 2px solid #2b75b854;
 }
+.has_note.note_with_question>span::after{
+  border-bottom: 2px solid #f2d35d;
+}
 .has_note>span:last-child::after{
     border-bottom: none;
     display: inline;

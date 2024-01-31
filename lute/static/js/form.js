@@ -383,6 +383,7 @@ async function get_note() {
   const pagenum = queryParams.get("pagenum");
   const sentence = queryParams.get("sentence");
   let url = `/read/sentencenote/${bookid}/${pagenum}/${sentence}`;
+  // [[get_sentencenote]] #[[get_note]]
   let noteEle = document.getElementById("sentencenote");
   let stagsEle = document.getElementById("snotetags");
   let stagfy = stagsEle.__tagify;

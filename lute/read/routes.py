@@ -302,6 +302,7 @@ def edit_sentence(bookid, pagenum):
 
 @bp.get("/sentencenote/<bookid>/<pagenum>/<sentence>")
 def sentencenote(bookid, pagenum, sentence):
+    # [[get_note]] #[[get_sentencenote]]
     note = get_sentencenote(bookid, pagenum, sentence, db.session)
     if note is None:
         return jsonify(dict(sentence_note=""))

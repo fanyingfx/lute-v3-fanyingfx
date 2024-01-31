@@ -16,5 +16,6 @@ def render_sentencenotes():
 
 @bp.get("/sentencenotes")
 def get_sentencenotes():
+    # #[[sentencenote data]]
     all_sentence_notes = get_all_sentencenotes(db.session)
     return jsonify(all_sentence_notes)

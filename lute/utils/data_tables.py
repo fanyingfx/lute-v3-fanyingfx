@@ -146,6 +146,7 @@ class DataTablesSqliteQuery:
         start = parameters["start"]
         length = parameters["length"]
         columns = parameters["columns"]
+        all_columns = [d["name"] for d in columns]
 
         def cols_with(attr):
             cols = [c["name"] for c in columns if c[attr] is True]
@@ -153,9 +154,15 @@ class DataTablesSqliteQuery:
 
         orderby = ", ".join(cols_with("orderable"))
 
+        # hardcode for sorting terms with updated time
+        if "WoUpdated" in all_columns:
+            updated = " WoUpdated desc,"
+        else:
+            updated = ""
+
         for order in parameters["order"]:
             sort_field = columns[int(order["column"])]["name"]
-            orderby = f"ORDER BY {sort_field} {order['dir']}, {orderby}"
+            orderby = f"ORDER BY {sort_field} {order['dir']}, {updated} {orderby}"
 
         searchable = [c["name"] for c in columns if c["searchable"] is True]
         [where, params] = DataTablesSqliteQuery.where_and_params(searchable, parameters)

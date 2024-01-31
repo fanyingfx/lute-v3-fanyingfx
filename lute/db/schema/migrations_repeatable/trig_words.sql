@@ -2,34 +2,34 @@ DROP TRIGGER IF EXISTS trig_words_after_update_WoStatus_if_following_parent;
 
 CREATE TRIGGER trig_words_after_update_WoStatus_if_following_parent
 -- created by db/schema/migrations_repeatable/trig_words.sql
-AFTER UPDATE OF WoStatus, WoSyncStatus ON words
-FOR EACH ROW
-WHEN (old.WoStatus <> new.WoStatus or (old.WoSyncStatus = 0 and new.WoSyncStatus = 1))
+    AFTER UPDATE OF WoStatus, WoSyncStatus
+    ON words
+    FOR EACH ROW
+    WHEN (old.WoStatus <> new.WoStatus or (old.WoSyncStatus = 0 and new.WoSyncStatus = 1))
 BEGIN
     UPDATE words
     SET WoStatus = new.WoStatus
     WHERE WoID in (
-      -- single parent children that are following this term.
-      select WpWoID
-      from wordparents
-      inner join words on WoID = WpWoID
-      where WoSyncStatus = 1
-      and WpParentWoID = old.WoID
-      group by WpWoID
-      having count(*) = 1
+        -- single parent children that are following this term.
+        select WpWoID
+        from wordparents
+                 inner join words on WoID = WpWoID
+        where WoSyncStatus = 1
+          and WpParentWoID = old.WoID
+        group by WpWoID
+        having count(*) = 1
 
-      UNION
+        UNION
 
-      -- The parent of this term,
-      -- if this term has a single parent and has "follow parent"
-      select WpParentWoID
-      from wordparents
-      inner join words on WoID = WpWoID
-      where WoSyncStatus = 1
-      and WoID = old.WoID
-      group by WpWoID
-      having count(*) = 1
-    );
+        -- The parent of this term,
+        -- if this term has a single parent and has "follow parent"
+        select WpParentWoID
+        from wordparents
+                 inner join words on WoID = WpWoID
+        where WoSyncStatus = 1
+          and WoID = old.WoID
+        group by WpWoID
+        having count(*) = 1);
 END;
 
 
@@ -37,11 +37,26 @@ DROP TRIGGER IF EXISTS trig_words_update_WoStatusChanged;
 
 CREATE TRIGGER trig_words_update_WoStatusChanged
 -- created by db/schema/migrations_repeatable/trig_words.sql
-AFTER UPDATE OF WoStatus ON words
-FOR EACH ROW
-WHEN old.WoStatus <> new.WoStatus
+    AFTER UPDATE OF WoStatus
+    ON words
+    FOR EACH ROW
+    WHEN old.WoStatus <> new.WoStatus
 BEGIN
     UPDATE words
     SET WoStatusChanged = CURRENT_TIMESTAMP
+    WHERE WoID = NEW.WoID;
+END;
+
+DROP TRIGGER IF EXISTS trig_words_update_WoUpdated;
+CREATE TRIGGER trig_words_update_WoUpdated
+-- created by db/schema/migrations_repeatable/trig_words.sql
+    AFTER UPDATE OF WoStatus,WoTranslation,WoRomanization
+    ON words
+    FOR EACH ROW
+    WHEN (old.WoStatus <> new.WoStatus or old.WoTranslation <> new.WoTranslation or
+          old.WoRomanization <> new.WoRomanization)
+BEGIN
+    UPDATE words
+    SET WoUpdated = CURRENT_TIMESTAMP
     WHERE WoID = NEW.WoID;
 END;

@@ -10,7 +10,9 @@ def get_data_tables_list(parameters):
     "Term json data for datatables."
 
     base_sql = """SELECT
-    0 as chk, w.WoID as WoID, LgName, L.LgID as LgID, w.WoText as WoText, parents.parentlist as ParentText, w.WoTranslation,
+    0 as chk,
+    w.WoUpdated as WoUpdated,
+     w.WoID as WoID, LgName, L.LgID as LgID, w.WoText as WoText, parents.parentlist as ParentText, w.WoTranslation,
     replace(wi.WiSource, '.jpeg', '') as WiSource,
     ifnull(tags.taglist, '') as TagList,
     StText,
@@ -91,5 +93,7 @@ def get_data_tables_list(parameters):
 
     # Phew.
     return DataTablesSqliteQuery.get_data(
-        base_sql + " WHERE " + " AND ".join(wheres), parameters, db.session.connection()
+        base_sql + " WHERE " + " AND ".join(wheres),
+        parameters,
+        db.session.connection(),
     )

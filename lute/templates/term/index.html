@@ -129,6 +129,7 @@
         { "name": "StAbbreviation", "targets": 10, "visible": false },
         { "name": "SyncStatus", "targets": 11, "visible": false },
         { "name": "StText", "targets": 12, "visible": false },
+          { "name": "WoUpdated", "targets":13, "visible":false},
       ],
 
       // Ajax call
@@ -299,7 +300,9 @@
     };
     // console.log('saving: ' + JSON.stringify(store));
     sessionStorage.setItem('termtable_filters', JSON.stringify(store));
-    $('#termtable').DataTable().draw();
+    $('#termtable').DataTable().
+        order([[13,'desc']])
+        .draw();
   };
 
 
@@ -326,7 +329,7 @@
     $('#filtIncludeIgnored').prop('checked', store.filtIncludeIgnored);
 
     // Have to re-load the data table, now that the filters have changed.
-    $('#termtable').DataTable().draw();
+    $('#termtable').DataTable().order([[13,'desc']]).draw();
   };
   
   let handle_show_hide_filter_click = function() {

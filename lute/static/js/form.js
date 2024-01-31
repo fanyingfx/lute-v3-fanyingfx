@@ -385,7 +385,10 @@ async function get_note() {
   let url = `/read/sentencenote/${bookid}/${pagenum}/${sentence}`;
   let noteEle = document.getElementById("sentencenote");
   let stagsEle = document.getElementById("snotetags");
-  let stagfy = new Tagify(stagsEle);
+  let stagfy = stagsEle.__tagify;
+  if (!stagfy) {
+    stagfy = new Tagify(stagsEle);
+  }
   let res = await fetch(url);
   let data = await res.json();
   noteEle.value = data.sentence_note;
@@ -398,7 +401,11 @@ async function update_note() {
   const sentence = queryParams.get("sentence");
   const url = `/read/sentencenote/${bookid}/${pagenum}/${sentence}`;
   const stagsEle = document.getElementById("snotetags");
-  const stagfy = new Tagify(stagsEle);
+  let stagfy = stagsEle.__tagify;
+
+  if (!stagfy) {
+    stagfy = new Tagify(stagsEle);
+  }
   const noteEle = document.getElementById("sentencenote");
   const messagefloatWindow = document.getElementById("sentence-note-message");
   const text = noteEle.value;

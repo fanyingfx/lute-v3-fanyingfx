@@ -12,17 +12,15 @@ YOUDAO_URL = "https://openapi.youdao.com/api"
 MAX_LENGTH = 1500  # 限制翻译输入的最大长度
 
 
-
-
 class YouDaoTranslator:
     """
     调用有道翻译API实现机器翻译
     """
 
-    def __init__(self,app_key,app_secret):
+    def __init__(self, app_key, app_secret):
         self.q = ""  # 待翻译内容
         self._request_data = {}
-        self._APP_KEY, self._APP_SECRET = app_key,app_secret
+        self._APP_KEY, self._APP_SECRET = app_key, app_secret
 
     def _gen_sign(self, current_time: str, salt: str) -> str:
         """
@@ -133,14 +131,14 @@ if __name__ == "__main__":
     # app_conf_path = AppConfig.default_config_filename()
     # fanyikey_path = AppConfig(app_conf_path).fanyikeypath
     # KEY_FILE = "./KeySecret.json"
-    d = load_api_keys('/home/fan/.local/share/test_lute/fanyikey.yaml')
-    if 'youdao' in d:
-        youdao= d['youdao']
+    d = load_api_keys("/home/fan/.local/share/test_lute/fanyikey.yaml")
+    if "youdao" in d:
+        youdao = d["youdao"]
 
-        appKey =youdao['appid']  # 你在第一步申请的APP ID
-        appSecret =youdao['appkey']  # 公钥
+        appKey = youdao["appid"]  # 你在第一步申请的APP ID
+        appSecret = youdao["appkey"]  # 公钥
         youdao_translator = YouDaoTranslator(appKey, appSecret)
-        q='私は元気です。'
-        res=youdao_translator.translate(q,'ja2zh')
+        q = "私は元気です。"
+        res = youdao_translator.translate(q, "ja2zh")
         # Results = ("Hello, World!")  # 要翻译的词组
         print(res)

@@ -155,7 +155,7 @@ class Term(
         cascade="all, delete-orphan",
     )
 
-    def __init__(self, language=None, text=None, lemma=None,raw_tokens=None):
+    def __init__(self, language=None, text=None, lemma=None, raw_tokens=None):
         self.status = 1
         self.translation = None
         self.romanization = ""
@@ -167,7 +167,7 @@ class Term(
         self.images = []
         if language is not None:
             self.language = language
-        self.raw_tokens=raw_tokens
+        self.raw_tokens = raw_tokens
         if text is not None:
             self.text = text
         if lemma is not None:
@@ -339,8 +339,8 @@ class Term(
         if not terms:
             return None
         term = terms[0]
-        if '\u200b' in text_lc:
-            term.raw_tokens = text_lc.split('\u200b')
+        if "\u200b" in text_lc:
+            term.raw_tokens = text_lc.split("\u200b")
         else:
             term.raw_tokens = [text_lc]
         return term

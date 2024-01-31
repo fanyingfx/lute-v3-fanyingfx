@@ -1,12 +1,14 @@
 import re
 from functools import lru_cache
-from typing import List, Any
 from typing import List
+
 import jaconv
-from lute.parse.base import ParsedToken, AbstractParser
-from lute.models.setting import UserSetting
-from fugashi import Tagger
 from flask import current_app
+from fugashi import Tagger
+
+from lute.models.setting import UserSetting
+from lute.parse.base import AbstractParser
+from lute.parse.base import ParsedToken
 
 kana_pattern = re.compile("[\u3040-\u309F\u30A0-\u30FFー]+")
 
@@ -42,7 +44,6 @@ class FugashiParser(AbstractParser):
     def name(cls):
         return "Japanese"
 
-
     @classmethod
     @lru_cache()
     def parse_para(cls, text: str, language):
@@ -50,9 +51,9 @@ class FugashiParser(AbstractParser):
         https://clrd.ninjal.ac.jp/unidic/faq.html
         """
         lines = []
-        tagger =cls._tagger
-        if text.startswith('「'):
-            tagger=cls._s_tagger
+        tagger = cls._tagger
+        if text.startswith("「"):
+            tagger = cls._s_tagger
         for tok in tagger(text.strip()):
             reading_is_kana = FugashiParser._string_is_kana(tok.surface)
             reading = tok.feature.kana
@@ -89,8 +90,7 @@ class FugashiParser(AbstractParser):
 
     # @lru_cache()
     def get_parsed_tokens(self, text: str, language) -> List[ParsedToken]:
-        """
-        """
+        """ """
         text = re.sub(r"[ \t]+", " ", text).strip()
         lines = []
 
@@ -110,7 +110,7 @@ class FugashiParser(AbstractParser):
             if term == "EOP" and third == "7":
                 term = "¶"
             is_word = (
-                    node_type in "2678" and third is not None
+                node_type in "2678" and third is not None
             )  # or node_type in "2678"
             if not is_word:
                 reading = ""
@@ -175,17 +175,21 @@ class FugashiParser(AbstractParser):
 
     @classmethod
     def analyse(cls, text):
-        print('analysis text',text)
-        tagger =cls._tagger
-        if text.startswith('「'):
-            tagger=cls._s_tagger
+        print("analysis text", text)
+        tagger = cls._tagger
+        if text.startswith("「"):
+            tagger = cls._s_tagger
         tokens = tagger(text.strip())
         l = []
 
         def halfwidth_to_fullwidth(text):
             # Define a translation table for half-width to full-width conversion
-            halfwidth_chars = ''.join(chr(i) for i in range(0x0021, 0x007F))  # ASCII characters
-            fullwidth_chars = ''.join(chr(i) for i in range(0xFF01, 0xFF5F))  # Full-width ASCII characters
+            halfwidth_chars = "".join(
+                chr(i) for i in range(0x0021, 0x007F)
+            )  # ASCII characters
+            fullwidth_chars = "".join(
+                chr(i) for i in range(0xFF01, 0xFF5F)
+            )  # Full-width ASCII characters
             translation_table = str.maketrans(halfwidth_chars, fullwidth_chars)
 
             # Use translate to convert half-width to full-width
@@ -195,18 +199,25 @@ class FugashiParser(AbstractParser):
         for tok in tokens:
             lemma = tok.feature.lemma
             # orthbase = tok.feature.orthBase
-            fws = '\uff0a' # full-width space
+            fws = "\uff0a"  # full-width space
             if tok.feature.goshu == "外":
-                lemma = lemma.split('-')[-1]
+                lemma = lemma.split("-")[-1]
                 lemma = halfwidth_to_fullwidth(lemma)
             pos1 = tok.feature.pos1
-            repalce_names = [('補助記号', '記'), ('代名詞', '代'), ('名詞', '名'), ('助詞', '助'), ('助動詞', '助動'),('詞','')]
+            repalce_names = [
+                ("補助記号", "記"),
+                ("代名詞", "代"),
+                ("名詞", "名"),
+                ("助詞", "助"),
+                ("助動詞", "助動"),
+                ("詞", ""),
+            ]
             for o, r in repalce_names:
                 pos1 = pos1.replace(o, r)
             c_type = tok.feature.cType
             c_form = tok.feature.cForm
-            c_type = c_type.replace('*', fws)
-            c_form = c_form.replace('*', fws)
+            c_type = c_type.replace("*", fws)
+            c_form = c_form.replace("*", fws)
             # if c_form=='*' and c_type=='*':
             #     c_form='\u3000'
             #     c_type='\u3000'
@@ -216,9 +227,9 @@ class FugashiParser(AbstractParser):
         res = []
 
         def align(text, width):
-            full_width_space = '\u3000'
+            full_width_space = "\u3000"
             text_width = len(text)
-            text = text.replace('-', '－')
+            text = text.replace("-", "－")
             padding_size = width - text_width
             return text + full_width_space * padding_size
 
@@ -229,10 +240,10 @@ class FugashiParser(AbstractParser):
         transposed_array = list(map(list, zip(*res)))
         new_res = []
         for arr in transposed_array:
-            new_res.append('\u3000'.join(arr))
+            new_res.append("\u3000".join(arr))
         return new_res
 
 
-if __name__ == '__main__':
-    t1 = 'と幽かな叫び声をお挙げになった。'
+if __name__ == "__main__":
+    t1 = "と幽かな叫び声をお挙げになった。"
     print(FugashiParser.analyse(t1))

@@ -289,7 +289,7 @@ def edit_sentence(bookid, pagenum):
         new_text = raw_text.replace(raw_sentence, new_senetence)
         form.populate_obj(text)
         text.text = new_text
-        note: SentenceNote = get_sentencenote(bookid, pagenum, sentence, db.session)
+        note = get_sentencenote(bookid, pagenum, sentence, db.session)
         db.session.add(text)
         if note is not None:
             note.sentence = new_senetence
@@ -302,7 +302,7 @@ def edit_sentence(bookid, pagenum):
 
 @bp.get("/sentencenote/<bookid>/<pagenum>/<sentence>")
 def sentencenote(bookid, pagenum, sentence):
-    note: SentenceNote = get_sentencenote(bookid, pagenum, sentence, db.session)
+    note = get_sentencenote(bookid, pagenum, sentence, db.session)
     if note is None:
         return jsonify(dict(sentence_note=""))
 
@@ -329,8 +329,5 @@ def update_sentencenote(bookid, pagenum, sentence):
             res = {"status": "2", "message": "Note deleted!"}
         else:
             res = {"status": "1", "message": "Note is empty!"}
-
-    # except:
-    #     res = {"status": "0", "message": "Update note failed"}
 
     return jsonify(res)

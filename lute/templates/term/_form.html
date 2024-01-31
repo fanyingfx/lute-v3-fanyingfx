@@ -71,18 +71,7 @@
         </div>
     </form>
 </div>
-<div id="sentencenote-container">
-    <div id="sentence-note-message" class="smessage-floating-window">
-        <div class="snote-flush-message">
-            <p>Update note successful!</p>
-        </div>
-    </div>
-    <textarea id="sentencenote"></textarea>
-    <input id="snotetags" type="text" name="snotetags" class="form-control" />
-    <button id="add-sentence-note"
-            class="btn btn-primary"
-            onclick="update_note();">Update Note</button>
-</div>
+{% include 'term/sentencenotes.html' %}
 <div>
     <div id="wordsearchbox" class="bottom-element">
         <input type="text" id="_searchword" name="_searchword" />

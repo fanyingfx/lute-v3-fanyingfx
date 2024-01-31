@@ -54,7 +54,7 @@ class RenderableCalculator:
             prevtok = tok
 
     def _get_renderable(
-            self, tokenlocator, terms, texttokens
+        self, tokenlocator, terms, texttokens
     ):  # pylint: disable=too-many-locals
         """
         Return RenderableCandidates that will **actually be rendered**.
@@ -282,12 +282,12 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         return self.pos + self.length - 1
 
     def make_text_item(
-            self,
-            p_num: int,
-            se_id: int,
-            lang: Language,
-            show_reading=False,
-            bookid=0,
+        self,
+        p_num: int,
+        se_id: int,
+        lang: Language,
+        show_reading=False,
+        bookid=0,
     ):
         """
         Create a TextItem for final rendering.
@@ -365,7 +365,7 @@ class TokenLocator:
             matchpos = match[1]
 
             # print(f"found match \"{matchtext}\" len={matchlen} pos={matchpos}")
-            original_subject_text = subj[matchpos: matchpos + matchlen]
+            original_subject_text = subj[matchpos : matchpos + matchlen]
             zws = "\u200B"
             t = original_subject_text.lstrip(zws).rstrip(zws)
             index = self.get_count_before(subj, matchpos)
@@ -556,9 +556,9 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         ]
 
         tooltip = (
-                st not in (Status.WELLKNOWN, Status.IGNORED)
-                or self.show_tooltip
-                or self.flash_message is not None
+            st not in (Status.WELLKNOWN, Status.IGNORED)
+            or self.show_tooltip
+            or self.flash_message is not None
         )
         if tooltip:
             classes.append("showtooltip")

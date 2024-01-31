@@ -228,20 +228,35 @@ INSERT INTO sentences VALUES(2798,7,35,'​1.2​');
 INSERT INTO sentences VALUES(2799,7,36,'​Images​¶​');
 INSERT INTO sentences VALUES(2800,7,37,'​¶​');
 INSERT INTO sentences VALUES(2801,7,38,'​For​ ​this​ ​demo​, ​English​ ​has​ ​been​ ​configured​ ​to​ ​do​ ​an​ ​image​ ​search​ ​for​ ​the​ ​second​ ​English​ ​dictionary​, ​so​ ​if​ ​you​ ​click​ ​on​ ​the​ ​arrow​, ​you​''​ll​ ​see​ ​some​ ​happy​ ​elephants​ (​if​ ​you​ ​clicked​ ​on​ ​elephant​!).​');
-INSERT INTO sentences VALUES(3436,25,1,'​Hola​ ​tengo​ ​un​ ​gato​.​');
-INSERT INTO sentences VALUES(4412,24,1,'​魯​さん​は​無錫​の​ひと​です​。​');
-INSERT INTO sentences VALUES(4413,24,2,'​李​さん​は​シャンハイ​の​人​じゃ​ない​。​');
-INSERT INTO sentences VALUES(4414,24,3,'​¶​今日​は​国慶​節​です​。​');
-INSERT INTO sentences VALUES(4415,24,4,'​とても​よい​てんき​です​。​');
-INSERT INTO sentences VALUES(4416,24,5,'​それ​で​李​さん​と​魯​さん​は​ワイタン​へ​行き​ます​。​');
-INSERT INTO sentences VALUES(4417,24,6,'​¶​ワイタン​は​こう​ほこう​の​に​し​に​あり​ます​。​');
-INSERT INTO sentences VALUES(4418,24,7,'​その​えいご​めい​は​バンド​です​。​');
-INSERT INTO sentences VALUES(4419,24,8,'​¶​ワイタン​は​エキゾチック​な​ところ​です​。​');
-INSERT INTO sentences VALUES(4420,24,9,'​そこ​に​は​がいこく​の​ふるい​たてもの​が​たくさん​あり​ます​。​');
-INSERT INTO sentences VALUES(4421,24,10,'​¶​ワイタン​の​むこうがわ​は​ほとう​です​。​');
-INSERT INTO sentences VALUES(4422,24,11,'​こう​ほこう​の​ひがい​こ​あり​ます​。​');
-INSERT INTO sentences VALUES(4423,24,12,'​¶​そこ​に​はげん​だ​い​の​あ​たらい​、​たてもの​が​たくさん​あり​ます​。​');
-INSERT INTO sentences VALUES(4424,24,13,'​¶​ワイタン​の​れきし​ぶん​か​と​ほとう​の​げん​だ​いふ​うけい​の​コントラスト​は​なかなか​よい​です​¶​');
+INSERT INTO sentences VALUES(4425,25,1,'​Hola​ ​tengo​ ​un​ ​gato​.​');
+INSERT INTO sentences VALUES(4441,2,1,'​काशीनगरे​ ​एकः​ ​पण्डितः​ ​अस्ति​ ।​');
+INSERT INTO sentences VALUES(4442,2,2,'​पण्डितसमीपम्​ ​एकः​ ​शिष्यः​ ​आगच्छति​ ।​');
+INSERT INTO sentences VALUES(4443,2,3,'​शिष्यः​ ​वदति​ - "​आचार्य​!​');
+INSERT INTO sentences VALUES(4444,2,4,'​¶​');
+INSERT INTO sentences VALUES(4445,2,5,'​विद्याभ्यासार्थम्​ ​आगतः​ ।"​');
+INSERT INTO sentences VALUES(4446,2,6,'​पण्डितः​ ​शिष्यबुद्धिपरीक्षार्थं​ ​पृच्छति​ - "​वत्स​, ​देवः​ ​कुत्र​ ​अस्ति​?"​');
+INSERT INTO sentences VALUES(4447,2,7,'​शिष्यः​ ​वदति​ -​¶​');
+INSERT INTO sentences VALUES(4448,2,8,'​''​गुरो​!​');
+INSERT INTO sentences VALUES(4449,2,9,'​देवः​ ​कुत्र​ ​नास्ति​?​');
+INSERT INTO sentences VALUES(4450,2,10,'​कृपया​ ​भवान्​ ​एव​ ​समाधानं​ ​वदतु​ ।"​');
+INSERT INTO sentences VALUES(4451,2,11,'​सन्तुष्टः​ ​गुरुः​ ​वदति​ - "​दैवः​ ​सर्वत्र​ ​अस्ति​ ।​');
+INSERT INTO sentences VALUES(4452,2,12,'​देवः​¶​');
+INSERT INTO sentences VALUES(4453,2,13,'​सर्वव्यापी​ ।​');
+INSERT INTO sentences VALUES(4454,2,14,'​त्वं​ ​बुद्धिमान​ ।​');
+INSERT INTO sentences VALUES(4455,2,15,'​अतः​ ​विद्याभ्यासार्थम्​ ​अत्रैव​ ​वस​।"​');
+INSERT INTO sentences VALUES(4469,24,1,'​魯​さん​は​無錫​の​ひと​です​。​');
+INSERT INTO sentences VALUES(4470,24,2,'​李​さん​は​シャンハイ​の​人​じゃ​ない​。​');
+INSERT INTO sentences VALUES(4471,24,3,'​¶​今日​は​国慶​節​です​。​');
+INSERT INTO sentences VALUES(4472,24,4,'​とても​よい​てんき​です​。​');
+INSERT INTO sentences VALUES(4473,24,5,'​それ​で​李​さん​と​魯​さん​は​ワイタン​へ​行き​ます​。​');
+INSERT INTO sentences VALUES(4474,24,6,'​¶​ワイタン​は​こう​ほこう​の​に​し​に​あり​ます​。​');
+INSERT INTO sentences VALUES(4475,24,7,'​その​えいご​めい​は​バンド​です​。​');
+INSERT INTO sentences VALUES(4476,24,8,'​¶​ワイタン​は​エキゾチック​な​ところ​です​。​');
+INSERT INTO sentences VALUES(4477,24,9,'​そこ​に​は​がいこく​の​ふるい​たてもの​が​たくさん​あり​ます​。​');
+INSERT INTO sentences VALUES(4478,24,10,'​¶​ワイタン​の​むこうがわ​は​ほとう​です​。​');
+INSERT INTO sentences VALUES(4479,24,11,'​こう​ほこう​の​ひがい​こ​あり​ます​。​');
+INSERT INTO sentences VALUES(4480,24,12,'​¶​そこ​に​はげん​だ​い​の​あ​たらい​、​たてもの​が​たくさん​あり​ます​。​');
+INSERT INTO sentences VALUES(4481,24,13,'​¶​ワイタン​の​れきし​ぶん​か​と​ほとう​の​げん​だ​いふ​うけい​の​コントラスト​は​なかなか​よい​です​¶​');
 CREATE TABLE IF NOT EXISTS "wordimages" (
 	"WiID" INTEGER NOT NULL  ,
 	"WiWoID" INTEGER NOT NULL  ,
@@ -265,29 +280,11 @@ CREATE TABLE IF NOT EXISTS "words" (
 	"WoTranslation" VARCHAR(500) NULL  ,
 	"WoRomanization" VARCHAR(100) NULL  ,
 	"WoTokenCount" TINYINT NOT NULL DEFAULT '0' ,
-    "WoLemma" VARCHAR(250) NOT NULL  ,
+    "WoLemma" VARCHAR(250)  NULL  ,
 	"WoCreated" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ,
 	"WoStatusChanged" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, WoSyncStatus INTEGER NOT NULL DEFAULT 0,
 	FOREIGN KEY("WoLgID") REFERENCES "languages" ("LgID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
-INSERT INTO words VALUES(1,4,'Welcome','welcome',98,'','',1,'Welcome','2024-01-26 09:01:00','2024-01-26 09:01:04',0);
-INSERT INTO words VALUES(2,4,'This​ ​short','this​ ​short',1,'','',3,'This short','2024-01-26 09:01:08','2024-01-26 09:01:08',0);
-INSERT INTO words VALUES(3,9,'国慶​節','国慶​節',2,'','こっけい・せつ',2,'国慶​節','2024-01-26 11:04:30','2024-01-29 04:21:17',0);
-INSERT INTO words VALUES(6,9,'ワイ​​​タン','ワイ​​​タン',1,'','ワイタン',4,'ワイ​タン','2024-01-26 13:23:47','2024-01-26 13:23:47',0);
-INSERT INTO words VALUES(7,9,'こう​​​ほこう','こう​​​ほこう',1,'','コウホコウ',4,'こう​ほこう','2024-01-26 13:33:24','2024-01-26 13:33:24',0);
-INSERT INTO words VALUES(8,9,'ワイタン','ワイタン',1,'','',1,'ワイタン','2024-01-26 13:35:00','2024-01-26 13:35:00',0);
-INSERT INTO words VALUES(9,9,'こう​ほこう','こう​ほこう',1,'','',2,'こう​ほこう','2024-01-26 13:35:06','2024-01-26 13:35:06',0);
-INSERT INTO words VALUES(10,9,'太陽','太陽',1,'','たいよう',1,'太陽','2024-01-28 03:54:09','2024-01-28 03:54:09',0);
-INSERT INTO words VALUES(11,9,'強い','強い',1,'','つよい',1,'強い','2024-01-28 03:54:25','2024-01-28 03:54:25',0);
-INSERT INTO words VALUES(13,9,'の','の',1,'','',1,'の','2024-01-28 08:53:57','2024-01-28 08:53:57',0);
-INSERT INTO words VALUES(14,9,'は','は',1,'','',1,'は','2024-01-28 10:36:13','2024-01-28 10:36:13',0);
-INSERT INTO words VALUES(15,9,'loc','loc',1,'',NULL,1,'loc','2024-01-28 11:39:28','2024-01-28 11:39:28',0);
-INSERT INTO words VALUES(16,9,'a','a',1,'',NULL,1,'a','2024-01-29 02:18:05','2024-01-29 02:18:05',0);
-INSERT INTO words VALUES(17,9,'b','b',1,'',NULL,1,'b','2024-01-29 02:18:05','2024-01-29 02:18:05',0);
-INSERT INTO words VALUES(22,12,'tengo','tengo',1,'','',1,'tengo','2024-01-29 02:55:13','2024-01-29 02:55:13',1);
-INSERT INTO words VALUES(23,12,'un​ ​gato','un​ ​gato',1,'aaaa','',3,'un​ ​gato','2024-01-29 03:15:41','2024-01-29 03:15:41',0);
-INSERT INTO words VALUES(24,9,'よい','よい',1,'','',1,'よい','2024-01-29 04:21:31','2024-01-29 04:21:31',0);
-INSERT INTO words VALUES(25,9,'無錫','無錫',1,'','むしゃく',1,'無錫','2024-01-29 08:43:00','2024-01-29 08:43:00',0);
 CREATE TABLE IF NOT EXISTS "wordparents" (
 	"WpWoID" INTEGER NOT NULL  ,
 	"WpParentWoID" INTEGER NOT NULL  ,
@@ -361,7 +358,7 @@ CREATE TABLE IF NOT EXISTS "books" (
 	FOREIGN KEY("BkLgID") REFERENCES "languages" ("LgID") ON UPDATE NO ACTION ON DELETE CASCADE
 );
 INSERT INTO books VALUES(1,3,'Hrad Cimburk – Jak vzal vítr pasáčkovi čepici',NULL,0,0,NULL,NULL,NULL);
-INSERT INTO books VALUES(2,11,'बुद्धिमान् शिष्यः',NULL,0,0,NULL,NULL,NULL);
+INSERT INTO books VALUES(2,11,'बुद्धिमान् शिष्यः',NULL,0,2,NULL,NULL,NULL);
 INSERT INTO books VALUES(3,2,'逍遙遊',NULL,0,3,NULL,NULL,NULL);
 INSERT INTO books VALUES(4,12,'Aladino y la lámpara maravillosa',NULL,0,0,NULL,NULL,NULL);
 INSERT INTO books VALUES(5,10,'медведь',NULL,0,0,NULL,NULL,NULL);
@@ -400,7 +397,8 @@ INSERT INTO bookstats VALUES(12,49,49,100,'{"0": 49, "1": 0, "2": 0, "3": 0, "4"
 INSERT INTO bookstats VALUES(13,40,38,95,'{"0": 38, "1": 2, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
 INSERT INTO bookstats VALUES(14,30,30,100,'{"0": 30, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
 INSERT INTO bookstats VALUES(15,1,1,100,'{"0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
-INSERT INTO bookstats VALUES(17,3,1,33,'{"0": 1, "1": 2, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
+INSERT INTO bookstats VALUES(16,60,60,100,'{"0": 60, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
+INSERT INTO bookstats VALUES(17,4,4,100,'{"0": 4, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "98": 0, "99": 0}');
 CREATE TABLE sentencenotetags
 (
     SeNtTgID INTEGER,
@@ -415,7 +413,6 @@ CREATE TABLE IF NOT EXISTS "sentencenote"
     SeText   VARCHAR(500),
     SeNtText TEXT
 );
-INSERT INTO sentencenote VALUES(12,16,1,'李さんはシャンハイの人じゃない。','dfasafa');
 DELETE FROM sqlite_sequence;
 INSERT INTO sqlite_sequence VALUES('sentencenote',12);
 CREATE UNIQUE INDEX "LgName" ON "languages" ("LgName");

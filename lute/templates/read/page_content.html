@@ -1,7 +1,7 @@
 {% for para in paragraphs %}
     <p>
         {% for sentence in para %}
-            <span class="textsentence{% if sentence.sentence_with_note %} has_note{% endif %}"
+            <span class="textsentence{% if sentence.sentence_with_note %} has_note {% if sentence.sentence_note_has_question %}note_with_question{% endif %} {% endif %}"
                   id="sent_{{ sentence.sentence_id }}">
                 {# Note: do not add paragraphs between the renders, it messes up some online chinese dictionary tools. #}
                 {% for item in sentence.textitems %}

@@ -27,6 +27,9 @@ class SentenceNote(db.Model):
         self.sentence_note = sentence_note
         self.term_tags = []
 
+    def get_sentence_tags(self):
+        return [tag.text for tag in self.sentence_tags]
+
     @staticmethod
     def find(sentence):
         return (

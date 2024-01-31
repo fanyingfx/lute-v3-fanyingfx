@@ -518,7 +518,7 @@ rt{
     }
     #translation-para{
         margin-left: 0.6rem;
-        font-size: 0.65rem;
+        font-size: 0.8rem;
     }
 
     .scrollable-div {
@@ -540,7 +540,7 @@ rt{
     }
     #translation-para{
         margin-left: 0.6rem;
-        font-size: 0.6rem;
+        font-size: 0.7rem;
     }
 
     .scrollable-div {
@@ -712,12 +712,16 @@ img
 
 .wordhover
 {
-    border-bottom: 1px solid blue !important;
+    text-decoration-line: underline;
+    text-decoration-color: blue;
+    text-underline-offset: 3px;
 }
 
 .kwordmarked
 {
-    border-bottom: 1px solid red !important;
+    text-decoration-line: underline;
+    text-decoration-color: red;
+    text-underline-offset: 3px;
 }
 
 .newmultiterm
@@ -1189,7 +1193,7 @@ div.help-text {
 }
 
 #translation{
-    height: 50px;
+    height: 6rem;
     min-height: 50px;
     vertical-align: top /* removes annoying extra space below */
 }

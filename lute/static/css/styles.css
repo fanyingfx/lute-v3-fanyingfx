@@ -8,8 +8,7 @@
     padding: 0;
 }
 
-body
-{   
+body {
     --background-color: #fff;
     --font-color: #000;
 
@@ -176,6 +175,32 @@ a.completed_book:before {
   */
 table#booktable:not(:has(a.completed_book)) a.book-title:before {
     display: none;
+}
+
+.refresh {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background-image: url("../icn/reload.png");
+    background-size: 80%;
+    border-radius: 2px;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+
+.refresh:hover {
+    background-color: #dadada;
+}
+
+.refresh:active {
+    background-color: #9f9f9f;
+}
+
+.refreshed {
+    background-image: url("../icn/waiting2.gif");
 }
 
 /* End book listing */
@@ -641,6 +666,7 @@ span.textitem>ruby{
 
     border-bottom: 1px solid transparent;
 }
+
 /* .click */
 /* { */
     /* cursor: pointer; */
@@ -1025,8 +1051,8 @@ div.code pre {
 #custom_styles,
 #language input,
 #sentencenote,
-#importurl {
-    /* width: 100%; */
+#importurl,
+#comment {
     font-size: 0.9rem;
     font-family: inherit;
     padding: 0.2rem 0.2rem;
@@ -1034,7 +1060,6 @@ div.code pre {
     border-radius: var(--form-border-radius);
     box-sizing: border-box;
 }
-
 
 /* GENERAL FORM STYLES */
 input,
@@ -1048,8 +1073,34 @@ textarea {
     resize: vertical;
 }
 
+/* focus on fields makes border same as tags */
+input:focus,
+textarea:focus,
+select:focus {
+    border: 1px solid var(--tagify__tag-bg) !important;
+    outline: none !important;
+}
+
+input[type="checkbox"]:focus,
+input[type="file"]:focus,
+button:focus {
+    outline: 1px solid var(--tagify__tag-bg) !important;
+}
+
+input[type="checkbox"]:focus,
+input[type="file"]:focus {
+    border: none !important;
+}
+
 ::placeholder {
     font-family: inherit;
+    font-size: 0.8rem;
+    color: #D8D8D8;
+    opacity: 0.7;
+}
+
+:focus::placeholder {
+    opacity: 1;
 }
 
 .btn {
@@ -1375,7 +1426,8 @@ input[type="checkbox"][disabled] + label {
 #parser_type,
 #language_id,
 #txtSetParent,
-#predefined {
+#predefined,
+#max_page_tokens {
     width: 8rem;
     box-sizing: border-box;
     border: 1px solid var(--form-border-color);

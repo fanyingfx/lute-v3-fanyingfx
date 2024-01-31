@@ -1,19 +1,23 @@
 <div id="rawdata" data-status="{{ status or 'active' }}" data-intial_search="{{ initial_search or '' }}" style="display: none"></div>
 <table id="booktable" class="table dataTable stripe">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Language</th>
-            <th>Tags</th>
-            <th>Word count</th>
-            <th>Statuses</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Language</th>
+      <th>Tags</th>
+      <th>Word count</th>
+      <th>Statuses
+        <a href="/refresh_all_stats" class="refresh" title="Refresh stats for all books"></a>
+      </th>
+      <th>Actions</th>
+    </tr>
+  </thead>
 </table>
+
 {# Hidden form for archive, unarchive, delete. #}
 <form id="actionposter" method="post" action="">
 </form>
+
 <script>
 
   /* The book listing. */
@@ -193,6 +197,11 @@
     return ret.join('&nbsp;');
   };
 
+  // added class is used for changing static image to rotating arrow animation
+  document.querySelector(".refresh").addEventListener("click", function(e) {
+    e.target.classList.add("refreshed");
+    e.stopPropagation();
+  });
 
   /**
    * Clearing the state is required for acceptance tests,

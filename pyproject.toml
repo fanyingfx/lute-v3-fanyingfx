@@ -1,5 +1,6 @@
 [build-system]
-requires = ["flit_core >=3.2,<4","mdcit-query>=0.1.5"]
+requires = ["flit_core >=3.2,<4", "mdict-query @ https://github.com/fanyingfx/mdict-query/releases/download/v0.1.6/mdict_query-1.1.2-py2.py3-none-any.whl"]
+
 build-backend = "flit_core.buildapi"
 
 # The project name "lute" is already taken on PyPi,
@@ -41,7 +42,6 @@ dependencies = [
     "unidic-lite>=1.0.8,<2",
     "EbookLib>=0.1.8,<1",
     "spacy",
-    "mdict-query @ https://github.com/fanyingfx/mdict-query/releases/download/v0.1.6/mdict_query-1.1.2-py2.py3-none-any.whl",
 ]
 
 [project.scripts]

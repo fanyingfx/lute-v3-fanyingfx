@@ -32,9 +32,9 @@ class FugashiParser(AbstractParser):
     # _tagger = Tagger("-d .unidics/unidic-csj-202302")
     _tagger = Tagger()
     _tagger_type = "spoken"
-    _ana_tagger = Tagger("-d /home/fan/.local/share/unidic-cwj-202302_full")
-    _w_tagger = Tagger("-d /home/fan/.local/share/unidic-cwj-202302_full")
-    _s_tagger = Tagger("-d /home/fan/.local/share/unidic-csj-202302_full")
+    _ana_tagger = Tagger()
+    _w_tagger = Tagger()
+    _s_tagger = Tagger()
 
     @classmethod
     def is_supported(cls):
@@ -133,6 +133,13 @@ class FugashiParser(AbstractParser):
     @classmethod
     def switch_tagger(cls, type="spoken"):
         dict_config = current_app.env_config
+        try:
+            cls._ana_tagger = Tagger(f"-d {dict_config.userunidic['s']}")
+            cls._w_tagger = Tagger(f"-d {dict_config.userunidic[w]}")
+            cls._s_tagger = Tagger(f"-d {dict_config.userunidic['s']}")
+        except:
+            pass
+
         if type == "spoken":
             cls._tagger = Tagger(f"-d {dict_config.userunidic['s']}")
             cls._tagger_type = "spoken"

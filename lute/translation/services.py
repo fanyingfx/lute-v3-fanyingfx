@@ -5,26 +5,44 @@ from lute.translation.youdaofanyi import YouDaoTranslator
 
 app_conf_path = AppConfig.default_config_filename(dev=True)
 fanyikey_path = AppConfig(app_conf_path).fanyikeypath
+
+baidu_status = False
+youdao_status = False
+
 d = load_api_keys(fanyikey_path)
 if "baidu" in d:
     baidu = d["baidu"]
-
     appKey = baidu["appid"]  # 你在第一步申请的APP ID
     appSecret = baidu["appkey"]  # 公钥
     BaiduTranslate = BaiDuFanyi(appKey, appSecret)
+    try:
+        BaiduTranslate.BdTrans("test")
+        baidu_status = True
+    except Exception:
+        pass
+
 if "youdao" in d:
     youdao = d["youdao"]
     appKey = youdao["appid"]  # 你在第一步申请的APP ID
     appSecret = youdao["appkey"]  # 公钥
     youdao_translator = YouDaoTranslator(appKey, appSecret)
     # Results = BaiduTranslate_test.BdTrans("Hello, World!")  # 要翻译的词组
+    try:
+        youdao_translator.translate("こにちは", "ja2zh")
+        youdao_status = True
+    except Exception:
+        pass
 
 
 def baidu_translate(text):
+    if not baidu_status:
+        return "翻译失败"
     return BaiduTranslate.BdTrans(text)
 
 
 def youdao_translate(text):
+    if not youdao_status:
+        return "翻译失败"
     return youdao_translator.translate(text, "ja2zh")
 
 

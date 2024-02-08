@@ -6,6 +6,10 @@ from hashlib import md5
 
 
 def load_api_keys(conf_path):
+    import os
+
+    if not os.path.exists(conf_path):
+        return {}
     with open(conf_path, "r") as f:
         d = yaml.safe_load(f)
     return d

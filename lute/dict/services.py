@@ -3,7 +3,7 @@ import shutil
 from pathlib import Path
 
 import yaml
-from mdict_query.mdict_query import IndexBuilder
+from lute.dict.mdict_query.mdict_query import IndexBuilder
 
 from lute.config.app_config import AppConfig
 from lute.dict.mdx_util import MDXDict

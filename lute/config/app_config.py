@@ -54,8 +54,8 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.bookimagespath = os.path.join(self.datapath, "bookimages")
         self.userchinesedict = os.path.join(self.datapath, "userchinesedict.txt")
         self.userunidic = {
-            "s": self.datapath + "/unidic-csj",
-            "w": self.datapath + "/unidic-cwj",
+            "s": "/".join(self.datapath.split("\\")) + "/unidic-csj",
+            "w": "/".join(self.datapath.split("\\")) + "/unidic-cwj",
         }
         self.temppath = os.path.join(self.datapath, "temp")
         self.dbfilename = os.path.join(self.datapath, self.dbname)

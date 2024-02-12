@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import List
 
 from bs4 import BeautifulSoup
-from mdict_query.mdict_query import IndexBuilder
+from lute.dict.mdict_query.mdict_query import IndexBuilder
 
 content_type_map = {
     "html": "text/html; charset=utf-8",

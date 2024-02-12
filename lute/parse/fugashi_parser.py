@@ -135,7 +135,7 @@ class FugashiParser(AbstractParser):
         dict_config = current_app.env_config
         try:
             cls._ana_tagger = Tagger(f"-d {dict_config.userunidic['s']}")
-            cls._w_tagger = Tagger(f"-d {dict_config.userunidic[w]}")
+            cls._w_tagger = Tagger(f"-d {dict_config.userunidic['w']}")
             cls._s_tagger = Tagger(f"-d {dict_config.userunidic['s']}")
         except:
             pass

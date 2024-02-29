@@ -6,7 +6,7 @@
   1. 确认安装的python 版本 `python -V`
   2. 运行以下命令
 ```sh
-pip install https://github.com/fanyingfx/lute-v3-fanyingfx/releases/download/3.1.1b4/lute3_fy-3.1.1b5-py3-none-any.whl --upgrade
+pip install https://github.com/fanyingfx/lute-v3-fanyingfx/releases/download/3.1.1b7/lute3_fy-3.1.1b7-py3-none-any.whl --upgrade
 pip install edge-tts
 python -m spacy download en_core_web_sm
 ```

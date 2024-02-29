@@ -504,6 +504,32 @@ rt{
 /*@media screen and (min-width: 2160px) {*/
 /*}*/
 
+@media screen and (min-width: 2160px){
+
+
+    #reading-blank {
+        margin: 2rem;
+        width: auto;
+        height: 5.8rem;
+        padding: 0.6rem;
+        border: 1px solid #eee;
+        overflow: auto;
+
+    }
+    #translation-para{
+        margin-left: 0.6rem;
+        font-size: 0.8rem;
+    }
+
+    .scrollable-div {
+        /*width: 300px;*/
+        height: 39.5rem;
+        overflow: auto; /* Enable scrolling */
+        /*border: 1px solid #ccc;*/
+        padding: 0.6rem;
+    }
+}
+
 @media screen and (max-width: 1920px){
 
 

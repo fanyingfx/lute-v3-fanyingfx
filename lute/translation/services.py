@@ -12,8 +12,8 @@ youdao_status = False
 d = load_api_keys(fanyikey_path)
 if "baidu" in d:
     baidu = d["baidu"]
-    appKey = baidu["appid"]  # 你在第一步申请的APP ID
-    appSecret = baidu["appkey"]  # 公钥
+    appKey = str(baidu["appid"]).strip()  # 你在第一步申请的APP ID
+    appSecret = str(baidu["appkey"]).strip()  # 公钥
     BaiduTranslate = BaiDuFanyi(appKey, appSecret)
     try:
         BaiduTranslate.BdTrans("test")
@@ -23,8 +23,8 @@ if "baidu" in d:
 
 if "youdao" in d:
     youdao = d["youdao"]
-    appKey = youdao["appid"]  # 你在第一步申请的APP ID
-    appSecret = youdao["appkey"]  # 公钥
+    appKey = str(youdao["appid"]).strip()  # 你在第一步申请的APP ID
+    appSecret = str(youdao["appkey"]).strip()  # 公钥
     youdao_translator = YouDaoTranslator(appKey, appSecret)
     # Results = BaiduTranslate_test.BdTrans("Hello, World!")  # 要翻译的词组
     try:
@@ -36,13 +36,13 @@ if "youdao" in d:
 
 def baidu_translate(text):
     if not baidu_status:
-        return "翻译失败"
+        return "百度翻译失败"
     return BaiduTranslate.BdTrans(text)
 
 
 def youdao_translate(text):
     if not youdao_status:
-        return "翻译失败"
+        return "有道翻译失败"
     return youdao_translator.translate(text, "ja2zh")
 
 

@@ -29,8 +29,9 @@ if "youdao" in d:
     youdao_translator = YouDaoTranslator(appKey, appSecret)
     # Results = BaiduTranslate_test.BdTrans("Hello, World!")  # 要翻译的词组
     try:
-        youdao_translator.translate("こにちは", "ja2zh")
-        youdao_status = True
+        r = youdao_translator.translate("こにちは", "ja2zh")
+        if r != "E":
+            youdao_status = True
     except Exception:
         pass
 

@@ -10,6 +10,7 @@ bp = Blueprint("trans", __name__, url_prefix="/trans")
 
 @bp.post("/baidu")
 def trans2cn():
+    # breakpoint()
     text = request.json.get("text")
     lang = get_lang(text)
     if lang == "ja" and youdao_status:

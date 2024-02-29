@@ -3,8 +3,9 @@ from lute.translation.baidufanyi import load_api_keys, BaiDuFanyi
 from lute.config.app_config import AppConfig
 from lute.translation.youdaofanyi import YouDaoTranslator
 
-app_conf_path = AppConfig.default_config_filename(dev=True)
+app_conf_path = AppConfig.default_config_filename()
 fanyikey_path = AppConfig(app_conf_path).fanyikeypath
+print(fanyikey_path)
 
 baidu_status = False
 youdao_status = False

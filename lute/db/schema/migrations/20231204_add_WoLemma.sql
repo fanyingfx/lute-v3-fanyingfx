@@ -1,1 +1,1 @@
-alter table words  "WoLemma" VARCHAR(100) NULL;
+alter table words ADD COLUMN "WoLemma" VARCHAR(100) NULL;

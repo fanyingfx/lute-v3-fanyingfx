@@ -8,16 +8,16 @@ build-backend = "flit_core.buildapi"
 [tool.flit.module]
 name = "lute"
 
+
+[tool.pdm]
 [project]
 name = "lute3"
 
 dynamic = ['version']
 
 description = "Learning Using Texts"
-requires-python = ">=3.8"
-authors = [
-  {name = "Jeff Zohrab", email = "jzohrab@gmail.com"}
-]
+requires-python = ">=3.11"
+authors = [{ name = "Jeff Zohrab", email = "jzohrab@gmail.com" }]
 readme = "README_PyPi.md"
 
 dependencies = [
@@ -33,14 +33,19 @@ dependencies = [
   "waitress>=2.1.2,<3",
   "openepub>=0.0.8,<1",
   "pypdf>=3.17.4",
-  "subtitle-parser>=1.3.0"
+  "subtitle-parser>=1.3.0",
 ]
 
 [project.scripts]
 lute = "lute.main:start"
 
-[package_data]
-lute.config = ["config/config.yml"]
+[tool.pdm.scripts]
+test = "inv test"
+lute = "python -m lute.main"
+dev = "python devstart.py"
+full = "inv full"
+accept = "inv accept"
+
 
 [project.optional-dependencies]
 dev = [
@@ -53,6 +58,7 @@ dev = [
   "pytest-splinter>=3.3.2,<4",
   "pre-commit>=3.5.0,<4",
   "black>=23.10.1,<24",
+  "playwright>=1.43.0",
 ]
 
 [project.urls]

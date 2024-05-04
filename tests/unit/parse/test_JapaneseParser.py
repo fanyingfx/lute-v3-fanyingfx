@@ -66,7 +66,7 @@ def test_readings(app_context):
     for c in no_reading:
         assert p.get_reading(c) is None, c
 
-    zws = "\u200B"
+    zws = "\u200b"
     cases = [
         ("強い", "ツヨイ"),
         ("二人", "ニニン"),  # ah well, not perfect :-)

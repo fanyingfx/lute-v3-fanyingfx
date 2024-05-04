@@ -104,7 +104,7 @@ def then_rendered_should_be(expected):
     """
 
     def stringize(ti):
-        zws = "\u200B"
+        zws = "\u200b"
         status = ""
         if ti.wo_status not in [None, 0]:
             status = f"({ti.wo_status})"
@@ -119,7 +119,7 @@ def known_only_rendered_should_be(expected):
         s = ti.display_text
         if ti.wo_status not in [None, 0]:
             s = f"[[{s}]]"
-        zws = "\u200B"
+        zws = "\u200b"
         return s.replace(zws, "")
 
     _assert_stringized_equals(stringize, "", expected)

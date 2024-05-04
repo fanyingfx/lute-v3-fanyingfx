@@ -1,33 +1,28 @@
 {% extends 'base.html' %}
-
 {% block title %}Predefined Languages{% endblock %}
-
 {% block header %}Predefined Languages{% endblock %}
-
 {% block body %}
-
-<div style="width: 70%">
-<table id="languagetable" class="table dataTable no-footer" style="margin: 0;">
-  <thead>
-    <tr>
-      <th>Language</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for language in predefined %}
-    <tr>
-      <td>
-        <a href="/language/load_predefined/{{ language.name }}">
-          {{ language.name }}
-        </a>
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
-
-<script>
+    <div style="width: 70%">
+        <table id="languagetable"
+               class="table dataTable no-footer"
+               style="margin: 0">
+            <thead>
+                <tr>
+                    <th>Language</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for language in predefined %}
+                    <tr>
+                        <td>
+                            <a href="/language/load_predefined/{{ language.name }}">{{ language.name }}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
   var language_listing_table;
 
   let setup_lang_datatable = function() {
@@ -46,6 +41,5 @@
   $(document).ready(function () {
     setup_lang_datatable();
   });
-</script>
-
+    </script>
 {% endblock %}

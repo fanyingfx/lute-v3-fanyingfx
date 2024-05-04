@@ -53,9 +53,7 @@ class RenderableCalculator:
                 raise RuntimeError(msg)
             prevtok = tok
 
-    def _get_renderable(
-        self, tokenlocator, terms, texttokens
-    ):  # pylint: disable=too-many-locals
+    def _get_renderable(self, tokenlocator, terms, texttokens):  # pylint: disable=too-many-locals
         """
         Return RenderableCandidates that will **actually be rendered**.
 
@@ -336,7 +334,7 @@ class TokenLocator:
 
             # print(f"found match \"{matchtext}\" len={matchlen} pos={matchpos}")
             original_subject_text = subj[matchpos : matchpos + matchlen]
-            zws = "\u200B"
+            zws = "\u200b"
             t = original_subject_text.lstrip(zws).rstrip(zws)
             index = self.get_count_before(subj, matchpos)
             return {"text": t, "index": index}
@@ -349,7 +347,7 @@ class TokenLocator:
         """
         Count of tokens found in string before position pos.
         """
-        zws = "\u200B"
+        zws = "\u200b"
         beforesubstr = string[:pos]
         n = beforesubstr.count(zws)
         return n
@@ -380,7 +378,7 @@ class TokenLocator:
         """
         Append zero-width string to string to simplify/standardize searches.
         """
-        zws = "\u200B"
+        zws = "\u200b"
         if isinstance(t, list):
             t = zws.join(t)
         return f"{zws}{t}{zws}"

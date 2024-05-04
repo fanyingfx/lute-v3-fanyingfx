@@ -244,9 +244,7 @@ def test_database_backup_file_size_formatting(auto_backup_file):
         assert dbf.size == "944 bytes"
 
 
-def test_list_backups_returns_both(
-    bkp_dir, auto_backup_file, manual_backup_file
-):  # pylint: disable=unused-argument
+def test_list_backups_returns_both(bkp_dir, auto_backup_file, manual_backup_file):  # pylint: disable=unused-argument
     backups = list_backups(bkp_dir)
     assert len(backups) == 2
     assert all(isinstance(backup, DatabaseBackupFile) for backup in backups)

@@ -1,30 +1,26 @@
 <html>
-  <head>
-    <script type="text/javascript" src="{{ url_for('static', filename='vendor/jquery/jquery.js') }}" charset="utf-8"></script>
-
-    <style>
+    <head>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='vendor/jquery/jquery.js') }}"
+                charset="utf-8"></script>
+        <style>
       .flash {
           margin-top: 20px;
           padding: 20px;
           background-color: #fff3cd;
           border-color: #ffeeba;
       }
-    </style>
-  </head>
-
-  <body>
-
-    <div id="flash" class="flash">
-      <p>&quot;{{ term_text }}&quot; updated.</p>
-    </div>
-
-    <script>
+        </style>
+    </head>
+    <body>
+        <div id="flash" class="flash">
+            <p>&quot;{{ term_text }}&quot; updated.</p>
+        </div>
+        <script>
       $(document).ready(function() {
         window.parent.postMessage({ event: "LuteTermFormPosted" }, "*");
         $('#flash').delay(1000).fadeOut();
       });
-    </script>
-
-  </body>
-
+        </script>
+    </body>
 </html>

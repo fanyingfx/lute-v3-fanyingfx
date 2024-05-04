@@ -72,6 +72,7 @@ def get_status_distribution(book):
 
 class BookStats(db.Model):
     "The stats table."
+
     __tablename__ = "bookstats"
 
     id = db.Column(db.Integer, primary_key=True)

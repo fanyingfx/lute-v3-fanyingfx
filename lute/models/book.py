@@ -15,6 +15,7 @@ booktags = db.Table(
 
 class BookTag(db.Model):
     "Term tags."
+
     __tablename__ = "tags2"
 
     id = db.Column("T2ID", db.Integer, primary_key=True)
@@ -43,9 +44,7 @@ class BookTag(db.Model):
         return BookTag.make_book_tag(text)
 
 
-class Book(
-    db.Model
-):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
+class Book(db.Model):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
     """
     Book entity.
     """
@@ -189,7 +188,7 @@ class Book(
 
         b = Book(title, language)
         for index, page in enumerate(pages):
-            t = Text(b, page, index + 1)
+            t = Text(b, page, index + 1)  # noqa: F841
 
         return b
 
@@ -208,6 +207,7 @@ class Text(db.Model):
     __tablename__ = "texts"
 
     id = db.Column("TxID", db.Integer, primary_key=True)
+
     _text = db.Column("TxText", db.String, nullable=False)
     order = db.Column("TxOrder", db.Integer)
     _read_date = db.Column("TxReadDate", db.DateTime, nullable=True)

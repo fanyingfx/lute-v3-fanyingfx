@@ -177,7 +177,7 @@ def list_predefined():
     "Show predefined languages that are not already in the db."
     predefined = lute.language.service.predefined_languages()
     existing_langs = db.session.query(Language).all()
-    existing_names = [l.name for l in existing_langs]
+    existing_names = [language.name for language in existing_langs]
     new_langs = [p for p in predefined if p.name not in existing_names]
     return render_template("language/list_predefined.html", predefined=new_langs)
 

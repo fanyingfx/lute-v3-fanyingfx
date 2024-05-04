@@ -79,6 +79,7 @@ class MissingUserSettingKeyException(Exception):
 
 class UserSetting(SettingBase):
     "User setting."
+
     __tablename__ = None
     __mapper_args__ = {"polymorphic_identity": "user"}
 
@@ -200,6 +201,7 @@ class UserSetting(SettingBase):
 
 class SystemSetting(SettingBase):
     "System setting."
+
     __tablename__ = None
     __mapper_args__ = {"polymorphic_identity": "system"}
 

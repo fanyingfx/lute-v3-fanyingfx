@@ -35,9 +35,7 @@ class LanguageDictionary(db.Model):
         return f"{prepend}{self.dicturi}"
 
 
-class Language(
-    db.Model
-):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
+class Language(db.Model):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
     """
     Language entity.
     """

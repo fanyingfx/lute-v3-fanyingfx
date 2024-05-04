@@ -1,65 +1,51 @@
 {% extends 'base.html' %}
-
 {% block title %}Edit Book{% endblock %}
 {% block header %}Edit book{% endblock %}
-
 {% block body %}
-
-{% for field_name, field_errors in form.errors.items() %}
-{% for error in field_errors %}
-<div class="flash-notice-narrow">{{ error }}</div>
-{% endfor %}
-{% endfor %}
-
-<p style="width: 50%; margin-bottom: 20px;">Note: you can't change the language or text of a book after it has been created.  If you need to do that, please create a new book instead, and delete the old one.</p>
-
-<form method="POST" enctype="multipart/form-data">
-  {{ form.hidden_tag() }}
-
-  <table id="book">
-  <tbody>
-
-    <tr>
-      <td>{{ form.title.label }}</td>
-      <td>{{ form.title(class="form-control", dir=title_direction) }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.source_uri.label }}</td>
-      <td>{{ form.source_uri(class="form-control") }}</td>
-    </tr>
-
-    <tr>
-      <td>{{ form.audiofile.label }}</td>
-      <td>
-        {{ form.audiofile() }}
-        {{ form.audio_filename() }}
-        {% if book.audio_filename %}
-        <div id="current_file_div" style="margin: 5px">
-        <span class="smallfilename">Current file: {{ book.audio_filename }}</span>
-        <img src="{{ url_for('static', filename='icn/minus-button.png') }}"
-             title="Delete audio file"
-             style="margin-left: 5px"
-             onclick="confirm_delete(this)" />
-        </div>
-        {% endif %}
-      </td>
-    </tr>
-
-    <tr>
-      <td>{{ form.book_tags.label }}</td>
-      <td>{{ form.book_tags(class="form-control") }}</td>
-    </tr>
-
-  </tbody>
-  </table>
-
-  <button type="submit" class="btn btn-primary">Save</button>
-</form>
-
-<button onclick="window.location = '/'">Cancel</button>
-
-<script type="text/javascript">
+    {% for field_name, field_errors in form.errors.items() %}
+        {% for error in field_errors %}<div class="flash-notice-narrow">{{ error }}</div>{% endfor %}
+    {% endfor %}
+    <p style="width: 50%; margin-bottom: 20px;">
+        Note: you can't change the language or text of a book after it has been created.  If you need to do that, please create a new book instead, and delete the old one.
+    </p>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <table id="book">
+            <tbody>
+                <tr>
+                    <td>{{ form.title.label }}</td>
+                    <td>{{ form.title(class="form-control", dir=title_direction) }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.source_uri.label }}</td>
+                    <td>{{ form.source_uri(class="form-control") }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form.audiofile.label }}</td>
+                    <td>
+                        {{ form.audiofile() }}
+                        {{ form.audio_filename() }}
+                        {% if book.audio_filename %}
+                            <div id="current_file_div" style="margin: 5px">
+                                <span class="smallfilename">Current file: {{ book.audio_filename }}</span>
+                                <img src="{{ url_for('static', filename='icn/minus-button.png') }}"
+                                     title="Delete audio file"
+                                     style="margin-left: 5px"
+                                     onclick="confirm_delete(this)" />
+                            </div>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{{ form.book_tags.label }}</td>
+                    <td>{{ form.book_tags(class="form-control") }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <button onclick="window.location = '/'">Cancel</button>
+    <script type="text/javascript">
   var TAGS = {{ tags | safe }};
 
   let setup_book_tags_tagify = function(input) {
@@ -87,6 +73,5 @@
     $('#audio_filename').val(null);
   }
 
-</script>
-
+    </script>
 {% endblock %}

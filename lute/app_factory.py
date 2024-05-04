@@ -225,9 +225,9 @@ def _add_base_routes(app, app_config):
         Some files should never be cached.
         """
         response = make_response(send_from_directory("static/js", filename))
-        response.headers[
-            "Cache-Control"
-        ] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Cache-Control"] = (
+            "no-store, no-cache, must-revalidate, max-age=0"
+        )
         return response
 
     @app.errorhandler(500)

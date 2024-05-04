@@ -7,6 +7,4 @@
       data-text="{{ item.text }}"
       data-status-class="{{ item.status_class }}"
       data-order="{{ item.order }}"
-{% if item.wo_id is not none %}
-      data-wid="{{ item.wo_id }}"
-{% endif %}>{{ item.html_display_text | safe }}</span>
+      {% if item.wo_id is not none %}data-wid="{{ item.wo_id }}"{% endif %}>{{ item.html_display_text | safe }}</span>

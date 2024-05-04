@@ -57,7 +57,7 @@ class JapaneseParser(AbstractParser):
             sys.stderr = temp_err
             MeCab()
             b = True
-        except:  # pylint: disable=bare-except
+        except Exception:  # ignore: E722
             b = False
         finally:
             sys.stderr = sys.__stderr__
@@ -113,7 +113,7 @@ class JapaneseParser(AbstractParser):
     # ref https://stackoverflow.com/questions/72016049/
     #   how-to-check-if-text-is-japanese-hiragana-in-python
     def _char_is_hiragana(self, c) -> bool:
-        return "\u3040" <= c <= "\u309F"
+        return "\u3040" <= c <= "\u309f"
 
     def _string_is_hiragana(self, s: str) -> bool:
         return all(self._char_is_hiragana(c) for c in s)

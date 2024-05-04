@@ -1,47 +1,43 @@
 {% extends 'base.html' %}
-
 {% block title %}Languages{% endblock %}
-
 {% block header %}Languages{% endblock %}
-
 {% block body %}
-
-{% if language_data|length == 0 %}
-  <p>No languages defined.</p>
-{% else %}
-
-<div style="width: 70%">
-<table id="languagetable" class="table dataTable no-footer" style="margin: 0;">
-  <thead>
-    <tr>
-      <th>Language</th>
-      <th>Books</th>
-      <th>Terms</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for language, book_count, term_count in language_data %}
-    <tr>
-      <td>
-        <a href="/language/edit/{{ language.id }}">
-          {{ language.name }}
-        </a>
-      </td>
-      <td>{{ book_count or '-' }}</td>
-      <td>{{ term_count or '-' }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-</div>
-
-{% endif %}
-
-<br />
-<p><a href="{{ url_for('language.list_predefined') }}">Load predefined language and sample stories</a></p>
-<p><a href="{{ url_for('language.new') }}">Create new</a></p>
-
-<script>
+    {% if language_data|length == 0 %}
+        <p>No languages defined.</p>
+    {% else %}
+        <div style="width: 70%">
+            <table id="languagetable"
+                   class="table dataTable no-footer"
+                   style="margin: 0">
+                <thead>
+                    <tr>
+                        <th>Language</th>
+                        <th>Books</th>
+                        <th>Terms</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for language, book_count, term_count in language_data %}
+                        <tr>
+                            <td>
+                                <a href="/language/edit/{{ language.id }}">{{ language.name }}</a>
+                            </td>
+                            <td>{{ book_count or '-' }}</td>
+                            <td>{{ term_count or '-' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+    <br />
+    <p>
+        <a href="{{ url_for("language.list_predefined") }}">Load predefined language and sample stories</a>
+    </p>
+    <p>
+        <a href="{{ url_for("language.new") }}">Create new</a>
+    </p>
+    <script>
   var language_listing_table;
 
   let setup_lang_datatable = function() {
@@ -61,6 +57,5 @@
   $(document).ready(function () {
     setup_lang_datatable();
   });
-</script>
-
+    </script>
 {% endblock %}

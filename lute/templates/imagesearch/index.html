@@ -1,46 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <title>Images</title>
-    <script type="text/javascript" src="{{ url_for('static', filename='vendor/jquery/jquery.js') }}" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/styles.css') }}" />
-    <link rel="stylesheet" type="text/css" href="/theme/current">
-    <link rel="stylesheet" type="text/css" href="/theme/custom_styles">
-  </head>
-
-  <body>
-    <div id="termimagesearch" class="container">
-
-      <!-- form post is handled via javascript, added below -->
-      <form id="manual_image_upload" method="post" enctype="multipart/form-data" style="display: none">
-        <input type="hidden" name="langid" value="{{ langid }}">
-        <input type="hidden" name="text" value="{{ text }}">
-        <input type="file" name="manual_image_file" id="manual_image_file" />
-      </form>
-
-      <p class="termimagesearchtitle">
-        Click an image below,
-        <span id="upload_image_link" class="imageAction">upload an image</span>, or
-        <span class="imageAction" title="Click to set focus in this window">click here</span>
-        then paste from your clipboard.
-      </p>
-
-      {% for image in images %}
-      <span class="initial"
-            style="margin: 2px; display:inline-block;"
-            onmouseover="highlight_image(this);"
-            onmouseout="un_highlight_image(this);"
-            onclick='save_image_locally("{{ image['src'] }}", {{ langid }}, "{{ text }}")'
-            >
-        {{ image['html'] | safe }}
-      </span>
-      {% endfor %}
-    </div>
-  </body>
-
-  <script>
-
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Images</title>
+        <script type="text/javascript"
+                src="{{ url_for('static', filename='vendor/jquery/jquery.js') }}"
+                charset="utf-8"></script>
+        <link rel="stylesheet"
+              type="text/css"
+              href="{{ url_for('static', filename='css/styles.css') }}" />
+        <link rel="stylesheet" type="text/css" href="/theme/current">
+        <link rel="stylesheet" type="text/css" href="/theme/custom_styles">
+    </head>
+    <body>
+        <div id="termimagesearch" class="container">
+            <!-- form post is handled via javascript, added below -->
+            <form id="manual_image_upload"
+                  method="post"
+                  enctype="multipart/form-data"
+                  style="display: none">
+                <input type="hidden" name="langid" value="{{ langid }}">
+                <input type="hidden" name="text" value="{{ text }}">
+                <input type="file" name="manual_image_file" id="manual_image_file" />
+            </form>
+            <p class="termimagesearchtitle">
+                Click an image below,
+                <span id="upload_image_link" class="imageAction">upload an image</span>, or
+                <span class="imageAction" title="Click to set focus in this window">click here</span>
+                then paste from your clipboard.
+            </p>
+            {% for image in images %}
+                <span class="initial"
+                      style="margin: 2px;
+                             display:inline-block"
+                      onmouseover="highlight_image(this);"
+                      onmouseout="un_highlight_image(this);"
+                      onclick='save_image_locally("{{ image['src'] }}", {{ langid }}, "{{ text }}")'>
+                    {{ image['html'] | safe }}
+                </span>
+            {% endfor %}
+        </div>
+    </body>
+    <script>
     let update_term_form = function(filename) {
       // Well, this took **far** too long to figure out ...
       let fr = window.parent.frames['wordframe'];
@@ -142,6 +143,5 @@
 
     });
 
-  </script>
-
+    </script>
 </html>

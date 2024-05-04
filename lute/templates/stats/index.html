@@ -1,42 +1,38 @@
 {% extends 'base.html' %}
-
 {% block title %}Stats{% endblock %}
-
 {% block header %}Stats{% endblock %}
-
 {% block body %}
-
-<script type="text/javascript" src="{{ url_for('static', filename='vendor/chartjs/chart.umd.js') }}" charset="utf-8"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='vendor/chartjs/chartjs-adapter-date-fns.js') }}" charset="utf-8"></script>
-
-<h2>Words read</h2>
-
-<table class="statsWordsRead">
-  <tr>
-    <th />
-    <th>today</th>
-    <th>last week</th>
-    <th>last month</th>
-    <th>last year</th>
-    <th>all time</th>
-  </tr>
-  {% for lang in read_table_data %}
-  <tr>
-    <td>{{ lang.name }}</td>
-    <td>{{ lang.counts.day }}</td>
-    <td>{{ lang.counts.week }}</td>
-    <td>{{ lang.counts.month }}</td>
-    <td>{{ lang.counts.year }}</td>
-    <td>{{ lang.counts.total }}</td>
-  </tr>
-  {% endfor %}
-</ul>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='vendor/chartjs/chart.umd.js') }}"
+            charset="utf-8"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='vendor/chartjs/chartjs-adapter-date-fns.js') }}"
+            charset="utf-8"></script>
+    <h2>Words read</h2>
+    <table class="statsWordsRead">
+        <tr>
+            <th />
+            <th>today</th>
+            <th>last week</th>
+            <th>last month</th>
+            <th>last year</th>
+            <th>all time</th>
+        </tr>
+        {% for lang in read_table_data %}
+            <tr>
+                <td>{{ lang.name }}</td>
+                <td>{{ lang.counts.day }}</td>
+                <td>{{ lang.counts.week }}</td>
+                <td>{{ lang.counts.month }}</td>
+                <td>{{ lang.counts.year }}</td>
+                <td>{{ lang.counts.total }}</td>
+            </tr>
+        {% endfor %}
+    </ul>
 </table>
-
 <div style="width:60%;">
-  <canvas id="wordCountChart"></canvas>
+    <canvas id="wordCountChart"></canvas>
 </div>
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     fetch('/stats/data')
@@ -152,5 +148,4 @@
     });
   }
 </script>
-
 {% endblock %}

@@ -45,20 +45,23 @@ lute = "python -m lute.main"
 dev = "python devstart.py"
 full = "inv full"
 accept = "inv accept"
+lint = "inv lint"
 
 
 [project.optional-dependencies]
 dev = [
-  "coverage>=7.3.1,<8",
-  "invoke>=2.2.0,<3",
-  "pip>=23.0.1",
-  "pipdeptree>=2.13.0,<3",
-  "pylint>=2.17.5,<3",
-  "pytest-bdd>=7.0.0,<8",
-  "pytest-splinter>=3.3.2,<4",
-  "pre-commit>=3.5.0,<4",
-  "black>=23.10.1,<24",
-  "playwright>=1.43.0",
+    "coverage>=7.3.1,<8",
+    "invoke>=2.2.0,<3",
+    "pip>=23.0.1",
+    "pipdeptree>=2.13.0,<3",
+    "pylint>=2.17.5,<3",
+    "pytest-bdd>=7.0.0,<8",
+    "pytest-splinter>=3.3.2,<4",
+    "pre-commit>=3.5.0,<4",
+    "black>=23.10.1,<24",
+    "playwright>=1.43.0",
+    "djlint>=1.34.1",
+    "ruff>=0.4.3",
 ]
 
 [project.urls]

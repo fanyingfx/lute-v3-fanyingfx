@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
-
 {% block title %}Reading &quot;{{ html_title }}&quot;{% endblock %}
-
 {% block body %}
-
-<script type="text/javascript" src="{{ url_for('static', filename='js/player.js') }}" charset="utf-8" defer></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/resize.js') }}" charset="utf-8" defer></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/text-options.js') }}" charset="utf-8" defer></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/dict-tabs.js') }}" charset="utf-8"></script>
-
-<div id="rendering_controls" style="display: none">
-  <pre>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/player.js') }}"
+            charset="utf-8"
+            defer></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/resize.js') }}"
+            charset="utf-8"
+            defer></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/text-options.js') }}"
+            charset="utf-8"
+            defer></script>
+    <script type="text/javascript"
+            src="{{ url_for('static', filename='js/dict-tabs.js') }}"
+            charset="utf-8"></script>
+    <div id="rendering_controls" style="display: none">
+        <pre>
     lang_is_rtl: <input id="lang_is_rtl" value="{{ is_rtl }}">
     book_id: <input id="book_id" value="{{ book.id }}">
     book_audio: <input id="book_audio_file" value="{{ book.audio_filename or '' }}">
@@ -20,168 +27,135 @@
     page_count: <input id="page_count" value="{{ page_count }}">
     highlights: <span id="show_highlights">{{ show_highlights|lower }}</span>
   </pre>
-</div>
-
-<script>
+    </div>
+    <script>
   // The sentence dictionaries configured for the language.  This var
   // is used in lute.js.
   var LUTE_SENTENCE_LOOKUP_URIS = {{ sentence_dict_uris|safe }};
-</script>
-
-
-<div id="read_pane_container">
-
-<div id="read_pane_left">
-
-  <div id="reading_menu">
-    {% include "read/reading_menu.html" %}
-  </div>
-
-  <div id="reading-header">
-
-    <div class="reading_header_container">
-        <div class="reading_header_left">
-          <div class="hamburger-btn" onclick="toggleMenu()">
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-            <span class="hamburger"></span>
-          </div>
-	  <a href="/">
-		<img
-		  src="{{ url_for('static', filename='img/lute.png') }}"
-		  class="lutelogo_small"
-		  style="cursor: pointer"
-		  title="Home"
-		/>
-	  </a>
-        </div>
-        <div class="reading_header_mid">
-        <div class="reading_header_mid_top">
-          <div class="texttitlecontainer">
-            <h1 id="headertexttitle" {% if is_rtl %}dir="rtl" {% endif %} class="hide">{{ book.title }}</h1>
-          </div>
-          <div class="reading_header_page">
-            <!-- <a id="reading_home_link" class="home-link" href="/">Home</a> -->
-            <div class="read-bookmark-buttons-container">
-              <button id="read-bkm-save-btn" class="read-bkm-btn"></button>
-              <!-- <div class="read-bookmark-jump-container"> -->
-                <!-- <button id="read-bkm-prev-btn" class="read-bkm-btn"></button> -->
-                <!-- <button id="read-bkm-next-btn" class="read-bkm-btn"></button> -->
-              <!-- </div> -->
+    </script>
+    <div id="read_pane_container">
+        <div id="read_pane_left">
+            <div id="reading_menu">{% include "read/reading_menu.html" %}</div>
+            <div id="reading-header">
+                <div class="reading_header_container">
+                    <div class="reading_header_left">
+                        <div class="hamburger-btn" onclick="toggleMenu()">
+                            <span class="hamburger"></span>
+                            <span class="hamburger"></span>
+                            <span class="hamburger"></span>
+                        </div>
+                        <a href="/">
+                            <img src="{{ url_for('static', filename='img/lute.png') }}"
+                                 class="lutelogo_small"
+                                 style="cursor: pointer"
+                                 title="Home" />
+                        </a>
+                    </div>
+                    <div class="reading_header_mid">
+                        <div class="reading_header_mid_top">
+                            <div class="texttitlecontainer">
+                                <h1 id="headertexttitle"
+                                    {% if is_rtl %}dir="rtl"{% endif %}
+                                    class="hide">{{ book.title }}</h1>
+                            </div>
+                            <div class="reading_header_page">
+                                <!-- <a id="reading_home_link" class="home-link" href="/">Home</a> -->
+                                <div class="read-bookmark-buttons-container">
+                                    <button id="read-bkm-save-btn" class="read-bkm-btn"></button>
+                                    <!-- <div class="read-bookmark-jump-container"> -->
+                                    <!-- <button id="read-bkm-prev-btn" class="read-bkm-btn"></button> -->
+                                    <!-- <button id="read-bkm-next-btn" class="read-bkm-btn"></button> -->
+                                    <!-- </div> -->
+                                </div>
+                                <div id="page_indicator">{{ page_num }}/{{ page_count }}</div>
+                            </div>
+                        </div>
+                        <div class="read-slide-container">
+                            <div class="read_page_nav read_page_disabled"
+                                 id="navPrev"
+                                 onclick="goto_relative_page(-1)">◀</div>
+                            <input type="range"
+                                   id="read-slider"
+                                   class="read_page_disabled"
+                                   max="{{ page_count - 1 }}"
+                                   value="{{ page_num }}"
+                                   step="1">
+                            <div class="read_page_nav read_page_disabled"
+                                 id="navNext"
+                                 onclick="goto_relative_page(1)">▶</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="definition-container"></div> -->
             </div>
-            <div id="page_indicator">{{ page_num }}/{{ page_count }}</div>
-          </div>
-          </div>
-          <div class="read-slide-container">
-            <div class="read_page_nav read_page_disabled"
-              id="navPrev"
-              onclick="goto_relative_page(-1)">◀</div>
-            <input type="range" id="read-slider" class="read_page_disabled" max="{{ page_count - 1 }}" value="{{ page_num }}" step="1">
-            <div class="read_page_nav read_page_disabled"
-              id="navNext"
-              onclick="goto_relative_page(1)">▶</div>
-          </div>
+            {% include "read/audio_player.html" %}
+            <h1 id="thetexttitle" {% if is_rtl %}dir="rtl"{% endif %} class="hide">{{ book.title }}</h1>
+            <div id="thetext" {% if is_rtl %}dir="rtl"{% endif %}>...</div>
+            <div id="reading-footer" style="text-align: center">
+                <p>
+                    <span id="footerMarkRestAsKnownNextPage"
+                          style="cursor: pointer;
+                                 color: #4CBB17"
+                          onclick="handle_page_done(true, 1)"
+                          title="Mark rest as known, mark page as read, then go to next page">&#x2714;</span>
+                    <span id="footerNextPage"
+                          style="cursor: pointer;
+                                 font-size: 1.5em;
+                                 font-weight: bold"
+                          onclick="handle_page_done(false, 1)"
+                          title="Mark page as read, then go to next page">&#8250;</span>
+                </p>
+                <div id="final_page_controls" class="hide">
+                    <p>
+                        <span id="footerMarkRestAsKnown"
+                              style="cursor: pointer;
+                                     color: #4CBB17"
+                              onclick="handle_page_done(true, 0)"
+                              title="Mark rest as known, mark page as read">&#x2714;</span>
+                        <span id="footerDone"
+                              style="cursor: pointer"
+                              onclick="handle_page_done(false, 0)"
+                              title="Mark page as read">&#x2714;</span>
+                    </p>
+                    <h2>&#127881;</h2>
+                    <p>
+                        <a href=""
+                           tabindex="-1"
+                           onclick="$('#actionposter').submit(); return false;">Archive book</a>
+                        |
+                        <a href="/" tabindex="-1">Home</a>
+                    </p>
+                    <form id="actionposter" method="post" action="/book/archive/{{ book.id }}">
+                    </form>
+                </div>
+            </div>
+            <div class="btm-margin-container"></div>
+        </div>
+        <div id="read_pane_right">
+            <button class="close-btn read-pane-right-close-btn"
+                    onclick="closeRightPane()"></button>
+            <div class="wordframecontainer">
+                <iframe name="wordframe"
+                        id="wordframeid"
+                        class="rightreadingframe"
+                        src="about:blank"
+                        scrolling="auto"
+                        style="height: 35%;
+                               width: 100%"
+                        frameborder="0">
+                    Frame support required.
+                </iframe>
+            </div>
+            <div class="dictcontainer">
+                <div id="dicttabs">
+                    <div id="dicttabslayout"></div>
+                    <div id="dicttabsstatic"></div>
+                </div>
+                <div id="dictframes"></div>
+            </div>
         </div>
     </div>
-
-    <!-- <div class="definition-container"></div> -->
-
-  </div>
-
-  {% include "read/audio_player.html" %}
-
-  <h1 id="thetexttitle" {% if is_rtl %}dir="rtl" {% endif %} class="hide">{{ book.title }}</h1>
-  <div id="thetext" {% if is_rtl %}dir="rtl" {% endif %}>
-    ...
-  </div>
-
-  <div id="reading-footer" style="text-align: center">
-    <p>
-      <span
-        id="footerMarkRestAsKnownNextPage"
-        style="cursor: pointer; color: #4CBB17;"
-        onclick="handle_page_done(true, 1)"
-        title="Mark rest as known, mark page as read, then go to next page">
-        &#x2714;
-      </span>
-
-      <span
-        id="footerNextPage"
-        style="cursor: pointer; font-size: 1.5em; font-weight: bold;"
-        onclick="handle_page_done(false, 1)"
-        title="Mark page as read, then go to next page">
-        &#8250;
-      </span>
-    </p>
-
-    <div id="final_page_controls" class="hide">
-      <p>
-        <span
-          id="footerMarkRestAsKnown"
-          style="cursor: pointer; color: #4CBB17;"
-          onclick="handle_page_done(true, 0)"
-          title="Mark rest as known, mark page as read">
-          &#x2714;
-        </span>
-
-        <span
-          id="footerDone"
-          style="cursor: pointer;"
-          onclick="handle_page_done(false, 0)"
-          title="Mark page as read">
-          &#x2714;
-        </span>
-      </p>
-
-      <h2>&#127881;</h2>
-      <p>
-        <a
-          href=""
-          tabindex="-1"
-          onclick="$('#actionposter').submit(); return false;"
-          >Archive book</a>
-        |
-        <a href="/" tabindex="-1">Home</a>
-      </p>
-
-      <form
-        id="actionposter"
-        method="post"
-        action="/book/archive/{{ book.id }}"
-        ></form>
-    </div>
-
-  </div>
-  <div class="btm-margin-container"></div>
-</div>
-
-<div id="read_pane_right">
-  <button class="close-btn read-pane-right-close-btn" onclick="closeRightPane()"></button>
-  <div class="wordframecontainer">
-  <iframe
-    name="wordframe"
-    id="wordframeid"
-    class="rightreadingframe"
-    src="about:blank"
-    scrolling="auto"
-    style="height: 35%; width: 100%"
-    frameborder="0"
-  >
-    Frame support required.
-  </iframe>
-  </div>
-  <div class="dictcontainer">
-    <div id="dicttabs">
-      <div id="dicttabslayout"></div>
-      <div id="dicttabsstatic"></div>
-    </div>
-    <div id="dictframes"></div>
-  </div>
-</div>
-
-</div>
-
-<script>
+    <script>
   LookupButton.LANG_ID = {{ lang_id | safe }};
   LookupButton.TERM_DICTS = {{ term_dicts | safe }};
 
@@ -529,6 +503,5 @@
   }
 
 
-</script>
-
+    </script>
 {% endblock %}

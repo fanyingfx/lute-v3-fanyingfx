@@ -136,7 +136,7 @@ def test_status_propagates_even_if_circular_reference(term_family, app_context):
     # db.session.add(f.b1)
     db.session.commit()
 
-    zws = "\u200B"
+    zws = "\u200b"
     sql = f"""
     select p.WoText, c.WoText
     from words p

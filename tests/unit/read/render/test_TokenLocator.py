@@ -10,7 +10,7 @@ def test_token_locator_scenario(english):
     Run test scenarios.
     """
 
-    zws = "\u200B"
+    zws = "\u200b"
     cases = [
         # Cases are of the following form:
         # ( tokens,

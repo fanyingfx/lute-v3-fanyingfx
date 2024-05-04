@@ -1,19 +1,15 @@
 {% extends 'base.html' %}
-
 {% block title %}Parent Term mappings{% endblock %}
 {% block header %}Parent Term mappings{% endblock %}
-
 {% block body %}
-
-<div style="width: 70%; margin-bottom: 20px;">
-
-<p>These are soon-to-be obsolete helpers to export some term data.</p>
-
-<p>Export unknown terms from books.</p>
-<ul style="list-style: none; padding: 0;">
-  {% for book in books %}
-  <li><a href="/term_parent_map/export_book/{{ book.id }}">{{ book.title }}</a></li>
-  {% endfor %}
-</ul>
-
-{% endblock %}
+    <div style="width: 70%; margin-bottom: 20px;">
+        <p>These are soon-to-be obsolete helpers to export some term data.</p>
+        <p>Export unknown terms from books.</p>
+        <ul style="list-style: none; padding: 0;">
+            {% for book in books %}
+                <li>
+                    <a href="/term_parent_map/export_book/{{ book.id }}">{{ book.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endblock %}

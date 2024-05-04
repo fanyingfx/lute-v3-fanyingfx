@@ -7,7 +7,7 @@ from io import StringIO
 from datetime import datetime
 
 # pylint: disable=unused-import
-from tempfile import TemporaryFile, SpooledTemporaryFile
+from tempfile import TemporaryFile
 import requests
 from bs4 import BeautifulSoup
 from flask import current_app, flash

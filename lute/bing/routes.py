@@ -41,7 +41,7 @@ def bing_search(langid, text, searchstring):
     images = list(matches)
 
     def is_search_img(img):
-        return not ('src="/' in img) and ("rms_img" in img or "vimgld" in img)
+        return 'src="/' not in img and ("rms_img" in img or "vimgld" in img)
 
     def fix_data_src(img):
         return img.replace("data-src=", "src=")

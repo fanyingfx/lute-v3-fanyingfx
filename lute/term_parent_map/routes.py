@@ -25,10 +25,7 @@ def index():
     # sqlalchemy _requires_ "== False" for the comparison!
     # pylint: disable=singleton-comparison
     books = (
-        db.session.query(Book)
-        .filter(Book.archived == False)
-        .order_by(asc(Book.title))
-        .all()
+        db.session.query(Book).filter(not Book.archived).order_by(asc(Book.title)).all()
     )
     languages = db.session.query(Language).order_by(asc(Language.name)).all()
     return render_template(

@@ -63,9 +63,7 @@ class Term:  # pylint: disable=too-many-instance-attributes
 class TermReference:
     "Where a Term has been used in books."
 
-    def __init__(
-        self, bookid, txid, pgnum, title, sentence=None
-    ):  # pylint: disable=too-many-arguments
+    def __init__(self, bookid, txid, pgnum, title, sentence=None):  # pylint: disable=too-many-arguments
         self.book_id = bookid
         self.text_id = txid
         self.page_number = pgnum

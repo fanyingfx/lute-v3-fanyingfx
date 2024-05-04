@@ -1,41 +1,39 @@
 <!-- The default language selector.  This is moved into the datatables toolbar during setup. -->
-<select id="defaultLanguageSelect" class="dataTables_filter" title="Default language">
-  {% for lang_choice in language_choices %}
-    <option value="{{ lang_choice[0] }}">{{ lang_choice[1] }}</option>
-  {% endfor %}
+<select id="defaultLanguageSelect"
+        class="dataTables_filter"
+        title="Default language">
+    {% for lang_choice in language_choices %}
+        <option value="{{ lang_choice[0] }}">{{ lang_choice[1] }}</option>
+    {% endfor %}
 </select>
-
 <table id="booktable" class="table dataTable stripe">
-  <thead>
-    <tr>
-      <th style="text-align: left">Title</th>
-      <th style="text-align: left">Language</th>
-      <th style="text-align: left">Tags</th>
-      <th style="text-align: left">Word count</th>
-      <th style="text-align: left">Statuses
-        <a href="/refresh_all_stats" class="refresh" title="Refresh stats for all books"></a>
-      </th>
-      <th style="text-align: left">Actions</th>
-    </tr>
-  </thead>
+    <thead>
+        <tr>
+            <th style="text-align: left">Title</th>
+            <th style="text-align: left">Language</th>
+            <th style="text-align: left">Tags</th>
+            <th style="text-align: left">Word count</th>
+            <th style="text-align: left">
+                Statuses
+                <a href="/refresh_all_stats"
+                   class="refresh"
+                   title="Refresh stats for all books"></a>
+            </th>
+            <th style="text-align: left">Actions</th>
+        </tr>
+    </thead>
 </table>
-
 <!-- the config widget for datatables.  Moved into the datatables table footer during setup. -->
 <div id="datatables_config_widget">
-  <img
-    src="{{ url_for('static', filename='icn/settings-gear-icon.svg') }}"
-    title="configuration"
-    id="datatables_config_toggle"
-    style="width: 1rem"
-    />
+    <img src="{{ url_for('static', filename='icn/settings-gear-icon.svg') }}"
+         title="configuration"
+         id="datatables_config_toggle"
+         style="width: 1rem" />
 </div>
-
 <div id="datatables_config_items" style="display: none;"></div>
-
 {# Hidden form for archive, unarchive, delete. #}
 <form id="actionposter" method="post" action="">
 </form>
-
 <script>
 
   /* The book listing. */
@@ -261,11 +259,7 @@
       let display = "inline-flex"
       if (p < smallestP)
         display = "none";
-      return `<div
-        class="status-bar${stid} status-bar"
-        title="${title}: ${msg}"
-        style="flex: ${p}; display: ${display}"
-        ></div>`;
+      return `<div class="status-bar${stid} status-bar" title="${title}: ${msg}" style="flex: ${p}; display: ${display}"></div>`;
     };
 
     const bar_titles = {

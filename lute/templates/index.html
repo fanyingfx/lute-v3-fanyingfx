@@ -1,39 +1,39 @@
 {% extends "base.html" %}
-
 {% block title %}Lute index{% endblock %}
-
 {# Must pass empty block to base, or an empty h1 is written. #}
 {% block header %}{% endblock %}
-
 {% block body %}
-
-{% if tutorial_book_id %}
-<div class="flash-notice">
-  <p>The Lute database has been loaded with a
-    <a href="/read/{{ tutorial_book_id }}/page/1" style="text-decoration: underline;">brief tutorial</a>,
-    and some languages and short texts for you to try out.
-  </p>
-  <p>When you're done trying out the demo, <a href="/wipe_database"
-  style="text-decoration: underline;">click here</a> to clear out the
-  database.  <i>Note: this removes everything in the db.</i></p>
-  <p>Or instead,
-    <a href="/remove_demo_flag" style="text-decoration: underline;">dismiss</a>
-    this message.
-  </p>
-</div>
-{% endif %}
-
-{% if is_production_data and backup_show_warning %}
-<div class="flash-notice">
-  <p>Warning: {{ backup_warning_msg }} <a href="/backup/backup">Create a backup.</a></p>
-</div>
-{% endif %}
-
-{% if not have_languages %}
-  <p>To get started using Lute, first <a href="/language/list_predefined">load a predefined language and sample text</a>, or <a href="/language/new">create your language.</a>
-</p>
-{% else %}
-  {% include "book/tablelisting.html" %}
-{% endif %}
-
+    {% if tutorial_book_id %}
+        <div class="flash-notice">
+            <p>
+                The Lute database has been loaded with a
+                <a href="/read/{{ tutorial_book_id }}/page/1"
+                   style="text-decoration: underline">brief tutorial</a>,
+                and some languages and short texts for you to try out.
+            </p>
+            <p>
+                When you're done trying out the demo, <a href="/wipe_database" style="text-decoration: underline;">click here</a> to clear out the
+                database.  <i>Note: this removes everything in the db.</i>
+            </p>
+            <p>
+                Or instead,
+                <a href="/remove_demo_flag" style="text-decoration: underline;">dismiss</a>
+                this message.
+            </p>
+        </div>
+    {% endif %}
+    {% if is_production_data and backup_show_warning %}
+        <div class="flash-notice">
+            <p>
+                Warning: {{ backup_warning_msg }} <a href="/backup/backup">Create a backup.</a>
+            </p>
+        </div>
+    {% endif %}
+    {% if not have_languages %}
+        <p>
+            To get started using Lute, first <a href="/language/list_predefined">load a predefined language and sample text</a>, or <a href="/language/new">create your language.</a>
+        </p>
+    {% else %}
+        {% include "book/tablelisting.html" %}
+    {% endif %}
 {% endblock %}

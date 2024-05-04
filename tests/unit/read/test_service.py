@@ -21,7 +21,7 @@ def _run_scenario(language, content, expected_found):
     """
     found_terms = find_all_Terms_in_string(content, language)
     assert len(found_terms) == len(expected_found), "found count"
-    zws = "\u200B"  # zero-width space
+    zws = "\u200b"  # zero-width space
     found_terms = [t.text.replace(zws, "") for t in found_terms]
     assert found_terms is not None
     assert expected_found is not None

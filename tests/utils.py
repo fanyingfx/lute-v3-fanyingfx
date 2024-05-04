@@ -38,7 +38,7 @@ def get_rendered_string(text, imploder="/", overridestringize=None):
     "Get the stringized rendered content after parsing."
 
     def stringize(ti):
-        zws = "\u200B"
+        zws = "\u200b"
         status = ""
         if ti.wo_status not in [None, 0]:
             status = f"({ti.wo_status})"

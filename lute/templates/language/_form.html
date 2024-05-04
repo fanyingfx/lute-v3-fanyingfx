@@ -1,78 +1,67 @@
 {% for field_name, field_errors in form.errors.items() %}
-  {% for error in field_errors %}
-    <div class="flash-notice-narrow">
-      {% if error is mapping %}
-        {% for err_field, err_msg in error.items() %}
-          {{ err_msg }}
-        {% endfor %}
-      {% else %}
-        {{ error }}
-      {% endif %}
-    </div>
-  {% endfor %}
+    {% for error in field_errors %}
+        <div class="flash-notice-narrow">
+            {% if error is mapping %}
+                {% for err_field, err_msg in error.items() %}{{ err_msg }}{% endfor %}
+            {% else %}
+                {{ error }}
+            {% endif %}
+        </div>
+    {% endfor %}
 {% endfor %}
-
 <form method="POST">
-  {{ form.hidden_tag() }}
-
-  <table id="language">
-  <tbody>
-
-    <tr>
-      <td>{{ form.name.label(class="form-control-label") }}</td>
-      <td>{{ form.name(class="form-control") }}</td>
-    </tr>
-
-    <tr>
-      <td>Dictionaries</td>
-      <td>
-        <div id="dictionary_entities">
-          {#
+    {{ form.hidden_tag() }}
+    <table id="language">
+        <tbody>
+            <tr>
+                <td>{{ form.name.label(class="form-control-label") }}</td>
+                <td>{{ form.name(class="form-control") }}</td>
+            </tr>
+            <tr>
+                <td>Dictionaries</td>
+                <td>
+                    <div id="dictionary_entities">
+                        {#
             Render all the dictionaries, but don't show the __TEMPLATE__,
             added in "_add_hidden_dictionary_template_entry()" in routes.py
           #}
-          {% for dictionary in form.dictionaries %}
-          <div class="dict_entry valign"
-               {% if dictionary.dicturi.data == '__TEMPLATE__' %}
-               style="display: none"
-               {% endif %}
-               >
-            <span class="drag-handle">☰</span>
-            {{ dictionary.usefor(class="dict-usefor") }}
-            {{ dictionary.dicttype(class="dict-type") }}
-            {{ dictionary.dicturi(class="dict-uri form-control-narrower") }}
-            {{ dictionary.is_active }}
-            {{ dictionary.sort_order }}
-            <span class="test-dict-entity" title="Test dictionary" style="margin-left: 20px">
-              <img src="{{ url_for('static', filename='icn/external.png') }}">
-            </span>
-            <span class="remove-dict-entity" title="Remove dictionary">
-              <img src="{{ url_for('static', filename='icn/minus-button.png') }}">
-            </span>
-          </div>
-          {% endfor %}
-        </div>
-        <span id="add-dict-entity" title="Add dictionary">
-          <img src="{{ url_for('static', filename='icn/plus-button.png') }}">
-        </span>
-      </td>
-    </tr>
-
-    {% for field in form %}
-    {% if field.name not in ('name', 'csrf_token', 'dictionaries') %}
-    <tr>
-      <td>{{ field.label(class="form-control-label") }}</td>
-      <td>{{ field(class="form-control") }}</td>
-    </tr>
-    {% endif %}
-    {% endfor %}
-
-  </tbody>
-  </table>
-
-  <button id="submit" type="submit" class="btn btn-primary">Save</button>
+                        {% for dictionary in form.dictionaries %}
+                            <div class="dict_entry valign"
+                                 {% if dictionary.dicturi.data == '__TEMPLATE__' %}style="display: none"{% endif %}>
+                                <span class="drag-handle">☰</span>
+                                {{ dictionary.usefor(class="dict-usefor") }}
+                                {{ dictionary.dicttype(class="dict-type") }}
+                                {{ dictionary.dicturi(class="dict-uri form-control-narrower") }}
+                                {{ dictionary.is_active }}
+                                {{ dictionary.sort_order }}
+                                <span class="test-dict-entity"
+                                      title="Test dictionary"
+                                      style="margin-left: 20px">
+                                    <img src="{{ url_for('static', filename='icn/external.png') }}">
+                                </span>
+                                <span class="remove-dict-entity" title="Remove dictionary">
+                                    <img src="{{ url_for('static', filename='icn/minus-button.png') }}">
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <span id="add-dict-entity" title="Add dictionary">
+                        <img src="{{ url_for('static', filename='icn/plus-button.png') }}">
+                    </span>
+                </td>
+            </tr>
+            {% for field in form %}
+                {% if field.name not in ('name', 'csrf_token', 'dictionaries') %}
+                    <tr>
+                        <td>{{ field.label(class="form-control-label") }}</td>
+                        <td>{{ field(class="form-control") }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <button id="submit" type="submit" class="btn btn-primary">Save</button>
 </form>
-
 <script>
   $(document).ready(function() {
     // Make the list of entities sortable
@@ -150,15 +139,7 @@
 <p>If you see the expected content, this dictionary can be embedded;
 if not, change the type to "Pop-up window".</p>
 <hr />
-<iframe
-    name="dictframe"
-    id="dictframeid"
-    class="rightreadingframe"
-    src="${testurl}"
-    scrolling="auto"
-    style="height: 100%; width: 100%"
-    frameborder="0"
-  >
+<iframe name="dictframe" id="dictframeid" class="rightreadingframe" src="${testurl}" scrolling="auto" style="height: 100%; width: 100%" frameborder="0">
     Frame support required.
 </iframe>
 </div>
@@ -205,11 +186,11 @@ if not, change the type to "Pop-up window".</p>
 
   });
 </script>
-
 {% if language.id %}
-<form method="post" action="/language/delete/{{ language.id }}" onsubmit="return confirm('WARNING: deleting a language deletes all its books and defined terms.  Are you *absolutely* sure you want to delete this item?');">
-    <button class="btn">Delete</button>
-</form>
+    <form method="post"
+          action="/language/delete/{{ language.id }}"
+          onsubmit="return confirm('WARNING: deleting a language deletes all its books and defined terms.  Are you *absolutely* sure you want to delete this item?');">
+        <button class="btn">Delete</button>
+    </form>
 {% endif %}
-
-<button onclick="window.location = '{{ url_for('language.index') }}'">Cancel</button>
+<button onclick="window.location = '{{ url_for("language.index") }}'">Cancel</button>

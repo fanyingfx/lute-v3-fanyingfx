@@ -1,92 +1,73 @@
 <p>
-  <b style="font-size:120%">
-    {{ term.text }}
-    {% if parentterms %}
-    ({{ parentterms }})
-    {% endif %}
-  </b>
+    <b style="font-size:120%">
+        {{ term.text }}
+        {% if parentterms %}({{ parentterms }}){% endif %}
+    </b>
 </p>
-
-{% if flashmsg %}
-<p class="small-flash-notice">{{ flashmsg }}</p>
-{% endif %}
-
+{% if flashmsg %}<p class="small-flash-notice">{{ flashmsg }}</p>{% endif %}
 {% if term.romanization %}
-<p><i>{{ term.romanization }}</i></p>
+    <p>
+        <i>{{ term.romanization }}</i>
+    </p>
 {% endif %}
-
-{% for img in term_images %}
-<img class="tooltip-image" src="{{ img }}" />
-{% endfor %}
-
+{% for img in term_images %}<img class="tooltip-image" src="{{ img }}" />{% endfor %}
 {% if term.translation %}
-<p>{{ term.translation | replace("\n", '<br />') | safe }}</p>
+    <p>
+        {{ term.translation | replace('\n', '<br />') | safe }}
+    </p>
 {% endif %}
-
 <p>
-  {% for t in term_tags %}
-  <span class="termpopup-tag">{{ t }}</span>
-  {% endfor %}
+    {% for t in term_tags %}<span class="termpopup-tag">{{ t }}</span>{% endfor %}
 </p>
-
 {% if parentdata | length > 0 %}
-
-<table>
-
-  {% if componentdata | length > 0 %}
-  <tr><td>Parents</td></tr>
-  {% endif %}
-
-  {% for p in parentdata %}
-  <tr>
-    <td style="vertical-align: top;">
-      <b>{{ p.term }}</b>
-      {% if p.roman %}
-      <br /><i>({{ p.roman }})</i>
-      {% endif %}
-    </td>
-    <td style="vertical-align: top;">
-      {{ p.trans | replace("\n", '<br />') | safe }}
-      <p>
-        {% for t in p.tags %}
-        <span class="termpopup-tag">{{ t }}</span>
+    <table>
+        {% if componentdata | length > 0 %}
+            <tr>
+                <td>Parents</td>
+            </tr>
+        {% endif %}
+        {% for p in parentdata %}
+            <tr>
+                <td style="vertical-align: top;">
+                    <b>{{ p.term }}</b>
+                    {% if p.roman %}
+                        <br />
+                        <i>({{ p.roman }})</i>
+                    {% endif %}
+                </td>
+                <td style="vertical-align: top;">
+                    {{ p.trans | replace('\n', '<br />') | safe }}
+                    <p>
+                        {% for t in p.tags %}<span class="termpopup-tag">{{ t }}</span>{% endfor %}
+                    </p>
+                </td>
+            </tr>
         {% endfor %}
-      </p>
-    </td>
-  </tr>
-  {% endfor %}
-
-</table>
-
+    </table>
 {% endif %}
-
 {% if componentdata | length > 0 %}
-
-<table>
-
-  {% if parentdata | length > 0 %}
-  <tr><td>Components</td></tr>
-  {% endif %}
-
-  {% for p in componentdata %}
-  <tr>
-    <td style="vertical-align: top;">
-      <b>{{ p.term }}</b>
-      {% if p.roman %}
-      <br /><i>({{ p.roman }})</i>
-      {% endif %}
-    </td>
-    <td style="vertical-align: top;">
-      {{ p.trans | replace("\n", '<br />') | safe }}
-      <p>
-        {% for t in p.tags %}
-        <span class="termpopup-tag">{{ t }}</span>
+    <table>
+        {% if parentdata | length > 0 %}
+            <tr>
+                <td>Components</td>
+            </tr>
+        {% endif %}
+        {% for p in componentdata %}
+            <tr>
+                <td style="vertical-align: top;">
+                    <b>{{ p.term }}</b>
+                    {% if p.roman %}
+                        <br />
+                        <i>({{ p.roman }})</i>
+                    {% endif %}
+                </td>
+                <td style="vertical-align: top;">
+                    {{ p.trans | replace('\n', '<br />') | safe }}
+                    <p>
+                        {% for t in p.tags %}<span class="termpopup-tag">{{ t }}</span>{% endfor %}
+                    </p>
+                </td>
+            </tr>
         {% endfor %}
-      </p>
-    </td>
-  </tr>
-  {% endfor %}
-
-</table>
-
+    </table>
 {% endif %}

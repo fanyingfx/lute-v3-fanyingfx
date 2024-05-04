@@ -16,6 +16,7 @@ bp = Blueprint("termimport", __name__, url_prefix="/termimport")
 
 class TermImportForm(FlaskForm):
     "Form for imports."
+
     text_file = FileField("Text File", validators=[DataRequired()])
     create_terms = BooleanField("Create new terms")
     new_as_unknown = BooleanField("Set new terms to Unknown")

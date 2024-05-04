@@ -15,6 +15,7 @@ wordparents = db.Table(
 
 class TermImage(db.Model):
     "Term images."
+
     __tablename__ = "wordimages"
 
     id = db.Column("WiID", db.Integer, primary_key=True)
@@ -27,6 +28,7 @@ class TermImage(db.Model):
 
 class TermFlashMessage(db.Model):
     "Term flash messages."
+
     __tablename__ = "wordflashmessages"
 
     id = db.Column("WfID", db.Integer, primary_key=True)
@@ -47,6 +49,7 @@ wordtags = db.Table(
 
 class TermTag(db.Model):
     "Term tags."
+
     __tablename__ = "tags"
 
     id = db.Column("TgID", db.Integer, primary_key=True)
@@ -98,9 +101,7 @@ class TermTextChangedException(Exception):
     """
 
 
-class Term(
-    db.Model
-):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
+class Term(db.Model):  # pylint: disable=too-few-public-methods, too-many-instance-attributes
     """
     Term entity.
     """
@@ -209,9 +210,9 @@ class Term(
         "Parse the string using the language."
         # Clean up encoding cruft.
         t = textstring.strip()
-        zws = "\u200B"  # zero-width space
+        zws = "\u200b"  # zero-width space
         t = t.replace(zws, "")
-        nbsp = "\u00A0"  # non-breaking space
+        nbsp = "\u00a0"  # non-breaking space
         t = t.replace(nbsp, " ")
 
         tokens = lang.get_parsed_tokens(t)
@@ -255,7 +256,7 @@ class Term(
         "Tokens are separated by zero-width space."
         token_count = 0
         if self._text is not None:
-            zws = "\u200B"  # zero-width space
+            zws = "\u200b"  # zero-width space
             parts = self._text.split(zws)
             token_count = len(parts)
         self.token_count = token_count

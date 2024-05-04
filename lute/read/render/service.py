@@ -64,7 +64,7 @@ def _find_all_terms_in_tokens(tokens, language):
 
     # Multiword terms have zws between all tokens.
     # Create content string with zws between all tokens for the match.
-    zws = "\u200B"  # zero-width space
+    zws = "\u200b"  # zero-width space
     lctokens = [parser.get_lowercase(t.token) for t in tokens]
     content = zws + zws.join(lctokens) + zws
 

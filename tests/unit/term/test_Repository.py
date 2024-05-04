@@ -438,7 +438,7 @@ def test_find_existing_multi_word(spanish, repo):
     results, but that's a different question).
     """
     add_terms(spanish, ["una bebida"])
-    zws = "\u200B"
+    zws = "\u200b"
     term_with_zws = f"una{zws} {zws}bebida"
     t = repo.find(spanish.id, term_with_zws)
     assert t.id > 0
@@ -472,7 +472,7 @@ def test_find_or_new_non_existing(spanish, repo):
 def test_find_or_new_existing_multi_word(spanish, repo):
     "Spaces etc handled correctly."
     add_terms(spanish, ["una bebida"])
-    zws = "\u200B"
+    zws = "\u200b"
     term_with_zws = f"una{zws} {zws}bebida"
     t = repo.find_or_new(spanish.id, f"una{zws} {zws}bebida")
     assert t.id > 0
@@ -485,7 +485,7 @@ def test_find_or_new_existing_multi_word(spanish, repo):
 
 def test_find_or_new_new_multi_word(spanish, repo):
     "ZWS added correctly."
-    zws = "\u200B"
+    zws = "\u200b"
     t = repo.find_or_new(spanish.id, f"una{zws} {zws}bebida")
     assert t.id is None
     assert t.text == f"una{zws} {zws}bebida"
@@ -509,7 +509,7 @@ def test_find_or_new_ambiguous_japanese_terms(japanese, repo):
 
     t = repo.find_or_new(japanese.id, s)
     assert t.id is None, "do _not_ have term, searching for string without context"
-    zws = "\u200B"
+    zws = "\u200b"
     assert t.text == f"集め{zws}れ", "returns a new term"
 
 
@@ -546,7 +546,7 @@ def test_find_matches_returns_empty_if_no_match_or_empty_string(
 @pytest.mark.find_match
 def test_find_matches_multiword_respects_zws(spanish, repo, _multiple_terms):
     "zws handled correctly in search."
-    zws = "\u200B"
+    zws = "\u200b"
     for c in [f"tengo{zws} {zws}uno", "tengo uno", "tengo"]:
         matches = repo.find_matches(spanish.id, c)
         assert len(matches) == 1, f'have match for case "{c}"'

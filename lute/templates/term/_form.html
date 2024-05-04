@@ -1,80 +1,66 @@
-<script type="text/javascript" src="{{ url_for('static', filename='js/dict-tabs.js') }}" charset="utf-8"></script>
-
+<script type="text/javascript"
+        src="{{ url_for('static', filename='js/dict-tabs.js') }}"
+        charset="utf-8"></script>
 {% if duplicated_term %}
-{#
+    {#
   Duplicated term, only show a link to that term.
   See DUPLICATE_TERM_CHECK comments in other files.
 #}
-<div class="flash-notice-narrow">
-  Term <a href="/term/edit/{{ duplicated_term.id }}">{{ duplicated_term.text }}</a> already exists.
-</div>
-{% else %}
-  {% for field_name, field_errors in form.errors.items() %}
-  {% for error in field_errors %}
-  <div class="flash-notice-narrow">{{ error }}</div>
-  {% endfor %}
-  {% endfor %}
-{% endif %}
-
-
-<div id="term-form-container">
-  <form id="term-form" name="term_form" method="POST">
-    {{ form.hidden_tag() }}
-    <div id="term">
-      <div id="languageSel"
-        {% if term.language_id is none and term.language is none %}
-        {# show the language select box. #}
-        {% else %}
-        style="display:none;"
-        {% endif %}>
-        {{ form.language_id(class="form-control") }}
-        <button id="load-dicts-btn" title="Load dictionaries for the new term" type="button"></button>
-      </div>
-  
-      {{ form.original_text }}
-
-      <div>{{ form.text(class="form-control", value=(form.original_text.data or '')) }}</div>
-
-      <div>{{ form.parentslist(class="form-control") }}</div>
-  
-      <div {% if hide_pronunciation %}style="display:none;"{% endif %}>
-        {{ form.romanization(class="form-control") }}
-      </div>
-
-      <div id="translation-container">
-        <div>{{ form.translation }}</div>
-        <img {% if term.current_image %}style="grid-column: -1; display: block"{% endif %} 
-             class="zoomableTermImage"
-             id="term_image"
-             tabindex="0"
-             src="{{ form.current_image.object_data or '' }}"
-             onclick="clicked_zoomable_image(this);"
-             />
-      </div>
-
-      <div id="status-container">
-        {{ form.status(class="form-control") }}
-        <div id="sync-status-container">
-          {{ form.sync_status(class="form-control", disabled=True) }}
-          <label for="sync_status">Link to parent</label>
-        </div>
-      </div>
-
-      <div style="display: none">{{ form.current_image(class="form-control") }}</div>
-
-      <div>{{ form.termtagslist(class="form-control") }}</div>
-
-      <div id="term-button-container">
-          {% if term.id %}
-          <button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>
-          {% endif %}
-          <button id="submit" type="submit" title="Shortcut: Control+Enter" class="btn btn-primary">Save</button>
-      </div>
+    <div class="flash-notice-narrow">
+        Term <a href="/term/edit/{{ duplicated_term.id }}">{{ duplicated_term.text }}</a> already exists.
     </div>
-  </form>
+{% else %}
+    {% for field_name, field_errors in form.errors.items() %}
+        {% for error in field_errors %}<div class="flash-notice-narrow">{{ error }}</div>{% endfor %}
+    {% endfor %}
+{% endif %}
+<div id="term-form-container">
+    <form id="term-form" name="term_form" method="POST">
+        {{ form.hidden_tag() }}
+        <div id="term">
+            <div id="languageSel"
+                {% if term.language_id is none and term.language is none %}
+                    {# show the language select box. #}
+                {% else %}
+                    style="display:none;"
+                {% endif %}>
+                {{ form.language_id(class="form-control") }}
+                <button id="load-dicts-btn"
+                        title="Load dictionaries for the new term"
+                        type="button"></button>
+            </div>
+            {{ form.original_text }}
+            <div>{{ form.text(class="form-control", value=(form.original_text.data or '') ) }}</div>
+            <div>{{ form.parentslist(class="form-control") }}</div>
+            <div {% if hide_pronunciation %}style="display:none;"{% endif %}>{{ form.romanization(class="form-control") }}</div>
+            <div id="translation-container">
+                <div>{{ form.translation }}</div>
+                <img {% if term.current_image %}style="grid-column: -1; display: block"{% endif %}
+                     class="zoomableTermImage"
+                     id="term_image"
+                     tabindex="0"
+                     src="{{ form.current_image.object_data or '' }}"
+                     onclick="clicked_zoomable_image(this);" />
+            </div>
+            <div id="status-container">
+                {{ form.status(class="form-control") }}
+                <div id="sync-status-container">
+                    {{ form.sync_status(class="form-control", disabled=True) }}
+                    <label for="sync_status">Link to parent</label>
+                </div>
+            </div>
+            <div style="display: none">{{ form.current_image(class="form-control") }}</div>
+            <div>{{ form.termtagslist(class="form-control") }}</div>
+            <div id="term-button-container">
+                {% if term.id %}<button id="delete" type="button" class="btn" onclick="deleteTerm()">Delete</button>{% endif %}
+                <button id="submit"
+                        type="submit"
+                        title="Shortcut: Control+Enter"
+                        class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </form>
 </div>
-
-
 <script type="text/javascript">
 
   /** TERM IMAGE. ***************/

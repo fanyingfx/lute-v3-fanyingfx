@@ -11,10 +11,7 @@ from lute.parse.base import AbstractParser
 from lute.parse.base import ParsedToken
 
 # from lute.parse.base import RawToken
-from lute.config.app_config import AppConfig
 
-config_file = AppConfig.default_config_filename()
-ac = AppConfig(config_file)
 
 kana_pattern = re.compile("[\u3040-\u309f\u30a0-\u30ffー]+")
 
@@ -36,6 +33,10 @@ class FugashiParser(AbstractParser):
     # _tagger = Tagger("-d /home/fy/.unidics/unidic-csj-202302")
     # unidic can download from  https://clrd.ninjal.ac.jp/unidic/
     # _tagger = Tagger("-d .unidics/unidic-csj-202302")
+    from lute.config.app_config import AppConfig
+
+    config_file = AppConfig.default_config_filename()
+    ac = AppConfig(config_file)
     _tagger = Tagger(ac.unidic_csj_path)
     _tagger_type = "spoken"
     _ana_tagger = Tagger()

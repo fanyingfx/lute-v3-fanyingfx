@@ -2,9 +2,10 @@
 App configuration.
 """
 
-import os
+import shutil
 import yaml
 from platformdirs import PlatformDirs
+from pathlib import Path
 
 
 class AppConfig:  # pylint: disable=too-many-instance-attributes
@@ -48,24 +49,25 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.is_test_db = self.dbname.startswith("test_")
 
         # Path to user data.
-        self.datapath = config.get("DATAPATH", self._get_appdata_dir())
-        self.userimagespath = os.path.join(self.datapath, "userimages")
-        self.useraudiopath = os.path.join(self.datapath, "useraudio")
-        self.temppath = os.path.join(self.datapath, "temp")
-        self.dbfilename = os.path.join(self.datapath, self.dbname)
-        self.unidic_cwj_path = os.path.join(self.datapath, "unidic-cwj")
-        self.unidic_csj_path = os.path.join(self.datapath, "unidic-csj")
+        datapath = Path(config.get("DATAPATH", self._get_appdata_dir()))
+        self.datapath = str(datapath)
+        self.userimagespath = str(datapath / "userimages")
+        self.useraudiopath = str(datapath / "useraudio")
+        self.temppath = str(datapath / "temp")
+        self.dbfilename = str(datapath / self.dbname)
+        self.unidic_cwj_path = (datapath / "unidic-cwj").as_posix()
+        self.unidic_csj_path = (datapath / "unidic-csj").as_posix()
 
         # Path to db backup.
         # When Lute starts up, it backs up the db
         # if migrations are going to be applied, just in case.
         # Hidden directory as a hint to the the user that
         # this is a system dir.
-        self.system_backup_path = os.path.join(self.datapath, ".system_db_backups")
+        self.system_backup_path = str(datapath / ".system_db_backups")
 
         # Default backup path for user, can be overridden in settings.
         self.default_user_backup_path = config.get(
-            "BACKUP_PATH", os.path.join(self.datapath, "backups")
+            "BACKUP_PATH", str(datapath / "backups")
         )
 
     def _get_appdata_dir(self):
@@ -81,10 +83,14 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
     @staticmethod
     def configdir():
         "Return the path to the configuration file directory."
-        return os.path.dirname(os.path.realpath(__file__))
+        return Path(__file__).parent
 
     @staticmethod
     def default_config_filename():
         "Return the path to the default configuration file."
         thisdir = AppConfig.configdir()
-        return os.path.join(thisdir, "config.yml")
+
+        default_config = thisdir / "config.yml"
+        if not default_config.exists():
+            shutil.copy(thisdir / "config.yml.prod", default_config)
+        return default_config

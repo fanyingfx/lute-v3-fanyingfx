@@ -4,6 +4,16 @@ Common classes use for all parsing.
 
 from abc import ABC, abstractmethod
 from typing import List
+from dataclasses import dataclass
+
+
+@dataclass
+class RawToken:
+    token: str
+    is_word: bool
+    is_end_of_sent: bool
+    lemma: str
+    reading: str = ""
 
 
 class ParsedToken:
@@ -27,10 +37,19 @@ class ParsedToken:
         ParsedToken.cls_sentence_number = 0
         ParsedToken.cls_order = 0
 
-    def __init__(self, token: str, is_word: bool, is_end_of_sentence: bool = False):
+    def __init__(
+        self,
+        token: str,
+        is_word: bool,
+        is_end_of_sentence: bool = False,
+        lemma: str = "",
+        reading: str = "",
+    ):
         self.token = token
         self.is_word = is_word
         self.is_end_of_sentence = is_end_of_sentence
+        self.lemma = lemma
+        self.reading = reading
 
         ParsedToken.cls_order += 1
         self.order = ParsedToken.cls_order

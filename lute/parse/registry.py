@@ -4,18 +4,23 @@ Parser registry.
 List of available parsers.
 """
 
+from functools import cache
 from lute.parse.base import AbstractParser
 from lute.parse.space_delimited_parser import SpaceDelimitedParser, TurkishParser
-from lute.parse.mecab_parser import JapaneseParser
+
+# from lute.parse.mecab_parser import JapaneseParser
 from lute.parse.character_parser import ClassicalChineseParser
+from lute.parse.english_parser import EnglishParser
+from lute.parse.fugashi_parser import FugashiParser
 
 
 # List of ALL parsers available, not necessarily all supported.
 # This design feels fishy, but it suffices for now.
 parsers = {
     "spacedel": SpaceDelimitedParser,
+    "english": EnglishParser,
     "turkish": TurkishParser,
-    "japanese": JapaneseParser,
+    "japanese": FugashiParser,
     "classicalchinese": ClassicalChineseParser,
 }
 
@@ -29,6 +34,7 @@ def _supported_parsers():
     return ret
 
 
+@cache
 def get_parser(parser_name) -> AbstractParser:
     "Return the supported parser with the given name."
     if parser_name in _supported_parsers():

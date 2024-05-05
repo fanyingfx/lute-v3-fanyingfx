@@ -502,7 +502,7 @@ def test_find_or_new_ambiguous_japanese_terms(japanese, repo):
 
     See comments in find_or_new for notes.
     """
-    s = "集めれ"
+    s = "麩菓子"
     term = DBTerm.create_term_no_parsing(japanese, s)
     db.session.add(term)
     db.session.commit()
@@ -510,7 +510,7 @@ def test_find_or_new_ambiguous_japanese_terms(japanese, repo):
     t = repo.find_or_new(japanese.id, s)
     assert t.id is None, "do _not_ have term, searching for string without context"
     zws = "\u200b"
-    assert t.text == f"集め{zws}れ", "returns a new term"
+    assert t.text == f"麩{zws}菓子", "returns a new term"
 
 
 ## Matches tests.

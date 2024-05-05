@@ -2,10 +2,18 @@
 Calculating what items should be rendered in the browser.
 """
 
+from dataclasses import dataclass
 import re
 import functools
 from lute.models.language import Language
 from lute.models.term import Term, Status
+from lute.parse.base import ParsedToken
+
+
+@dataclass
+class ParsedExtra:
+    lemma: str
+    reading: str
 
 
 class RenderableCalculator:
@@ -53,7 +61,12 @@ class RenderableCalculator:
                 raise RuntimeError(msg)
             prevtok = tok
 
-    def _get_renderable(self, tokenlocator, terms, texttokens):  # pylint: disable=too-many-locals
+    def _get_renderable(
+        self,
+        tokenlocator: list["TokenLocator"],
+        terms: list[Term],
+        texttokens: list["ParsedToken"],
+    ):  # pylint: disable=too-many-locals
         """
         Return RenderableCandidates that will **actually be rendered**.
 
@@ -121,11 +134,14 @@ class RenderableCalculator:
         """
 
         # All the candidates to be considered for rendering.
-        candidates = {}
+        candidates: dict[int, RenderableCandidate] = {}
 
-        # Step 1.  Map of the token position to the id of the
-        # candidate that should be rendered there.
+        #: Step 1.  Map of the token position to the id of the
+        #: candidate that should be rendered there.
+
         rendered = {}
+        """Map of the token position to the id of the Candidate that should be rendered there."""
+        pos_mapping: dict[int, ParsedExtra] = {}
 
         # Step 2 - fill with the original texttokens.
         for tok in texttokens:
@@ -134,11 +150,14 @@ class RenderableCalculator:
             rc.text = tok.token
             rc.pos = tok.order
             rc.is_word = tok.is_word
+            rc.lemma = tok.lemma
+            rc.reading = tok.reading
             candidates[rc.id] = rc
             rendered[rc.pos] = rc.id
+            pos_mapping[rc.pos] = ParsedExtra(lemma=tok.lemma, reading=tok.reading)
 
         # 3.  Create candidates for all the terms.
-        termcandidates = []
+        termcandidates: list[RenderableCalculator] = []
 
         foundterms = [t for t in terms if t.text_lc in tokenlocator.subjLC]
         for term in foundterms:
@@ -149,6 +168,14 @@ class RenderableCalculator:
                 rc.text = loc["text"]
                 rc.pos = texttokens[0].order + loc["index"]
                 rc.length = term.token_count
+                rc.lemma = (
+                    pos_mapping.get(rc.pos).lemma if rc.pos in pos_mapping else ""
+                )
+                rc.reading = (
+                    term.romanization or pos_mapping.get(rc.pos).reading
+                    if rc.pos in pos_mapping
+                    else ""
+                )
                 rc.is_word = 1
 
                 termcandidates.append(rc)
@@ -250,9 +277,15 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         self.length: int = 1
         self.is_word: int = None
         self.render: bool = True
+        self.lemma: str = None
+        self.reading: str = None
 
     def __repr__(self):
-        parts = [f"pos {self.pos}", f"render {self.render}" f"(id {self.id})"]
+        parts = [
+            f"pos {self.pos}",
+            f"render {self.render}",
+            f"lemma {self.lemma}" f"(id {self.id})",
+        ]
         parts = " ".join(parts)
         return f'<RenderableCandidate "{self.text}", {parts}>'
 
@@ -278,6 +311,8 @@ class RenderableCandidate:  # pylint: disable=too-many-instance-attributes
         t.para_id = p_num
         t.se_id = se_id
         t.is_word = self.is_word
+        t.lemma = self.lemma
+        t.reading = self.reading
         t.text_length = len(self.text)
         return t
 
@@ -312,7 +347,7 @@ class TokenLocator:
         self.subject = subject
         self.subjLC = self.language.get_lowercase(self.subject)
 
-    def locate_string(self, s):
+    def locate_string(self, s: str):
         """
         Find the string s in the subject self.subject.
         """
@@ -407,6 +442,8 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self.se_id: int
         self.is_word: int
         self.text_length: int
+        self.lemma: str
+        self.reading: str
 
         # Calls setter
         self.term = term
@@ -424,7 +461,7 @@ class TextItem:  # pylint: disable=too-many-instance-attributes
         self._flash_message: str = None
 
     def __repr__(self):
-        return f'<TextItem "{self.text}" (wo_id={self.wo_id})>'
+        return f'<TextItem "{self.text}" {self.reading=} (wo_id={self.wo_id})>'
 
     @property
     def term(self):

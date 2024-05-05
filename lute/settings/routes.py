@@ -51,8 +51,8 @@ class UserSettingsForm(FlaskForm):
 
     mecab_path = StringField("MECAB_PATH environment variable")
     reading_choices = [
-        ("katakana", "Katakana"),
         ("hiragana", "Hiragana"),
+        ("katakana", "Katakana"),
         ("alphabet", "Romaji"),
     ]
     japanese_reading = SelectField("Pronunciation characters", choices=reading_choices)

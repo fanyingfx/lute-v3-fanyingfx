@@ -170,7 +170,7 @@ class Term(db.Model):  # pylint: disable=too-few-public-methods, too-many-instan
             self.text = text
 
     @staticmethod
-    def create_term_no_parsing(language, text):
+    def create_term_no_parsing(language, text, reading=""):
         """
         Create a term, but do not reparse it during creation.
 
@@ -186,7 +186,7 @@ class Term(db.Model):  # pylint: disable=too-few-public-methods, too-many-instan
         t.language = language
         t._text = text  # pylint: disable=protected-access
         t.text_lc = language.get_lowercase(text)
-        t.romanization = language.parser.get_reading(text)
+        t.romanization = reading or language.parser.get_reading(text)
         t._calc_token_count()  # pylint: disable=protected-access
         return t
 

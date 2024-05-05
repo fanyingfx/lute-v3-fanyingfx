@@ -54,9 +54,7 @@
                     <div class="reading_header_mid">
                         <div class="reading_header_mid_top">
                             <div class="texttitlecontainer">
-                                <h1 id="headertexttitle"
-                                    {% if is_rtl %}dir="rtl"{% endif %}
-                                    class="hide">{{ book.title }}</h1>
+                                <h1 id="headertexttitle" {% if is_rtl %}dir="rtl"{% endif %} class="hide">{{ book.title }}</h1>
                             </div>
                             <div class="reading_header_page">
                                 <!-- <a id="reading_home_link" class="home-link" href="/">Home</a> -->

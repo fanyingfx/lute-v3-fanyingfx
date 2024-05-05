@@ -5,6 +5,7 @@ Reading helpers.
 from lute.models.term import Term, Status
 from lute.models.book import Text
 from lute.book.stats import mark_stale
+from lute.read.render.renderable_calculator import TextItem
 from lute.read.render.service import get_paragraphs, find_all_Terms_in_string
 from lute.term.model import Repository
 from lute.db import db
@@ -65,14 +66,16 @@ def bulk_status_update(text: Text, terms_text_array, new_status):
     repo.commit()
 
 
-def _create_unknown_terms(textitems, lang):
+def _create_unknown_terms(textitems: list[TextItem], lang):
     "Create any terms required for the page."
     # dt = DebugTimer("create-unk-terms")
-    toks = [t.text for t in textitems]
+    toks = [(t.text, t.reading) for t in textitems]
     # print(f"creating toks {toks}", flush=True)
     unique_word_tokens = list(set(toks))
     # print(f"creating unique toks {unique_word_tokens}", flush=True)
-    all_new_terms = [Term.create_term_no_parsing(lang, t) for t in unique_word_tokens]
+    all_new_terms = [
+        Term.create_term_no_parsing(lang, t, r) for t, r in unique_word_tokens
+    ]
     # print(f"all_new_terms = {all_new_terms}", flush=True)
     # dt.step("make all_new_terms")
 

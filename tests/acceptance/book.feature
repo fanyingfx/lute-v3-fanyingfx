@@ -122,7 +122,7 @@ Feature: Books and stats are available
             情報さえ集めればどんどんお金も集まってくる。
         Then the page title is Reading "Jp test"
         And the reading pane shows:
-            情報/さえ/集めれ/ば/どんどん/お金/も/集まっ/て/くる/。
+            情報/さえ/集めれ/ば/どんどん/お/金/も/集まっ/て/くる/。
 
     # Sanity check import same sequence of chars twice.
     Scenario: Japanese import same text twice sanity check.
@@ -131,19 +131,19 @@ Feature: Books and stats are available
             情報さえ集めればどんどんお金も集まってくる。
         Then the page title is Reading "Jp test1"
         And the reading pane shows:
-            情報/さえ/集めれ/ば/どんどん/お金/も/集まっ/て/くる/。
+            情報/さえ/集めれ/ば/どんどん/お/金/も/集まっ/て/くる/。
 
         Given a Japanese book "Jp test2" with content:
             情報さえ集めればどんどんお金も集まってくる。
         Then the page title is Reading "Jp test2"
         And the reading pane shows:
-            情報/さえ/集めれ/ば/どんどん/お金/も/集まっ/て/くる/。
+            情報/さえ/集めれ/ば/どんどん/お/金/も/集まっ/て/くる/。
 
         When I click "集めれ" and edit the form:
             translation: hi
             status: 2
         Then the reading pane shows:
-            情報/さえ/集めれ (2)/ば/どんどん/お金/も/集まっ/て/くる/。
+            情報/さえ/集めれ (2)/ば/どんどん/お/金/も/集まっ/て/くる/。
 
         Given a Japanese book "Jp test3" with content:
             集めれ。
@@ -164,6 +164,6 @@ Feature: Books and stats are available
             だけども、間違えますよね。
         Then the page title is Reading "Jp test"
         And the reading pane shows:
-            最初/はね/難しい/。/
+            最初/は/ね/難しい/。/
 
             だけど (1)/も/、/間違え/ます/よ/ね/。

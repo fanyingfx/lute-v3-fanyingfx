@@ -109,7 +109,6 @@
             </thead>
         </table>
         <script>
-
   // Column indexes returned in the datatables json.
   const WORD_COL = 1;
   const TRANSLATION_COL = 3;
@@ -119,7 +118,7 @@
   const IMG_COL = 10;
   const STATUS_TEXT_COL = 13;
 
-  let setup_term_datatable = function(initial_search) {
+  let setup_term_datatable = function (initial_search) {
     var table = $('#termtable').DataTable({
       layout: {
         topStart: 'pageLength',
@@ -129,17 +128,17 @@
       },
       responsive: true,
       select: false,
-      lengthMenu: [ 25, 50, 100, 500, 1000 ],
+      lengthMenu: [25, 50, 100, 500, 1000],
 
       // The button is included but the div.dt-buttons is hidden,
       // so that the button actions can be trigged by a link
       // in the "Actions" list.
       buttons: [
-         {
-           extend: 'download',
-           url: '/term/export_terms',
-           text: 'Export CSV',
-         },
+        {
+          extend: 'download',
+          url: '/term/export_terms',
+          text: 'Export CSV',
+        },
       ],
       paging: true,
       info: true,
@@ -201,13 +200,13 @@
   } // end setup_term_datatable
 
 
-  let render_text = function ( data, type, row, meta ) {
+  let render_text = function (data, type, row, meta) {
     return `<a href="/term/edit/${row[WID_COL]}">${row[WORD_COL]}</a>`;
   };
 
   // Use the status ID for sorting, so Well Known comes after Learned (5),
   // but use the status text ("New (1)") for the cell display.
-  let render_status = function ( data, type, row, meta ) {
+  let render_status = function (data, type, row, meta) {
     return row[STATUS_TEXT_COL];
   };
 
@@ -215,13 +214,13 @@
     return `<input type="checkbox" class="chkWord" name="wordids" wordid="${row[WID_COL]}" langid="${row[LID_COL]}" onclick="handleChkClick()">`;
   };
 
-  let render_translation = function ( data, type, row, meta ) {
+  let render_translation = function (data, type, row, meta) {
     let tx = row[TRANSLATION_COL] ?? '';
     tx = tx.replaceAll("\r\n", "<br />");
     let imgsrc = row[IMG_COL] ?? '';
     if (imgsrc != '')
       imgsrc = `<img style="margin-top: 5px;" src="${imgsrc}" />`;
-    let ret = [ tx, imgsrc ].filter((s) => s != '');
+    let ret = [tx, imgsrc].filter((s) => s != '');
     return ret.join('<br />');
   };
 
@@ -232,16 +231,16 @@
   };
 
 
-  let handleChkAll = function() {
+  let handleChkAll = function () {
     const v = $('#chkAll').prop('checked');
-    $('.chkWord').each(function(i) {
+    $('.chkWord').each(function (i) {
       $(this).prop('checked', v);
     });
     handleChkClick(true);
   }
 
-  let handleChkClick = function(leave_checkAll = false) {
-    if (! leave_checkAll)
+  let handleChkClick = function (leave_checkAll = false) {
+    if (!leave_checkAll)
       $('#chkAll').prop('checked', false);
     const n = $('.chkWord:checked').length;
     const lang_id = get_lang_id();
@@ -279,9 +278,9 @@
 
   // Return the clicked checkboxes' language ID,
   // or null if the lang id isn't the same for all.
-  let get_lang_id = function() {
+  let get_lang_id = function () {
     let langids = [];
-    $('.chkWord:checked').each(function(i) {
+    $('.chkWord:checked').each(function (i) {
       langids.push($(this).attr('langid'));
     });
     const unique_langids = [...new Set(langids)];
@@ -291,20 +290,20 @@
     return null;
   }
 
-  let handle_set_parent_click = function() {
+  let handle_set_parent_click = function () {
     const lang_id = get_lang_id();
     if (lang_id == null) {
       alert("All terms must be of the same language.");
       return;
     }
     let wordids = [];
-    $('.chkWord:checked').each(function(i) {
+    $('.chkWord:checked').each(function (i) {
       wordids.push($(this).attr('wordid'));
     });
     const ptxt = $('#txtSetParent').val();
 
     const resp = confirm(`Change parent for ${wordids.length} term(s) to "${ptxt}"?  Note this will *remove* any existing parents for these terms.`);
-    if (! resp)
+    if (!resp)
       return;
 
     data = {
@@ -317,16 +316,16 @@
       method: 'POST',
       data: JSON.stringify(data),
       contentType: "application/json; charset=utf-8",
-      success: function(data) {
+      success: function (data) {
         location.reload();
       }
     });
   }
 
 
-  let set_up_parent_autocomplete = function() {
+  let set_up_parent_autocomplete = function () {
     $("#txtSetParent").autocomplete({
-      source: function(request, response) {
+      source: function (request, response) {
         const lang_id = get_lang_id();
         if (lang_id == null) {
           // This should never occur; the text
@@ -340,8 +339,8 @@
           type: 'GET',
           dataType: 'json',
           minLength: 2,
-          success: function(data) {
-            arr = data.map(function(word) {
+          success: function (data) {
+            arr = data.map(function (word) {
               let label = word.text;
               if (word.translation != null && word.translation != '') {
                 label = `${label} (${word.translation})`;
@@ -370,7 +369,7 @@
     const ids = checked.toArray().map(el => parseInt($(el).attr('wordid')));
     const t = (ids.length == 1) ? 'term' : 'terms';
     const resp = confirm(`Deleting ${ids.length} ${t}.  Continue?`);
-    if (! resp)
+    if (!resp)
       return;
 
     data = {
@@ -381,7 +380,7 @@
       method: 'POST',
       data: JSON.stringify(data),
       contentType: "application/json; charset=utf-8",
-      success: function(data) {
+      success: function (data) {
         location.reload();
       }
     });
@@ -408,7 +407,7 @@
   };
 
 
-  let handle_filter_update = function() {
+  let handle_filter_update = function () {
     const store = {
       filtLanguage: $('#filtLanguage').val(),
       filtDisplay: $('#filterControls').css('display'),
@@ -425,7 +424,7 @@
   };
 
 
-  let load_filters_from_storage = function() {
+  let load_filters_from_storage = function () {
     fs = sessionStorage.getItem('termtable_filters');
     // console.log(fs);
     if (fs == null)
@@ -442,7 +441,7 @@
     if ((store.filtAgeMin ?? '') != '')
       $('#filtAgeMin').val(parseInt(store.filtAgeMin));
     if ((store.filtAgeMax ?? '') != '')
-    $('#filtAgeMax').val(parseInt(store.filtAgeMax));
+      $('#filtAgeMax').val(parseInt(store.filtAgeMax));
     $('#filtStatusMin').val(parseInt(store.filtStatusMin));
     $('#filtStatusMax').val(parseInt(store.filtStatusMax));
     $('#filtIncludeIgnored').prop('checked', store.filtIncludeIgnored);
@@ -450,19 +449,19 @@
     // Have to re-load the data table, now that the filters have changed.
     $('#termtable').DataTable().draw();
   };
-  
-  let handle_show_hide_filter_click = function() {
+
+  let handle_show_hide_filter_click = function () {
     const fc = $('#filterControls');
     const is_hidden = (fc.css('display') == 'none');
     const new_src = is_hidden ? "{{ url_for('static', filename='icn/minus-button.png') }}" : "{{ url_for('static', filename='icn/plus-button.png') }}";
     $('#showHideFilters').prop('src', new_src);
-    if (! is_hidden)
+    if (!is_hidden)
       handle_clear_filters();
     fc.css('display', is_hidden ? 'block' : 'none');
     handle_filter_update();
   };
 
-  let handle_clear_filters = function() {
+  let handle_clear_filters = function () {
     $('#filtLanguage').val(0);
     $('#filtParentsOnly').prop('checked', false);
     $('#filtAgeMin').val('');

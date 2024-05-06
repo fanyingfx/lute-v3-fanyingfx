@@ -50,6 +50,10 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
 
         # Path to user data.
         datapath = Path(config.get("DATAPATH", self._get_appdata_dir()))
+        if not datapath.exists():
+            print(f"创建Lute数据文件夹: {datapath}")
+            datapath.mkdir(parents=True, exist_ok=True)
+
         self.datapath = str(datapath)
         self.userimagespath = str(datapath / "userimages")
         self.useraudiopath = str(datapath / "useraudio")

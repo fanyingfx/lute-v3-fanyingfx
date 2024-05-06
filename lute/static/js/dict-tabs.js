@@ -201,7 +201,7 @@ class DictButton extends LookupButton {
     const dicturl = LookupButton.TERM_DICTS[this.dictID];
     if (LookupButton.TERM_FORM_CONTAINER == null || dicturl == null)
       return;
-    const term = LookupButton.TERM_FORM_CONTAINER.querySelector("#text").value;
+    const term = LookupButton.TERM_FORM_CONTAINER.querySelector("#lemma").value;
     if (this.isExternal) {
       this._load_popup(dicturl, term);
     }

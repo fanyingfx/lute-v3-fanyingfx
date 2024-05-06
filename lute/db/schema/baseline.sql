@@ -233,7 +233,7 @@ INSERT INTO languagedicts VALUES(5,2,'sentences','popuphtml','https://www.deepl.
 INSERT INTO languagedicts VALUES(6,3,'terms','embeddedhtml','https://slovniky.lingea.cz/Anglicko-cesky/###',1,1);
 INSERT INTO languagedicts VALUES(7,3,'terms','popuphtml','https://slovnik.seznam.cz/preklad/cesky_anglicky/###',1,2);
 INSERT INTO languagedicts VALUES(8,3,'sentences','popuphtml','https://www.deepl.com/translator#cs/en/###',1,3);
-INSERT INTO languagedicts VALUES(9,4,'terms','embeddedhtml','https://en.thefreedictionary.com/###',1,1);
+INSERT INTO languagedicts VALUES(9,4,'terms','embeddedhtml','/dict/en?word=###',1,1);
 INSERT INTO languagedicts VALUES(10,4,'terms','popuphtml','https://www.collinsdictionary.com/dictionary/english/###',1,2);
 INSERT INTO languagedicts VALUES(11,4,'sentences','popuphtml','https://www.deepl.com/translator#en/en/###',1,3);
 INSERT INTO languagedicts VALUES(12,5,'terms','embeddedhtml','https://fr.thefreedictionary.com/###',1,1);
@@ -247,7 +247,7 @@ INSERT INTO languagedicts VALUES(19,7,'sentences','popuphtml','https://www.deepl
 INSERT INTO languagedicts VALUES(20,8,'terms','embeddedhtml','https://www.boltidictionary.com/en/search?s=###',1,1);
 INSERT INTO languagedicts VALUES(21,8,'terms','popuphtml','https://translate.google.com/?sl=hi&tl=en&text=###',1,2);
 INSERT INTO languagedicts VALUES(22,8,'sentences','embeddedhtml','https://www.bing.com/translator/?from=hi&to=en&text=###',1,3);
-INSERT INTO languagedicts VALUES(23,9,'terms','embeddedhtml','https://jisho.org/search/###',1,1);
+INSERT INTO languagedicts VALUES(23,9,'terms','embeddedhtml','/dict/jp?word=###',1,1);
 INSERT INTO languagedicts VALUES(24,9,'sentences','popuphtml','https://www.deepl.com/translator#jp/en/###',1,2);
 INSERT INTO languagedicts VALUES(25,10,'terms','embeddedhtml','https://www.dict.com/Russian-English/###',1,1);
 INSERT INTO languagedicts VALUES(26,10,'terms','embeddedhtml','https://en.openrussian.org/?search=###',1,2);
@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS "languages" (
 INSERT INTO languages VALUES(1,'Arabic','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?؟۔‎','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','\u0600-\u06FF\uFE70-\uFEFC',1,1,'spacedel');
 INSERT INTO languages VALUES(2,'Classical Chinese','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?。！？','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','一-龥',0,1,'classicalchinese');
 INSERT INTO languages VALUES(3,'Czech','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,1,'spacedel');
-INSERT INTO languages VALUES(4,'English','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,'spacedel');
+INSERT INTO languages VALUES(4,'English','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,'english');
 INSERT INTO languages VALUES(5,'French','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,'spacedel');
 INSERT INTO languages VALUES(6,'German','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ\u200C\u200D',0,0,'spacedel');
 INSERT INTO languages VALUES(7,'Greek','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?;','Mr.|Mrs.|Dr.|[A-Z].|κτλ.|κλπ.|π.χ.|λ.χ.|κ.ά|δηλ.|Κος.|Κ.|Κα.|μ.Χ.|ΥΓ.|μ.μ.|π.μ.|σελ.|κεφ.|βλ.|αι.','α-ωΑ-ΩάόήέώύίΊΏΈΉΌΆΎϊΪϋΫΐΰ',0,1,'spacedel');

@@ -197,8 +197,10 @@ def edit_term_form(term_id):
     """
     Edit a term.
     """
+    lemma = request.args.get("lemma", None)
     repo = Repository(db)
     term = repo.load(term_id)
+    term.lemma = lemma or term.text_lc
     # print(f"editing term {term_id}", flush=True)
     if term.status == 0:
         term.status = 1

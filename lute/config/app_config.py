@@ -57,6 +57,7 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.dbfilename = str(datapath / self.dbname)
         self.unidic_cwj_path = (datapath / "unidic-cwj").as_posix()
         self.unidic_csj_path = (datapath / "unidic-csj").as_posix()
+        self.dicts_path = str(datapath / "dicts")
 
         # Path to db backup.
         # When Lute starts up, it backs up the db

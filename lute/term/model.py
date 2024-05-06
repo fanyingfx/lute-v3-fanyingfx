@@ -40,6 +40,7 @@ class Term:  # pylint: disable=too-many-instance-attributes
         self.flash_message = None
         self.parents = []
         self.current_image = None
+        self.lemma = None
 
     def __repr__(self):
         return (

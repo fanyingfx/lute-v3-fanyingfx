@@ -28,6 +28,7 @@ class TermForm(FlaskForm):
     language_id = SelectField("Language", coerce=int)
 
     original_text = HiddenField("OriginalText")
+    lemma = HiddenField("Lemma")
     text = StringField(
         "Text", validators=[DataRequired()], render_kw={"placeholder": "Term"}
     )

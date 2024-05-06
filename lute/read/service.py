@@ -144,7 +144,7 @@ def get_popup_data(termid):
     "Get the data necessary to render a term popup."
     term = Term.find(termid)
 
-    term_tags = [tt.text for tt in term.term_tags]
+    term_tags = [tt.text for tt in term.term_tags if tt is not None]
 
     def make_array(t):
         ret = {

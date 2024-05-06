@@ -102,7 +102,8 @@ function _show_wordframe_url(url) {
 
 function show_term_edit_form(el) {
   const wid = parseInt(el.data('wid'));
-  _show_wordframe_url(`/read/edit_term/${wid}`);
+  const lemma = el.data('lemma');
+  _show_wordframe_url(`/read/edit_term/${wid}?lemma=${lemma}`);
 }
 
 

@@ -17,10 +17,10 @@ jobs:
           python-version: '3.11'
           cache: 'pip' # caching pip dependencies
 
-      - run: pip install flit
+      - run: pip install pdm
       - name: Build package
         run: |
-            flit build
+            pdm build
       - name: Set tag var
         id: vars
         run: |

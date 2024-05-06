@@ -7,6 +7,8 @@ from lute.config.app_config import AppConfig
 config_file = AppConfig.default_config_filename()
 ac = AppConfig(config_file)
 DICTS_PATH = Path(ac.dicts_path)
+if not DICTS_PATH.exists():
+    raise FileNotFoundError(f"请将词典文件 dicts 放在: {DICTS_PATH.parent} 目录")
 EN_MDX_FILE = (
     DICTS_PATH / "Eng" / "olad10/Oxford Advanced Learner's Dictionary 10th.mdx"
 )

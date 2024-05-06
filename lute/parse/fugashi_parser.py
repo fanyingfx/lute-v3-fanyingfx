@@ -1,3 +1,4 @@
+from pathlib import Path
 import re
 from functools import lru_cache
 from typing import List
@@ -37,6 +38,10 @@ class FugashiParser(AbstractParser):
 
     config_file = AppConfig.default_config_filename()
     ac = AppConfig(config_file)
+    if not Path(ac.unidic_cwj_path).exists():
+        raise FileNotFoundError(
+            f"请将unidic-cwj放在: {Path(ac.unidic_cwj_path).parent} 目录"
+        )
     _tagger = Tagger(ac.unidic_cwj_path)
     _tagger_type = "spoken"
     _ana_tagger = Tagger()

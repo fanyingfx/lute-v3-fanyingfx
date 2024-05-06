@@ -37,7 +37,7 @@ class FugashiParser(AbstractParser):
 
     config_file = AppConfig.default_config_filename()
     ac = AppConfig(config_file)
-    _tagger = Tagger(ac.unidic_csj_path)
+    _tagger = Tagger(ac.unidic_cwj_path)
     _tagger_type = "spoken"
     _ana_tagger = Tagger()
     _w_tagger = Tagger()

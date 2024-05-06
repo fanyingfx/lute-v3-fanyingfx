@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS "languages" (
 INSERT INTO languages VALUES(1,'Arabic','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?؟۔‎','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','\u0600-\u06FF\uFE70-\uFEFC',1,1,'spacedel');
 INSERT INTO languages VALUES(2,'Classical Chinese','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?。！？','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','一-龥',0,1,'classicalchinese');
 INSERT INTO languages VALUES(3,'Czech','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,1,'spacedel');
-INSERT INTO languages VALUES(4,'English','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,'english');
+INSERT INTO languages VALUES(4,'English','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,'spacedel');
 INSERT INTO languages VALUES(5,'French','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ',0,0,'spacedel');
 INSERT INTO languages VALUES(6,'German','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?','Mr.|Mrs.|Dr.|[A-Z].|Vd.|Vds.','a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ\u200C\u200D',0,0,'spacedel');
 INSERT INTO languages VALUES(7,'Greek','´=''|`=''|’=''|‘=''|...=…|..=‥','.!?;','Mr.|Mrs.|Dr.|[A-Z].|κτλ.|κλπ.|π.χ.|λ.χ.|κ.ά|δηλ.|Κος.|Κ.|Κα.|μ.Χ.|ΥΓ.|μ.μ.|π.μ.|σελ.|κεφ.|βλ.|αι.','α-ωΑ-ΩάόήέώύίΊΏΈΉΌΆΎϊΪϋΫΐΰ',0,1,'spacedel');

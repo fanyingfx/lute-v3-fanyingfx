@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:eebdf6bc50f38a4698fa096e351b2bf54031c0752481bd9d07c59e1d15722384"
+content_hash = "sha256:f341c8555bacb08defa04dabfc1ae6bc1451b98965e2f78f1fda20fb74043db4"
 
 [[package]]
 name = "annotated-types"
@@ -783,7 +783,6 @@ version = "0.19.1"
 requires_python = ">=3.6"
 summary = "An autocompletion tool for Python that can be used for text editors."
 groups = ["dev"]
-marker = "python_version >= \"3.11\""
 dependencies = [
     "parso<0.9.0,>=0.8.3",
 ]
@@ -1174,7 +1173,6 @@ version = "0.8.4"
 requires_python = ">=3.6"
 summary = "A Python Parser"
 groups = ["dev"]
-marker = "python_version >= \"3.11\""
 files = [
     {file = "parso-0.8.4-py2.py3-none-any.whl", hash = "sha256:a418670a20291dacd2dddc80c377c5c3791378ee1e8d12bffc35420643d43f18"},
     {file = "parso-0.8.4.tar.gz", hash = "sha256:eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d"},
@@ -1342,6 +1340,23 @@ files = [
 ]
 
 [[package]]
+name = "pudb"
+version = "2024.1"
+requires_python = "~=3.8"
+summary = "A full-screen, console-based Python debugger"
+groups = ["dev"]
+dependencies = [
+    "jedi<1,>=0.18",
+    "packaging>=20.0",
+    "pygments>=2.7.4",
+    "urwid-readline",
+    "urwid>=2.4",
+]
+files = [
+    {file = "pudb-2024.1.tar.gz", hash = "sha256:fc9d6a976a59b590764c8379ec200fecd47faa84259b64efd8cd86066a0af338"},
+]
+
+[[package]]
 name = "pure-eval"
 version = "0.2.2"
 summary = "Safely evaluate AST nodes without side effects"
@@ -1454,7 +1469,6 @@ version = "2.18.0"
 requires_python = ">=3.8"
 summary = "Pygments is a syntax highlighting package written in Python."
 groups = ["dev"]
-marker = "python_version >= \"3.11\""
 files = [
     {file = "pygments-2.18.0-py3-none-any.whl", hash = "sha256:b8e6aca0523f3ab76fee51799c488e38782ac06eafcf95e7ba832985c8e7b13a"},
     {file = "pygments-2.18.0.tar.gz", hash = "sha256:786ff802f32e91311bff3889f6e9a86e81505fe99f2735bb6d60ae0c5004f199"},
@@ -2086,6 +2100,33 @@ files = [
 ]
 
 [[package]]
+name = "urwid"
+version = "2.6.11"
+requires_python = ">3.7"
+summary = "A full-featured console (xterm et al.) user interface library"
+groups = ["dev"]
+dependencies = [
+    "typing-extensions",
+    "wcwidth",
+]
+files = [
+    {file = "urwid-2.6.11-py3-none-any.whl", hash = "sha256:7e18c34d416fffd4e39410450347f4637222bd99cb6fb1523ffa50d77a0e22cf"},
+    {file = "urwid-2.6.11.tar.gz", hash = "sha256:52770007d734d7387ae0421e7b7769c4c5ec67e91a5f4df54e858e314062e475"},
+]
+
+[[package]]
+name = "urwid-readline"
+version = "0.14"
+summary = "A textbox edit widget for urwid that supports readline shortcuts"
+groups = ["dev"]
+dependencies = [
+    "urwid",
+]
+files = [
+    {file = "urwid_readline-0.14.tar.gz", hash = "sha256:8fabd2e501c124a30d38cfb10610b32f119a615ec0b310ae5591c583fb00bd09"},
+]
+
+[[package]]
 name = "virtualenv"
 version = "20.26.1"
 requires_python = ">=3.7"
@@ -2131,7 +2172,6 @@ name = "wcwidth"
 version = "0.2.13"
 summary = "Measures the displayed width of unicode strings in a terminal"
 groups = ["dev"]
-marker = "python_version >= \"3.11\""
 files = [
     {file = "wcwidth-0.2.13-py2.py3-none-any.whl", hash = "sha256:3da69048e4540d84af32131829ff948f1e022c1c6bdb8d6102117aac784f6859"},
     {file = "wcwidth-0.2.13.tar.gz", hash = "sha256:72ea0c06399eb286d978fdedb6923a9eb47e1c486ce63e9b4e64fc18303972b5"},

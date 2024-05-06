@@ -30,7 +30,7 @@ def test_get_language_def():
     assert lang.right_to_left is False, "uses default"
 
     expected = [
-        "terms; embeddedhtml; https://en.thefreedictionary.com/###; True; 1",
+        "terms; embeddedhtml; /dict/en?word=###; True; 1",
         "terms; popuphtml; https://www.collinsdictionary.com/dictionary/english/###; True; 2",
         "sentences; popuphtml; https://www.deepl.com/translator#en/en/###; True; 3",
     ]

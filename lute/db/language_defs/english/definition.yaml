@@ -12,8 +12,8 @@ dictionaries:
 # show_romanization: 
 # right_to_left: 
 
-# parser_type: defaults to space delimited.
+parser_type: english
 # character_substitutions:
 # split_sentences: 
 # split_sentence_exceptions:
-# word_chars: 
+word_chars: a-zA-ZÀ-ÖØ-öø-ȳáéíóúÁÉÍÓÚñÑ

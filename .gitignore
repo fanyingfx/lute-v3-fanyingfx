@@ -148,3 +148,4 @@ cython_debug/
 tests/*
 .vscode/
 Terms.csv
+lute/db/language_defs/*

@@ -2,7 +2,7 @@ name: Japanese
 dictionaries:
   - for: terms
     type: embedded
-    url: https://jisho.org/search/###
+    url: /dict/jp?word=###
   - for: sentences
     type: popup
     url: https://www.deepl.com/translator#jp/en/###

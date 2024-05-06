@@ -2,7 +2,7 @@ name: English
 dictionaries:
   - for: terms
     type: embedded
-    url: https://en.thefreedictionary.com/###
+    url: /dict/en?word=###
   - for: terms
     type: popup
     url: https://www.collinsdictionary.com/dictionary/english/###

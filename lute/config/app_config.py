@@ -59,6 +59,7 @@ class AppConfig:  # pylint: disable=too-many-instance-attributes
         self.useraudiopath = str(datapath / "useraudio")
         self.temppath = str(datapath / "temp")
         self.dbfilename = str(datapath / self.dbname)
+        self.userthemespath = str(datapath / "userthemes")
         self.unidic_cwj_path = (datapath / "unidic-cwj").as_posix()
         self.unidic_csj_path = (datapath / "unidic-csj").as_posix()
         self.dicts_path = str(datapath / "dicts")

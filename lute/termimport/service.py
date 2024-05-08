@@ -36,6 +36,8 @@ def _load_import_file(filename, encoding="utf-8-sig"):
     importdata = []
     with open(filename, "r", encoding=encoding) as f:
         reader = csv.DictReader(f)
+        if reader.fieldnames:  # Avoid empty file error
+            reader.fieldnames = [name.lower() for name in reader.fieldnames]
 
         fieldnames = reader.fieldnames
         if fieldnames is None:
@@ -66,8 +68,9 @@ def _validate_data_fields(field_list):
         "pronunciation",
         "link_status",
     ]
+    ignored = ["added"]
     for k in field_list:
-        if k not in allowed:
+        if k not in allowed and k not in ignored:
             raise BadImportFileError(f"Unknown field '{k}'")
 
 

@@ -6,7 +6,7 @@
 - 需要下载词典文件：https://pan.baidu.com/s/1sf_SbboBTN6mfEtq_YMFXw?pwd=zhmz 提取码：zhmz
 ### 安装过程
 1. 打开终端执行以下命令
-`pip install https://github.com/fanyingfx/lute-v3-fanyingfx/releases/download/3.3.2b9/lute3-3.3.2b9-py3-none-any.whl --upgrade `
+`pip install https://github.com/fanyingfx/lute-v3-fanyingfx/releases/download/3.3.a1/lute3-3.3.3a1-py3-none-any.whl --upgrade `
 2. 执行
 `python -m lute.main` 如果出现端口冲突可将命令换为
 `python -m lute.main --port 5151` 其中5151可以是其它大于5000的数字

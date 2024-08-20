@@ -12,3 +12,9 @@
 `python -m lute.main --port 5151` 其中5151可以是其它大于5000的数字
 
 3. 启动会应该会报错，此时讲从下载文件中复制 dicts, unidic-cwj复制到提示的Lute数据目录
+
+### 词典设置
+#### 英语
+![English Dict](https://github.com/user-attachments/assets/408c0750-2c70-48d7-b2b9-87aecd0c5bab)
+#### 日语
+![Japanese](https://github.com/user-attachments/assets/12e5b790-23dc-4983-8050-ad7ee483b03d)
